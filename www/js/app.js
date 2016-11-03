@@ -69,6 +69,16 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         }
     })
 
+    .state('app.stations', {
+        url: '/stations',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/stations.html',
+                controller: 'StationsCtrl'
+            }
+        }
+    })
+
     .state('app.extensions', {
         url: '/extensions',
         views: {
