@@ -1,0 +1,149 @@
+<ion-view view-title="{{station.city}}">
+  <ion-content class="padding">
+    
+    <p>
+      
+    </p>
+    <div class="list card" >
+        
+        <div class="card-title item item-avatar dark item-icon-right">
+          <img ng-src="{{station.image}}" style="width: 64px; height: 64px">
+          <h2><strong>{{station.city}}, {{station.country}}</strong></h2>
+          <h3><strong>Last Sync @ {{station.lastSync}}</strong></h3>
+          <i class="icon ion-more" ng-click="openPopover($event)"></i>
+        </div>
+        
+        <ion-slide-box class="card-subtitle">
+            <ion-slide>
+              <div class="box">
+                <div class="item item-body">
+                  <!-- <img class="full-image" src=""> -->
+                  <div class="row dark">
+                    <div class="col col-25"></div>
+                    <div class="col col-50">
+                      <a  class="item item-thumbnail-left">
+                        <img src="img/cloud4.png">
+                        <h1>9&#8451;</h1>
+                        <h4><strong>Feels like 8&#8451;</strong></h4>
+                      </a>
+                      <h2>Partly Cloudy</h2>
+                    </div>
+                    <div class="col"></div>
+                  </div>
+
+                  <!-- this is for spacing bad practice!! -->
+                  <div class="row">
+                    <div class="col col-75"></div>
+                    <div class="col"></div>
+                  </div>
+                  <div class="row">
+                    <div class="col col-75"></div>
+                    <div class="col"></div>
+                  </div>
+                  <div class="row">
+                    <div class="col col-75"></div>
+                    <div class="col"></div>
+                  </div>
+                  <div class="row">
+                    <div class="col col-75"></div>
+                    <div class="col"></div>
+                  </div>
+
+                  
+
+                  
+                </div>
+              </div>
+            </ion-slide>
+
+	        <ion-slide>
+	          <div  class="box">
+	            <div class="item item-body">
+	              <div  class="row dark">
+	                <div class="col">
+	                  <div class="row">
+	                    <div class="col col-25">
+	                      <i class="icon ion-compass"></i>
+	                    </div>
+	                  </div>
+	                  <strong>Wind</strong><br>
+	                  <small>19km/h SW<br></small>
+	                  <small>28km/h</small>
+	                </div>
+	                
+	                <div class="col">
+	                  <div class="row">
+	                    <div class="col col-25">
+	                      <i class="icon ion-waterdrop"></i>
+	                    </div>
+	                  </div>
+	                  <strong>Humidity</strong><br>
+	                  <small>66%<br></small>
+	                </div>
+	                <div class="col">
+	                  <div class="row">
+	                    <div class="col col-25">
+	                      <i class="icon ion-speedometer"></i>
+	                    </div>
+	                  </div>
+	                  <strong>Pressure</strong><br>
+	                  <small>99.6kPa<br></small>
+	                </div>
+	                <div class="col">
+	                  <div class="row">
+	                    <div class="col col-25">
+	                      <i class="icon ion-eye"></i>
+	                    </div>
+	                  </div>
+	                  <strong>Visibility</strong><br>
+	                  <small>24km<br></small>
+	                </div>
+	              </div>
+
+	              <div class="row dark">
+	                <div class="col col-25"></div>
+	                <div class="col">
+	                  <div class="row">
+	                    <div class="col col-25">
+	                      <i class="icon ion-paper-airplane"></i>
+	                    </div>
+	                  </div>
+	                  <strong>Air Quality</strong><br>
+	                  <small>Low Risk</small>
+	                </div>
+	                <div class="col">
+	                  <div class="row">
+	                    <div class="col col-25">
+	                      <i class="icon ion-gear-a"></i>
+	                    </div>
+	                  </div>
+	                  <strong>UV Report</strong><br>
+	                  <small>Low<br></small>
+	                </div>
+	                <div class="col col-25"></div>
+	              </div>
+	            
+	              <!-- this is for spacing bad practice!! -->
+	              <div class="row">
+	                <div class="col col-75"></div>
+	                <div class="col"></div>
+	              </div>
+	              <div class="row">
+	                <div class="col col-75"></div>
+	                <div class="col"></div>
+	              </div>
+	              <div class="row">
+	                <div class="col col-75"></div>
+	                <div class="col"></div>
+	              </div>
+	              <div class="row">
+	                <div class="col col-75"></div>
+	                <div class="col"></div>
+	              </div>
+	            </div>
+	          </div>
+	        </ion-slide>
+	    </ion-slide-box>
+	</div>
+  </ion-content>
+</ion-view>

@@ -1,0 +1,193 @@
+
+<ion-view view-title="Home">
+    <ion-content>
+
+      <div class="list card" style="background-image: url(img/partly-cloudy.jpg); background-size:cover;" ng-show="hasDefaultStation">
+        
+        <div class="card-title item item-icon-right dark" ng-click="showOrHideWeatherDetails()">
+          <h2><strong>{{defaultWeatherStation.city}}, {{defaultWeatherStation.country}}</strong></h2>
+          <h3><strong> Last Sync {{defaultWeatherStation.lastSync}}</strong></h3>
+          <i ng-hide="showWeatherDetails" class="icon"><h1>9&#8451;</h1></i>
+        </div>
+
+        <ion-slide-box ng-show="showWeatherDetails" class="card-subtitle dark">
+            <ion-slide>
+              <div class="box">
+                <div class="item item-body">
+                  <!-- <img class="full-image" src=""> -->
+                  <div class="row">
+                    <div class="col col-33"></div>
+                    <div class="col col-33">
+                      <h1>9&#8451;</h1>
+                      <h3><strong>Feels like 8&#8451;</strong></h3>
+                      <h2><strong>Partly Cloudy</strong></h2>
+                    </div>
+                    <div class="col"></div>
+                  </div>    
+                </div>
+              </div>
+            </ion-slide>
+            <ion-slide>
+              <div  class="box">
+                <div class="item item-body light">
+                  <div style="background: #000; opacity: 0.4;" class="row">
+                    <div class="col">
+                      <div class="row">
+                        <div class="col col-25">
+                          <i class="icon ion-compass"></i>
+                        </div>
+                      </div>
+                      <strong>Wind</strong><br>
+                      <small>19km/h SW<br></small>
+                      <small>28km/h</small>
+                    </div>
+                    
+                    <div class="col">
+                      <div class="row">
+                        <div class="col col-25">
+                          <i class="icon ion-waterdrop"></i>
+                        </div>
+                      </div>
+                      <strong>Humidity</strong><br>
+                      <small>66%<br></small>
+                    </div>
+                    <div class="col">
+                      <div class="row">
+                        <div class="col col-25">
+                          <i class="icon ion-speedometer"></i>
+                        </div>
+                      </div>
+                      <strong>Pressure</strong><br>
+                      <small>99.6kPa<br></small>
+                    </div>
+                    <div class="col">
+                      <div class="row">
+                        <div class="col col-25">
+                          <i class="icon ion-eye"></i>
+                        </div>
+                      </div>
+                      <strong>Visibility</strong><br>
+                      <small>24km<br></small>
+                    </div>
+                  </div>
+                  <br>
+                  <div style="background: #000; opacity: 0.4;" class="row">
+                    <div class="col col-25"></div>
+                    <div class="col">
+                      <div class="row">
+                        <div class="col col-25">
+                          <i class="icon ion-paper-airplane"></i>
+                        </div>
+                      </div>
+                      <strong>Air Quality</strong><br>
+                      <small>Low Risk</small>
+                    </div>
+                    <div class="col">
+                      <div class="row">
+                        <div class="col col-25">
+                          <i class="icon ion-gear-a"></i>
+                        </div>
+                      </div>
+                      <strong>UV Report</strong><br>
+                      <small>Low<br></small>
+                    </div>
+                    <div class="col col-25"></div>
+                  </div>
+                
+                  <!-- this is for spacing bad practice!! -->
+                  <div class="row">
+                    <div class="col col-75"></div>
+                    <div class="col"></div>
+                  </div>
+                  <div class="row">
+                    <div class="col col-75"></div>
+                    <div class="col"></div>
+                  </div>
+                  <div class="row">
+                    <div class="col col-75"></div>
+                    <div class="col"></div>
+                  </div>
+                  <div class="row">
+                    <div class="col col-75"></div>
+                    <div class="col"></div>
+                  </div>
+                </div>
+              </div>
+            </ion-slide>
+          </ion-slide-box>
+      </div>
+
+      <div class="card" ng-hide="hasDefaultStation">
+        <div class="item item-text-wrap">
+          Please select a weather station from the list
+          <div class="list">
+            <label class="item item-input item-select">
+              <div class="input-label">
+                Stations
+              </div>
+              <select ng-model="defaultWeatherStation.value">
+                <option value="{{station.id}}" ng-repeat="station in stations" >{{station.city}}, {{station.country}}</option>
+              </select>
+            </label>
+            <button class="button button-full button-stable" ng-click="setDefaultStation()">
+              Set Default Station
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- posts cards will go here -->
+      <div class="list card light" ng-repeat="post in posts" style="background-color: #999999">
+          <div class="item item-avatar" style="background-color: #666">
+              <img src="img/{{post.user.pic}}">
+              <h2>{{post.user.username}}</h2>
+              <h3>at {{post.location}}</h3>
+          </div>
+          <div class="item item-body">
+              {{post.data.value}}
+              <img ng-show="postHasImage_{{post.id}}" class="full-image" src="img/{{post.data.pic}}">
+              <p>
+                  <a class="light">{{post.likes.length}} Likes</a>
+                  <a ng-click="showOrHidePost({{post.id}})" class="light">{{post.comments.length}} Comments</a>
+              </p>
+          </div>
+          <div class="item tabs tabs-secondary tabs-icon-left">
+              <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5">
+                  <i class="icon ion-thumbsup"></i> Like
+              </a>
+              <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="showOrHidePost({{post.id}})">
+                  <i class="icon ion-chatbox"></i> Comment
+              </a>
+              <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5">
+                  <i class="icon ion-share"></i> Share
+              </a>
+          </div>
+          <hr>
+          
+          <div class="list" ng-repeat="comment in post.comments" ng-show="showPost_{{post.id}}">
+            <div class="item item-body item-avatar">
+                <img src="img/{{comment.user.pic}}">
+                <h2>{{comment.user.username}}</h2>
+                <p>{{comment.data.value}}</p>
+            </div>  
+            <hr>
+          </div>
+
+          <label class="item item-avatar item-input">
+            <img src="img/{{currentUser.pic}}">
+            <!-- <input type="text" placeholder="Write a comment"> -->
+            <form name="comment_form" ng-submit="submitComment()">
+              <div class="list">
+                 <div class="item item-input-inset">
+                    <label class="item-input-wrapper">
+                      <input class="dark" type="text" name="search_input" placeholder="Write a comment">
+                      <button class="button-clear icon ion-android-send"></button>
+                    </label>
+                 </div>
+              </div>
+            </form>
+          </label>
+      </div>
+      <br><br><br><br>
+    </ion-content>
+</ion-view>
