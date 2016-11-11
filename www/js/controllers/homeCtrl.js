@@ -33,7 +33,7 @@ app.controller('HomeCtrl', function($scope, $parse, $stateParams, $ionicSlideBox
 	}
 
 	$scope.setDefaultStation = function (){
-		if(Stations.get($scope.defaultWeatherStation.value) != null){
+		if(Stations.getStation($scope.defaultWeatherStation.value) != null){
 			localStorage.setItem("hasDefaultStation", true);
 			localStorage.setItem("defaultStation", JSON.stringify(Stations.get($scope.defaultWeatherStation.value)));
 		    
