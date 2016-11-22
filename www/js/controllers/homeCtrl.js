@@ -64,7 +64,12 @@ app.controller('HomeCtrl', function($scope, $parse, $ionicModal, $stateParams, $
 	}
 
 	$scope.submitComment = function(){
-		console.log("submitting comment");
+		if(Parse.User.current()){
+			console.log("submitting comment");
+		}else{
+			$scope.modal.show();
+		}
+		
 	}
 
 });

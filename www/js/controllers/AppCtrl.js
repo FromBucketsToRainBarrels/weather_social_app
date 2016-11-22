@@ -3,6 +3,8 @@
   $scope.signInSignUpModal = true;
   $scope.ParseConfiguration = ParseConfiguration;
   $scope.updateProfileData = {};
+  $scope.profilePic = "img/user1.png";
+  $scope.isLoggedIn = false;
 
   $scope.loadingTemplate = '<div class="loader"><svg class="circular"><circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/></svg></div>';
   $ionicLoading.show({
@@ -25,27 +27,34 @@
       $scope.modal = modal;
   });
 
-  if(UserService.getCurrentUser() == null){
+  if(Parse.User.current() == null){
+    $scope.currentUser = null;
+    $ionicLoading.hide();
+  }else if(UserService.getCurrentUser() == null){
     //if the web user presses refresh button need to fetch this again
     UserService.getUser(Parse.User.current())
       .then(function (_response) {
           UserService.setCurrentUser(_response[0]);
-          $scope.currentUser = _response[0];
-
+          $scope.currentUser = UserService.getCurrentUser();
+          $scope.isLoggedIn = true;
           $scope.updateProfileData.firstName = _response[0].get("information").get("firstName");
-
-          if($scope.currentUser.get("information").get("profilePhoto") != undefined){
+          if($scope.currentUser.information.profilePhoto.url != undefined){
               $scope.profilePic = $scope.currentUser.get("information").get("profilePhoto").url();
               $scope.profilePic = fixFileURL($scope.profilePic, $scope.ParseConfiguration.serverIPAdress);
           }
           $ionicLoading.hide();
+          $scope.$apply();
           //console.log("user refetched : " + JSON.stringify(_response[0]));
       }, function (_error) {
           $ionicLoading.hide();
-          alert("error getting user in " + _error.message);
+          console.error("error getting user in " + _error.message);
       })
   }else{
     $scope.currentUser = UserService.getCurrentUser();
+    $scope.profilePic = $scope.currentUser.information.profilePhoto.url;
+    $scope.isLoggedIn = true;
+
+    $ionicLoading.hide();
   }
 
   //check for internet connectivity and accordingly fetch data from the services or from localStorage
@@ -97,7 +106,12 @@
   });
 
   $scope.editProfile = function(){
-    $scope.editModal.show();
+    if(Parse.User.current()){
+      $scope.editModal.show();
+    }else{
+      $scope.modal.show();
+    }
+    
   }
 
   $scope.hideSignInSignUpModal = function(){
@@ -105,6 +119,7 @@
   }
 
   $scope.doLoginAction = function (loginData) {
+    
     if(loginData == null || loginData == undefined){
       alert("Please enter login credentials");
     }else if(loginData.email == undefined){
@@ -112,28 +127,39 @@
     }else if(loginData.password == undefined){
       alert("Please enter a password")
     }else{
+      $ionicLoading.show({
+        template: $scope.loadingTemplate
+      });
       UserService.login(loginData.email, loginData.password)
       .then(function (_response) {
-
           UserService.getUser(_response)
               .then(function (_response) {
-                  
                   UserService.setCurrentUser(_response[0]);
-
+                  $scope.currentUser = UserService.getCurrentUser();
+                  $scope.isLoggedIn = true;
+                  $scope.updateProfileData.firstName = _response[0].get("information").get("firstName");
+                  if($scope.currentUser.information.profilePhoto.url != undefined){
+                      $scope.profilePic = $scope.currentUser.information.profilePhoto.url;
+                      $scope.profilePic = fixFileURL($scope.profilePic, $scope.ParseConfiguration.serverIPAdress);
+                  }
+                  $scope.$apply();
                   if(window.cordova && window.cordova.plugins){
                       FCMPlugin.getToken(
                         function(token){
                           //alert(token);
 
                           $scope.modal.hide();
+                          $ionicLoading.hide();
                         },
                         function(err){
                           alert('error retrieving token: ' + err);
                           $scope.modal.hide();
+                          $ionicLoading.hide();
                         }
                       )
                   }else{
                       $scope.modal.hide();
+                      $ionicLoading.hide();
                   }
               }, function (_error) {
                   alert("error getting user in " + _error.message);

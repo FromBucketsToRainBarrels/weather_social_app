@@ -8,7 +8,6 @@ angular.module('user.services', [])
 
             return {
 
-                currentUserObject: null,
                 /**
                  *
                  * @returns {*}
@@ -110,11 +109,11 @@ angular.module('user.services', [])
                 },
                 setCurrentUser: function(currentUser){
                     //console.log("setCurrentUser : " + JSON.stringify(currentUser));
-                    this.currentUser = currentUser;
+                    localStorage.setItem("currentUser", JSON.stringify(currentUser));
                 },
                 getCurrentUser: function(){
                     //console.log("getCurrentUser : " + JSON.stringify(this.currentUserObject));
-                    return this.currentUserObject;
+                    return JSON.parse(localStorage.getItem("currentUser"));
                 },
                 uploadFile: function(_imageObject){
                     

@@ -20,7 +20,7 @@
         <ion-header-bar class="expanded">
             <img src="{{profilePic}}" class="avatar motion spin fade" ng-click="editProfile()">
             <div class="menu-bottom">
-                {{currentUser.get("information").get("firstName")}} {{currentUser.get("information").get("lastName")}} 
+                {{currentUser.information.firstName}} {{currentUser.information.lastName}} 
             </div>
         </ion-header-bar>
         <ion-content class="stable-bg has-expanded-header">
@@ -28,7 +28,6 @@
                 <a menu-close class="item item-icon-left dark" href="#/app/home">
                     <i class="icon ion-home"></i>
                     Home
-                    <span class="badge badge-dark">12</span>
                 </a>
 
                 <a menu-close class="item item-icon-left dark" href="#/app/stations">
