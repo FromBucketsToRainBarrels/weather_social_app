@@ -1,0 +1,60 @@
+<ion-modal-view>
+  <ion-header-bar class="bar bar-header">
+    <h1 class="title">Edit Profile</h1>
+    <button class="button button-clear button-primary ion-android-cancel" ng-click="modal.hide()"></button>
+  </ion-header-bar>
+  <ion-content class="padding has-footer">
+    
+  <div >
+    
+
+    <div class="list">
+
+      <div class="item">
+        <div class="card">
+          <div class="row">
+            <div class="col col-50"> <img class="full-image" src="{{profilePic}}"></div>
+            <div class="col"><input type="file" fileread="uploadProfilePicture.src" /></div>
+            <div class="col"></div>
+          </div>
+        </div>
+      </div>
+        
+
+      <label class="item item-input">
+        <span class="input-label">Email</span>
+        <input disabled value="{{currentUser.getEmail()}}" type="email">
+      </label>
+      <label class="item item-input">
+        <span class="input-label">First Name</span>
+        <input value='{{currentUser.get("information").get("firstName")}}' ng-model="updateProfileData.firstName" type="text">
+      </label>
+      <label class="item item-input">
+        <span class="input-label">Old Password</span>
+        <input ng-model="updateProfileData.oldPassword" type="password">
+      </label>
+      <label class="item item-input">
+        <span class="input-label">New Password</span>
+        <input ng-model="updateProfileData.newPassword" type="password">
+      </label>
+      <label class="item item-input">
+        <span class="input-label">New Re-Password</span>
+        <input ng-model="updateProfileData.newRePassword" type="password">
+      </label>      
+      
+    </div>    
+  </div>
+
+    
+
+  </ion-content>
+  
+    <div class="tabs">
+      <a class="tab-item" ng-click="editModal.hide()">
+        Close
+      </a>
+      <a class="tab-item" ng-click="uploadProfilePic()">
+        Update
+      </a>
+    </div>
+</ion-modal-view>

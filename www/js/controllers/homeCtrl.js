@@ -1,5 +1,12 @@
-app.controller('HomeCtrl', function($scope, $parse, $stateParams, $ionicSlideBoxDelegate, Stations, Posts, Users, $timeout, ionicMaterialInk, ionicMaterialMotion) {
+app.controller('HomeCtrl', function($scope, $parse, $ionicModal, $stateParams, $ionicSlideBoxDelegate, Stations, Posts, Users, $timeout, ionicMaterialInk, ionicMaterialMotion) {
 	
+	$ionicModal.fromTemplateUrl('templates/signInSignUp-modal.html', {
+	  scope: $scope,
+	  animation: 'slide-in-up'
+	}).then(function(modal) {
+	  $scope.modal = modal;
+	});
+
 	$scope.hasDefaultStation = localStorage.getItem("defaultStation");
 	$scope.currentUser = Users.getCurrentUser();
 	$scope.stations = Stations.all();

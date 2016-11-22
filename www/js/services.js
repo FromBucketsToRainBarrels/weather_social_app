@@ -39,7 +39,7 @@ angular.module('starter.services', [])
 .factory('Users', function() {
   return {
     getCurrentUser: function() {
-      return user_tyrion;
+      return Parse.User.current();
     }
   };
 })

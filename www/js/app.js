@@ -3,9 +3,20 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var app = angular.module('starter', ['ionic', 'ionic-material', 'starter.services', 'starter.Directives']);
+var app = angular.module('starter', [
+    'ionic', 
+    'user.controllers',
+    'user.services',
+    'ionic-material', 
+    'starter.services', 
+    'starter.Directives']);
 
-app.run(function ($ionicPlatform) {
+app.value('ParseConfiguration', {
+    applicationId: "myAppId",
+    serverIPAdress: "162.243.118.87"
+})
+
+app.run(function ($ionicPlatform, UserService) {
     $ionicPlatform.ready(function () {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
@@ -16,6 +27,7 @@ app.run(function ($ionicPlatform) {
         if (window.StatusBar) {
             StatusBar.styleDefault();
         }
+        UserService.init();
     });
 })
 
