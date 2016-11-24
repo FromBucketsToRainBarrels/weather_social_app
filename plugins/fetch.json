@@ -47,6 +47,30 @@
         "is_top_level": true,
         "variables": {}
     },
+    "cordova-plugin-inappbrowser": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-inappbrowser@1.5.0"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-fcm": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-fcm"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-datepicker": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-datepicker"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
     "cordova-plugin-network-information": {
         "source": {
             "type": "registry",
