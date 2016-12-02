@@ -5,8 +5,7 @@ angular.module('user.services', [])
 
             var parseInitialized = false;
 
-
-            return {
+            var functions = {
 
                 /**
                  *
@@ -41,8 +40,33 @@ angular.module('user.services', [])
                     user.set("password", _userParams.password);
 
                     // should return a promise
-                    return user.signUp(null, {});
-
+                    return $q(function(resolve, reject) {
+                        user.signUp(null, {
+                          success: function(user) {
+                            //add an empty information object to the user record and save it again
+                            var Information = Parse.Object.extend("Information");
+                            var information = new Information();
+                            information.set("user", user);
+                            information.save(null, {
+                              success: function(information) {
+                                // Execute any logic that should take place after the object is saved.
+                                console.log('New object created with objectId: ' + information.id);
+                                resolve(user);
+                              },
+                              error: function(information, error) {
+                                //this should not happen in any case will need to handle this later
+                                alert('Failed to create new information object, with error code: ' + error.message);
+                                reject(error);
+                              }
+                            });
+                          },
+                          error: function(user, error) {
+                            // Show the error message somewhere and let the user try again.
+                            alert("Error: " + error.code + " " + error.message);
+                            reject(error);
+                          }
+                        });
+                    })
                 },
                 /**
                  *
@@ -126,6 +150,8 @@ angular.module('user.services', [])
                         Parse.User.current().get("information").set("profilePhoto", parseFile);
                     }
                     
+                    alert(JSON.stringify(currentUser));
+
                     Parse.User.current().get("information").set("firstName", currentUser.information.firstName);
                     Parse.User.current().get("information").set("lastName", currentUser.information.lastName);
                     Parse.User.current().get("information").set("phone", currentUser.information.phone);
@@ -140,6 +166,189 @@ angular.module('user.services', [])
                            //return $q.reject({error: error});
                         }
                     });
+                },
+                getLocationObject: function(){
+                    return $q(function(resolve, reject) {
+                        navigator.geolocation.getCurrentPosition( function(position) {
+                            
+                            var locationObject = {
+                                  Latitude          : position.coords.latitude,          
+                                  Longitude         : position.coords.longitude,         
+                                  Altitude          : position.coords.altitude,          
+                                  Accuracy          : position.coords.accuracy,          
+                                  Altitude_Accuracy : position.coords.altitudeAccuracy,  
+                                  Heading           : position.coords.heading,           
+                                  Speed             : position.coords.speed,             
+                                  Timestamp         : position.timestamp            
+                            };
+
+                            resolve(locationObject);
+                        }, function (error) {
+                            reject('code: '    + error.code    + '\n' +
+                                  'message: ' + error.message + '\n');
+                        })
+                    });
+                },
+                getPost: function(page, displayLimit) {
+
+                    var Post = Parse.Object.extend("Post");
+                    var post = new Parse.Query(Post);
+                    post.descending('createdAt');
+                    post.limit(displayLimit);
+                    post.skip(page*displayLimit);
+                    post.include("user");
+                    post.include("user.information");
+                    post.include("comments");
+                    post.include("likes");
+                    
+                    return $q (function(resolve, reject) {
+                        post.find({
+                          success: function(posts) {
+                            console.log("Successfully retrieved " + posts.length + " posts.");
+                            resolve(posts);
+                          },
+                          error: function(error) {
+                            alert("Error: " + error.code + " " + error.message);
+                            reject(error);
+                          }
+                        });
+                    })
+                },
+                getInstallation: function(token){
+                    var Installation = Parse.Object.extend("Installation");
+                    var installation = new Parse.Query(Installation);
+                    installation.equalTo("deviceToken", token);
+                    installation.include("user");
+                    return $q (function(resolve, reject) {
+                        installation.find({
+                          success: function(installation) {
+                            console.log("Successfully retrieved " + installation.length + " installation.");
+                            resolve(installation);
+                          },
+                          error: function(error) {
+                            alert("Error: " + error.code + " " + error.message);
+                            reject(error);
+                          }
+                        });
+                    })
+                },
+                
+                getThisDeviceToken: function(){
+                    if(window.cordova && window.cordova.plugins){
+                        return $q (function(resolve, reject) {
+                            FCMPlugin.getToken(
+                                function(token){
+                                    console.log("token : " + token);
+                                    resolve(token);
+                                }, function(error){
+                                    alert('error retrieving token: ' + error);
+                                    reject(error);
+                                }
+                            )
+                        })
+                    }
+                },
+                updateInstallation: function(){
+                    if(window.cordova && window.cordova.plugins){
+                        FCMPlugin.getToken(
+                          function(token){
+                            //alert("token : " + token);
+                            var installationPromise = functions.getInstallation(token);
+                            installationPromise.then(function(installation){
+                                console.log("installationPromise returned : " + installation);
+                                var now = new Date();
+                                
+                                if(installation.length == 0){
+                                    //this device is not registered  --> first time user 
+                                    var Installation = Parse.Object.extend("Installation");
+                                    var newInstallationRecord = new Installation();
+                                    newInstallationRecord.set("deviceToken", token);
+                                    newInstallationRecord.set("lastOnline", now);
+                                    newInstallationRecord.set("userHistory", []);
+                                    newInstallationRecord.set("user", Parse.User.current()); 
+                                    newInstallationRecord.set("channels", []);
+                                    newInstallationRecord.set("timeZone", now.getTimezoneOffset());
+                                    newInstallationRecord.set("locationHistory", []);
+                                    newInstallationRecord.set("device_model", device.model);
+                                    newInstallationRecord.set("device_platform", device.platform);
+                                    newInstallationRecord.set("device_uuid", device.uuid);
+                                    newInstallationRecord.set("device_version", device.version);
+                                    newInstallationRecord.set("device_manufacturer", device.manufacturer);
+                                    newInstallationRecord.set("device_isVirtual", device.isVirtual);
+                                    newInstallationRecord.set("device_serial", device.serial);
+                                    var locationObjectPromise = functions.getLocationObject();
+                                    locationObjectPromise.then(function(locationObject){
+                                        console.log("got a locationObject : " + JSON.stringify(locationObject));
+                                        newInstallationRecord.set("lastLocation", locationObject);
+                                        newInstallationRecord.save(null, {
+                                            success: function(newInstallationRecord){
+                                                console.log("Saved installation object for this device into database");
+                                            },
+                                            error: function(newInstallationRecord, error){
+                                                alert("Error: " + error.code + " " + error.message);
+                                            }
+                                        })
+                                    }, function(error){
+                                        alert("Error: " + error.code + " " + error.message);
+                                    });
+                                }else{
+                                    console.log("found a installation record for this device : " + installation);
+                                    installation[0].set("lastOnline", now);
+                                    
+                                    if(Parse.User.current()){
+                                        console.log("Parse.User.current() == true");
+                                        installation[0].set("loginStatusOnDevice", "logged in");
+                                        if(installation[0].get("user") == undefined){
+                                            installation[0].set("user", Parse.User.current());
+                                        }else{
+                                            if(installation[0].get("user").get("username") != Parse.User.current().get("username")){
+                                               var userHistory =  installation[0].get("userHistory");
+                                               userHistory.push(installation[0].get("user"));
+                                               installation[0].set("userHistory", userHistory);
+                                               installation[0].set("user", Parse.User.current());
+                                            }
+                                        }
+                                    }else{
+                                        if(installation[0].get("loginStatusOnDevice") != undefined){
+                                            installation[0].set("loginStatusOnDevice", "logged out");
+                                        }else{
+                                            //on this device the user has never logged in 
+                                        }
+                                        
+                                    }
+
+                                    var lastLocation = installation[0].get("lastLocation");
+                                    var locationHistory = installation[0].get("locationHistory");
+                                    locationHistory.push(lastLocation);                                    
+                                    installation[0].set("locationHistory", locationHistory);
+                                    
+                                    var locationObjectPromise = functions.getLocationObject();
+                                    locationObjectPromise.then(function(locationObject){
+                                        installation[0].set("lastLocation", locationObject);
+                                        installation[0].save(null, {
+                                            success: function(newInstallationRecord){
+                                                console.log("Saved installation object for this device into database");
+                                            },
+                                            error: function(newInstallationRecord, error){
+                                                alert("Error: " + error.code + " " + error.message);
+                                            }
+                                        })
+                                    }, function(error){
+                                        alert("Error: " + error.code + " " + error.message);
+                                    });
+                                }
+                            }, function(error){
+                                alert("Error: " + error.code + " " + error.message);
+                            });
+                            
+                            
+
+                          }, function(err){
+                            alert('error retrieving token: ' + err);
+                          }
+                        )
+                    }
                 }
             }
+            return functions;
         }]);

@@ -141,60 +141,63 @@
       <div class="card">
         <div class="list"> 
           <label class="item item-input">
-            <textarea rows="4" placeholder="Whats on your mind?"></textarea>
+            <textarea ng-model="post.text" rows="3" placeholder="Whats on your mind?"></textarea>
           </label>
           <div class="button-bar">
             <a class="button"><i class="icon ion-ios-camera"></i></a>
-            <a class="button"><i class="icon ion-paper-airplane"></i></a>
+            <a ng-click="submitPost()" class="button"><i class="icon ion-paper-airplane"></i></a>
           </div>
         </div>
       </div>
 
       <!-- posts cards will go here -->
-      <div class="list card light" ng-repeat="post in posts" style="background-color: #999999">
-          <div class="item item-avatar" style="background-color: #666">
-              <img src="img/{{post.user.pic}}">
-              <h2>{{post.user.username}}</h2>
-              <h3>at {{post.location}}</h3>
+      <div class="list card dark" ng-repeat="post in posts" >
+          <div class="item item-avatar">
+              <img src='{{post.get("user").get("information").get("profilePhoto").url()}}'>
+              <h2>{{post.get("user").get("information").get("firstName")}} {{post.get("user").get("information").get("lastName")}}</h2>
+              <h3>{{post.get("location").Timestamp}}</h3>
           </div>
           <div class="item item-body">
-              {{post.data.value}}
+              {{post.get("data").value}}
               <img ng-show="postHasImage_{{post.id}}" class="full-image" src="img/{{post.data.pic}}">
               <p>
-                  <a class="light">{{post.likes.length}} Likes</a>
-                  <a ng-click="showOrHidePost({{post.id}})" class="light">{{post.comments.length}} Comments</a>
+                  <a class="light">{{post.get("likes").length}} Likes</a>
+                  <a ng-click="showOrHidePost({{post}})" class="light">{{post.get("comments").length}} Comments</a>
               </p>
           </div>
           <div class="item tabs tabs-secondary tabs-icon-left">
-              <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5">
+              <a ng-show="showPostLiked_{{post.id}}" ng-click="likeUnlikePost(post)" class="tab-item">
+                  <i class="icon ion-thumbsup"></i> Liked
+              </a>
+              <a ng-hide="showPostLiked_{{post.id}}" ng-click="likeUnlikePost(post)" class="tab-item">
                   <i class="icon ion-thumbsup"></i> Like
               </a>
-              <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="showOrHidePost({{post.id}})">
+              <a ng-click="showOrHidePost({{post}})" class="tab-item" ng-click="">
                   <i class="icon ion-chatbox"></i> Comment
               </a>
-              <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5">
-                  <i class="icon ion-share"></i> Share
+              <a class="tab-item">
+                  <i class="icon ion-android-walk"></i> Navigate
               </a>
           </div>
           <hr>
           
-          <div class="list" ng-repeat="comment in post.comments" ng-show="showPost_{{post.id}}">
-            <div class="item item-body item-avatar">
-                <img src="img/{{comment.user.pic}}">
-                <h2>{{comment.user.username}}</h2>
-                <p>{{comment.data.value}}</p>
+          <div class="list" ng-repeat="comment in post.get('comments')" ng-show="showPost_{{post.id}}">
+            <div class="item item-avatar">
+                <img src="{{comment.get('user').get('information').get('profilePhoto').url()}}">
+                <h2>{{comment.get("user").get("username")}}</h2>
+                <p>{{comment.get("data").value}}</p>
             </div>  
             <hr>
           </div>
 
-          <label class="item item-avatar item-input">
+          <label style="background-color: #f5f5f5" class="item item-avatar item-input">
             <img src="{{profilePic}}">
             <!-- <input type="text" placeholder="Write a comment"> -->
-            <form name="comment_form" ng-submit="submitComment()">
+            <form name="comment_form" ng-submit="submitComment(post)">
               <div class="list">
                  <div class="item item-input-inset">
                     <label class="item-input-wrapper">
-                      <input class="dark" type="text" name="search_input" placeholder="Write a comment">
+                      <input id="comment_{{post.id}}" class="" type="text" name="search_input" placeholder="Write a comment">
                       <button class="button-clear icon ion-android-send"></button>
                     </label>
                  </div>

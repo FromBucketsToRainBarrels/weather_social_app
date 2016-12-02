@@ -45,6 +45,9 @@ angular.module('starter.services', [])
 })
 
 .factory('Posts', function() {
+
+
+
   // Some fake testing data  
   var comment1 = {
     user : user_sansa,
@@ -114,13 +117,18 @@ angular.module('starter.services', [])
     all: function() {
       return posts;
     },
-    getPost: function(postId) {
-      for (var i = 0; i < posts.length; i++) {
-        if (posts[i].id === parseInt(postId)) {
-          return posts[i];
-        }
-      }
-      return null;
+    
+    getPost: function(page, displayLimit) {
+      var page = 0;
+      var displayLimit = 10;
+
+      var Post = Parse.Object.extend("Post");
+      var post = new Parse.Query(Post);
+      post.descending('updatedAt');
+      post.limit(displayLimit);
+      post.skip(page*displayLimit);
+      
+      
     }
   };
 })

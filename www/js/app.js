@@ -29,6 +29,7 @@ app.run(function ($ionicPlatform, UserService) {
         }
 
         UserService.init();
+        UserService.updateInstallation();
     });
 })
 

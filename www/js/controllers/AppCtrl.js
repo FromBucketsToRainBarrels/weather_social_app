@@ -42,76 +42,44 @@
     var promise = UserService.currentUser();
     promise.then(function(user) {
         //user is logged in
-        $scope.isLoggedIn = true;
-        
-        if(UserService.getCurrentUser() == null){
-            UserService.getUser(Parse.User.current())
-              .then(function (_response) {
-                  $scope = afterGetUser($scope, UserService, _response);
-                  $ionicLoading.hide();
-              }, function (_error) {
-                  $ionicLoading.hide();
-                  console.error("error getting user in " + _error.message);
-              })
-        }else{
-            if(window.cordova && window.cordova.plugins) {
-                
-                if(navigator.connection.type == Connection.NONE) {
-                    // no internet connection use localstorage data
-                    $scope.currentUser = UserService.getCurrentUser();
-                    $scope.profilePic = $scope.currentUser.information.profilePhoto.url;
-                    $scope.isLoggedIn = true;
-                    $ionicLoading.hide();
-                }else{
-                    // device has internet so we can fetch updated data
-                    UserService.getUser(Parse.User.current())
-                      .then(function (_response) {
-                          $scope = afterGetUser($scope, UserService, _response);
-                          $ionicLoading.hide();
-                      }, function (_error) {
-                          $ionicLoading.hide();
-                          console.error("error getting user in " + _error.message);
-                      })
-                }
-            }else{ 
-                //this part of the code is for browser testing not used for production
+        $scope.isLoggedIn = true;      
+        if(window.cordova && window.cordova.plugins) {
+            
+            if(navigator.connection.type == Connection.NONE) {
+                // no internet connection use localstorage data
+                $scope.currentUser = UserService.getCurrentUser();
+                $scope.profilePic = $scope.currentUser.information.profilePhoto.url;
+                $scope.isLoggedIn = true;
+                $ionicLoading.hide();
+            }else{
+                // device has internet so we can fetch updated data
                 UserService.getUser(Parse.User.current())
                   .then(function (_response) {
                       $scope = afterGetUser($scope, UserService, _response);
+                      $ionicLoading.hide();
                   }, function (_error) {
                       $ionicLoading.hide();
                       console.error("error getting user in " + _error.message);
                   })
-                  $ionicLoading.hide();
             }
-            
+        }else{ 
+            //this part of the code is for browser testing not used for production
+            UserService.getUser(Parse.User.current())
+              .then(function (_response) {
+                  $scope = afterGetUser($scope, UserService, _response);
+              }, function (_error) {
+                  $ionicLoading.hide();
+                  console.error("error getting user in " + _error.message);
+              })
+              $ionicLoading.hide();
         }
-
     }, function(reason) {
         // not logged in 
+        alert("not logged in");
+        UserService.setCurrentUser(null);
         $scope.currentUser = null;
         $ionicLoading.hide();
     });
-
-    // var navIcons = document.getElementsByClassName('ion-navicon');
-    // for (var i = 0; i < navIcons.length; i++) {
-    //   navIcons.addEventListener('click', function () {
-    //       this.classList.toggle('active');
-    //   });
-    // }
-
-    // var fab = document.getElementById('fab');
-    // fab.addEventListener('click', function () {
-    //   //location.href = 'https://google.com';
-    //   //window.open('https://google.com', '_blank');
-    //   if($scope.currentUser != null){
-    //     //here we show a modal for a new post
-    //     $scope.newPostModal.show();
-    //   }else{
-    //     //here we will show a modal for sign in or sign up
-    //     $scope.modal.show();
-    //   }
-    // });
 
     // .fromTemplate() method
     var template = '<ion-popover-view><ion-header-bar> <h1 class="title">My Popover Title</h1> </ion-header-bar> <ion-content> Hello! </ion-content></ion-popover-view>';
@@ -178,10 +146,48 @@
         }
     }
 
+    $scope.doLogOutAction = function(){
+      if(window.cordova && window.cordova.plugins){
+        var deviceTokenPromise =  UserService.getThisDeviceToken();
+        deviceTokenPromise.then(function(token){
+          var installationPromise = UserService.getInstallation(token);
+          installationPromise.then(function(installation) {
+            var now = new Date();
+            installation[0].set("lastOnline", now);
+            installation[0].set("loginStatusOnDevice", "logged out");
+            installation[0].save(null, {
+                success: function(installation){
+                  var logoutPromise = UserService.logout();
+                  logoutPromise.then(function(_response){
+                    UserService.setCurrentUser(null);
+                    window.location.reload(true);
+                  }, function(error){
+                    alert("Error : " + error.message);
+                  });
+                },
+                error: function(installation, error){
+                  alert("Error : " + error.message);
+                }
+            });
+          }, function(error){
+            alert("Error : " + error.message);
+          });
+        }, function(error){
+          alert("Error : " + error.message);
+        });
+      }else{
+        // browser code
+        UserService.logout();
+        UserService.setCurrentUser(null);
+        window.location.reload(true);
+      }
+        
+    }
+
     $scope.doLoginAction = function (loginData) {
-        loginData = {};
-        loginData.email = "tanzeelrana@live.com";
-        loginData.password =  "Turr1.Turr1.";
+        // loginData = {};
+        // loginData.email = "tanzeelrana@live.com";
+        // loginData.password =  "Turr1.Turr1.";
         if(loginData == null || loginData == undefined){
           alert("Please enter login credentials");
         }else if(loginData.email == undefined){
@@ -199,38 +205,22 @@
                       UserService.setCurrentUser(_response[0]);
                       $scope.currentUser = UserService.getCurrentUser();
                       $scope.isLoggedIn = true;
+                      UserService.updateInstallation();
+
                       if($scope.currentUser.information.profilePhoto.url != undefined){
                           $scope.profilePic = $scope.currentUser.information.profilePhoto.url;
                           $scope.profilePic = fixFileURL($scope.profilePic, $scope.ParseConfiguration.serverIPAdress);
                       }
                       $scope.$apply();
-                      if(window.cordova && window.cordova.plugins){
-                          FCMPlugin.getToken(
-                            function(token){
-                              //here we need to update the record for this specific device in the installation collection
-                              //we update the user, lastOnline, loginStatusOnDevice and locationHistory otherwise 
-                              //we will create a record for this specific device and store the respective information
-                              //note : wwe need to make use of the cordova navigator here to get location geopoint
-                              //alert("device token is : " + token);
-
-                              $scope.modal.hide();
-                              $ionicLoading.hide();
-                            },
-                            function(err){
-                              alert('error retrieving token: ' + err);
-                              $scope.modal.hide();
-                              $ionicLoading.hide();
-                            }
-                          )
-                      }else{
-                          $scope.modal.hide();
-                          $ionicLoading.hide();
-                      }
+                      $scope.modal.hide();
+                      $ionicLoading.hide();
                   }, function (_error) {
                       alert("error getting user in " + _error.message);
+                      $ionicLoading.hide();
                   })
           }, function (_error) {
               alert("error logging in " + _error.message);
+              $ionicLoading.hide();
           })
         }      
     };
@@ -242,17 +232,13 @@
         });
 
         UserService.createUser(signUpData).then(function (_response) {
-
             UserService.getUser(_response)
             .then(function (_response){ 
                 UserService.setCurrentUser(_response[0]);
                 $scope.currentUser = UserService.getCurrentUser();
+                UserService.updateInstallation();
                 $scope.isLoggedIn = true;
                 $scope.$apply();
-
-                //here we need to link the installation record of this 
-                //device to the user that has just signed up from this device and 
-                //update the respective collection columns
 
                 $ionicLoading.hide();
                 $scope.modal.hide();
@@ -270,6 +256,7 @@
 
         UserService.updateProfile($scope.uploadProfilePicture, $scope.currentUser)
         .then(function (_response) {
+            alert("UserService.updateProfile() response got");
             UserService.getUser(_response)
                 .then(function (_response){ 
                     UserService.setCurrentUser(_response[0]);

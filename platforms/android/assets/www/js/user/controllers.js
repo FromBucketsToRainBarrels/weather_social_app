@@ -38,26 +38,9 @@ angular.module('user.controllers', [])
 
                         UserService.getUser(_response.toJSON())
                             .then(function (_response) {
-                                
                                 UserService.setCurrentUser(_response[0]);
-
-                                if(window.cordova && window.cordova.plugins){
-                                    FCMPlugin.getToken(
-                                      function(token){
-                                        //alert(token);
-                                        
-                                        // transition to next state
-                                        $state.go('app.components');
-                                      },
-                                      function(err){
-                                        alert('error retrieving token: ' + err);
-                                        // transition to next state
-                                        $state.go('app.components');
-                                      }
-                                    )
-                                }else{
-                                    $state.go('app.components');
-                                }
+                                UserService.updateInstallation();
+                                $state.go('app.components');
                             }, function (_error) {
                                 alert("error getting user in " + _error.message);
                             })
