@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "307851448359",
+    "firebase_url": "https://frombucketstorainbarrels-70ed5.firebaseio.com",
+    "project_id": "frombucketstorainbarrels-70ed5",
+    "storage_bucket": "frombucketstorainbarrels-70ed5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:307851448359:android:0ce85eb35987be41",
+        "android_client_info": {
+          "package_name": "com.ionicframework.frombucketstorainbarrels553720"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "307851448359-2v20dgij8tpsff73a9vktu9068sjocr2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDz820Xk4GfOXhVJAqp0AeLuMk-4Lf3JMc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

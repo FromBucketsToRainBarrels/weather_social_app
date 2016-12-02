@@ -1,0 +1,73 @@
+<ion-modal-view>
+  <ion-header-bar class="bar bar-header">
+    <h1 class="title">Edit Profile</h1>
+    <button class="button button-clear button-primary ion-android-cancel" ng-click="modal.hide()"></button>
+  </ion-header-bar>
+  <ion-content class="padding has-footer">
+    
+  <div>    
+    <div class="list">
+
+      <div class="item">
+        <div class="card">
+          <div class="row">
+            <div class="col col-50"> <img class="full-image" src="{{profilePic}}"></div>
+            <div class="col"><input type="file" fileread="uploadProfilePicture.src" /></div>
+            <div class="col"></div>
+          </div>
+        </div>
+      </div>
+        
+
+      <label class="item item-input">
+        <span class="input-label">Email</span>
+        <input disabled value="{{currentUser.email}}" type="email">
+      </label>
+      
+      <label class="item item-input">
+        <span class="input-label">First Name</span>
+        <input ng-model="currentUser.information.firstName" type="text">
+      </label>
+      
+      <label class="item item-input">
+        <span class="input-label">Last Name</span>
+        <input ng-model="currentUser.information.lastName" type="text">
+      </label>
+
+      <label class="item item-input">
+        <span class="input-label">Phone</span>
+        <input ng-model="currentUser.information.phone" type="text">
+      </label>
+
+      <div class="item" >
+          <span class="input-label assertive" ng-click="passwordChange()">Change Password</span>
+          <div ng-show="showPasswordChange">
+              <label class="item item-input">
+                <span class="input-label">Old Password</span>
+                <input ng-model="updateProfileData.oldPassword" type="password">
+              </label>
+              <label class="item item-input">
+                <span class="input-label">New Password</span>
+                <input ng-model="updateProfileData.newPassword" type="password">
+              </label>
+              <label class="item item-input">
+                <span class="input-label">New Re-Password</span>
+                <input ng-model="updateProfileData.newRePassword" type="password">
+              </label>
+          </div>
+      </div>
+            
+      
+    </div>    
+  </div>
+
+  </ion-content>
+    <div class="tabs">
+      <a class="tab-item" ng-click="editModal.hide()">
+        Close
+      </a>
+      <a class="tab-item" ng-click="uploadProfile()">
+        Update
+      </a>
+    </div>
+</ion-modal-view>
