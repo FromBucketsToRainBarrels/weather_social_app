@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="/home/tanzeel/Documents/fall 2016/FromBucketsToRainBarrels/platforms/android/CordovaLib/src/main/jniLibs"/></dataSet><dataSet config="debug"><source path="/home/tanzeel/Documents/fall 2016/FromBucketsToRainBarrels/platforms/android/CordovaLib/src/debug/jniLibs"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="/home/tanzeelrana/Development/school_fall_2016/weather_social_app/platforms/android/CordovaLib/src/main/jniLibs"/></dataSet><dataSet config="debug"><source path="/home/tanzeelrana/Development/school_fall_2016/weather_social_app/platforms/android/CordovaLib/src/debug/jniLibs"/></dataSet></merger>

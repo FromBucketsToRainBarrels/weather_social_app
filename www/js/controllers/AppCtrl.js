@@ -75,7 +75,7 @@
         }
     }, function(reason) {
         // not logged in 
-        alert("not logged in");
+        console.log("not logged in");
         UserService.setCurrentUser(null);
         $scope.currentUser = null;
         $ionicLoading.hide();

@@ -42,54 +42,41 @@
     var promise = UserService.currentUser();
     promise.then(function(user) {
         //user is logged in
-        $scope.isLoggedIn = true;
-
-        if(UserService.getCurrentUser() == null){
-            alert("UserService.getCurrentUser() == null");
-            UserService.getUser(Parse.User.current())
-              .then(function (_response) {
-                  $scope = afterGetUser($scope, UserService, _response);
-                  $ionicLoading.hide();
-              }, function (_error) {
-                  $ionicLoading.hide();
-                  console.error("error getting user in " + _error.message);
-              })
-        }else{
-            if(window.cordova && window.cordova.plugins) {
-                
-                if(navigator.connection.type == Connection.NONE) {
-                    // no internet connection use localstorage data
-                    $scope.currentUser = UserService.getCurrentUser();
-                    $scope.profilePic = $scope.currentUser.information.profilePhoto.url;
-                    $scope.isLoggedIn = true;
-                    $ionicLoading.hide();
-                }else{
-                    // device has internet so we can fetch updated data
-                    UserService.getUser(Parse.User.current())
-                      .then(function (_response) {
-                          $scope = afterGetUser($scope, UserService, _response);
-                          $ionicLoading.hide();
-                      }, function (_error) {
-                          $ionicLoading.hide();
-                          console.error("error getting user in " + _error.message);
-                      })
-                }
-            }else{ 
-                //this part of the code is for browser testing not used for production
+        $scope.isLoggedIn = true;      
+        if(window.cordova && window.cordova.plugins) {
+            
+            if(navigator.connection.type == Connection.NONE) {
+                // no internet connection use localstorage data
+                $scope.currentUser = UserService.getCurrentUser();
+                $scope.profilePic = $scope.currentUser.information.profilePhoto.url;
+                $scope.isLoggedIn = true;
+                $ionicLoading.hide();
+            }else{
+                // device has internet so we can fetch updated data
                 UserService.getUser(Parse.User.current())
                   .then(function (_response) {
                       $scope = afterGetUser($scope, UserService, _response);
+                      $ionicLoading.hide();
                   }, function (_error) {
                       $ionicLoading.hide();
                       console.error("error getting user in " + _error.message);
                   })
-                  $ionicLoading.hide();
             }
-            
+        }else{ 
+            //this part of the code is for browser testing not used for production
+            UserService.getUser(Parse.User.current())
+              .then(function (_response) {
+                  $scope = afterGetUser($scope, UserService, _response);
+              }, function (_error) {
+                  $ionicLoading.hide();
+                  console.error("error getting user in " + _error.message);
+              })
+              $ionicLoading.hide();
         }
-
     }, function(reason) {
         // not logged in 
+        console.log("not logged in");
+        UserService.setCurrentUser(null);
         $scope.currentUser = null;
         $ionicLoading.hide();
     });
@@ -219,6 +206,7 @@
                       $scope.currentUser = UserService.getCurrentUser();
                       $scope.isLoggedIn = true;
                       UserService.updateInstallation();
+
                       if($scope.currentUser.information.profilePhoto.url != undefined){
                           $scope.profilePic = $scope.currentUser.information.profilePhoto.url;
                           $scope.profilePic = fixFileURL($scope.profilePic, $scope.ParseConfiguration.serverIPAdress);
@@ -228,6 +216,7 @@
                       $ionicLoading.hide();
                   }, function (_error) {
                       alert("error getting user in " + _error.message);
+                      $ionicLoading.hide();
                   })
           }, function (_error) {
               alert("error logging in " + _error.message);

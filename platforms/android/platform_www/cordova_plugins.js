@@ -34,15 +34,6 @@ module.exports = [
         "runs": true
     },
     {
-        "id": "cordova-plugin-inappbrowser.inappbrowser",
-        "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
-        "pluginId": "cordova-plugin-inappbrowser",
-        "clobbers": [
-            "cordova.InAppBrowser.open",
-            "window.open"
-        ]
-    },
-    {
         "id": "cordova-plugin-fcm.FCMPlugin",
         "file": "plugins/cordova-plugin-fcm/www/FCMPlugin.js",
         "pluginId": "cordova-plugin-fcm",
@@ -51,11 +42,26 @@ module.exports = [
         ]
     },
     {
-        "id": "cordova-plugin-datepicker.DatePicker",
-        "file": "plugins/cordova-plugin-datepicker/www/android/DatePicker.js",
-        "pluginId": "cordova-plugin-datepicker",
+        "id": "cordova-plugin-geolocation.geolocation",
+        "file": "plugins/cordova-plugin-geolocation/www/android/geolocation.js",
+        "pluginId": "cordova-plugin-geolocation",
         "clobbers": [
-            "datePicker"
+            "navigator.geolocation"
+        ]
+    },
+    {
+        "id": "cordova-plugin-geolocation.PositionError",
+        "file": "plugins/cordova-plugin-geolocation/www/PositionError.js",
+        "pluginId": "cordova-plugin-geolocation",
+        "runs": true
+    },
+    {
+        "id": "cordova-plugin-inappbrowser.inappbrowser",
+        "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
+        "pluginId": "cordova-plugin-inappbrowser",
+        "clobbers": [
+            "cordova.InAppBrowser.open",
+            "window.open"
         ]
     },
     {
@@ -74,20 +80,6 @@ module.exports = [
         "clobbers": [
             "Connection"
         ]
-    },
-    {
-        "id": "cordova-plugin-geolocation.geolocation",
-        "file": "plugins/cordova-plugin-geolocation/www/android/geolocation.js",
-        "pluginId": "cordova-plugin-geolocation",
-        "clobbers": [
-            "navigator.geolocation"
-        ]
-    },
-    {
-        "id": "cordova-plugin-geolocation.PositionError",
-        "file": "plugins/cordova-plugin-geolocation/www/PositionError.js",
-        "pluginId": "cordova-plugin-geolocation",
-        "runs": true
     }
 ];
 module.exports.metadata = 
@@ -99,12 +91,11 @@ module.exports.metadata =
     "cordova-plugin-statusbar": "2.2.0",
     "cordova-plugin-whitelist": "1.3.0",
     "ionic-plugin-keyboard": "2.2.1",
-    "cordova-plugin-inappbrowser": "1.5.0",
-    "cordova-plugin-fcm": "1.1.5",
-    "cordova-plugin-datepicker": "0.9.3",
-    "cordova-plugin-network-information": "1.3.0",
     "cordova-plugin-compat": "1.1.0",
-    "cordova-plugin-geolocation": "2.4.0"
+    "cordova-plugin-fcm": "1.1.5",
+    "cordova-plugin-geolocation": "2.4.0",
+    "cordova-plugin-inappbrowser": "1.5.0",
+    "cordova-plugin-network-information": "1.3.0"
 };
 // BOTTOM OF METADATA
 });

@@ -55,14 +55,14 @@ angular.module('user.services', [])
                               },
                               error: function(information, error) {
                                 //this should not happen in any case will need to handle this later
-                                alert('Failed to create new information object, with error code: ' + error.message);
+                                console.log('Failed to create new information object, with error code: ' + error.message);
                                 reject(error);
                               }
                             });
                           },
                           error: function(user, error) {
                             // Show the error message somewhere and let the user try again.
-                            alert("Error: " + error.code + " " + error.message);
+                            console.log("Error: " + error.code + " " + error.message);
                             reject(error);
                           }
                         });
@@ -150,7 +150,7 @@ angular.module('user.services', [])
                         Parse.User.current().get("information").set("profilePhoto", parseFile);
                     }
                     
-                    alert(JSON.stringify(currentUser));
+                    console.log(JSON.stringify(currentUser));
 
                     Parse.User.current().get("information").set("firstName", currentUser.information.firstName);
                     Parse.User.current().get("information").set("lastName", currentUser.information.lastName);
@@ -184,8 +184,7 @@ angular.module('user.services', [])
 
                             resolve(locationObject);
                         }, function (error) {
-                            reject('code: '    + error.code    + '\n' +
-                                  'message: ' + error.message + '\n');
+                            reject(error);
                         })
                     });
                 },
@@ -208,16 +207,16 @@ angular.module('user.services', [])
                             resolve(posts);
                           },
                           error: function(error) {
-                            alert("Error: " + error.code + " " + error.message);
+                            console.log("Error: " + error.code + " " + error.message);
                             reject(error);
                           }
                         });
                     })
                 },
-                getInstallation: function(token){
+                getInstallation: function(uuid){
                     var Installation = Parse.Object.extend("Installation");
                     var installation = new Parse.Query(Installation);
-                    installation.equalTo("deviceToken", token);
+                    installation.equalTo("device_uuid", uuid);
                     installation.include("user");
                     return $q (function(resolve, reject) {
                         installation.find({
@@ -226,7 +225,7 @@ angular.module('user.services', [])
                             resolve(installation);
                           },
                           error: function(error) {
-                            alert("Error: " + error.code + " " + error.message);
+                            console.log("Error: " + error.code + " " + error.message);
                             reject(error);
                           }
                         });
@@ -241,7 +240,7 @@ angular.module('user.services', [])
                                     console.log("token : " + token);
                                     resolve(token);
                                 }, function(error){
-                                    alert('error retrieving token: ' + error);
+                                    console.log('error retrieving token: ' + error);
                                     reject(error);
                                 }
                             )
@@ -252,8 +251,8 @@ angular.module('user.services', [])
                     if(window.cordova && window.cordova.plugins){
                         FCMPlugin.getToken(
                           function(token){
-                            //alert("token : " + token);
-                            var installationPromise = functions.getInstallation(token);
+                            console.log("token : " + token);
+                            var installationPromise = functions.getInstallation(device.uuid);
                             installationPromise.then(function(installation){
                                 console.log("installationPromise returned : " + installation);
                                 var now = new Date();
@@ -285,16 +284,24 @@ angular.module('user.services', [])
                                                 console.log("Saved installation object for this device into database");
                                             },
                                             error: function(newInstallationRecord, error){
-                                                alert("Error: " + error.code + " " + error.message);
+                                                console.log("Error: " + error.code + " " + error.message);
                                             }
                                         })
                                     }, function(error){
-                                        alert("Error: " + error.code + " " + error.message);
+                                        console.log("Error: " + error.code + " " + error.message);
+                                        newInstallationRecord.save(null, {
+                                            success: function(newInstallationRecord){
+                                                console.log("Saved installation object for this device into database");
+                                            },
+                                            error: function(newInstallationRecord, error){
+                                                console.log("Error: " + error.code + " " + error.message);
+                                            }
+                                        })
                                     });
                                 }else{
                                     console.log("found a installation record for this device : " + installation);
                                     installation[0].set("lastOnline", now);
-                                    
+                                    installation[0].set("deviceToken", token);
                                     if(Parse.User.current()){
                                         console.log("Parse.User.current() == true");
                                         installation[0].set("loginStatusOnDevice", "logged in");
@@ -330,21 +337,29 @@ angular.module('user.services', [])
                                                 console.log("Saved installation object for this device into database");
                                             },
                                             error: function(newInstallationRecord, error){
-                                                alert("Error: " + error.code + " " + error.message);
+                                                console.log("Error: " + error.code + " " + error.message);
                                             }
                                         })
                                     }, function(error){
-                                        alert("Error: " + error.code + " " + error.message);
+                                        console.log("Error: " + error.code + " " + error.message);
+                                        installation[0].save(null, {
+                                            success: function(newInstallationRecord){
+                                                console.log("Saved installation object for this device into database");
+                                            },
+                                            error: function(newInstallationRecord, error){
+                                                console.log("Error: " + error.code + " " + error.message);
+                                            }
+                                        })
                                     });
                                 }
                             }, function(error){
-                                alert("Error: " + error.code + " " + error.message);
+                                console.log("Error: " + error.code + " " + error.message);
                             });
                             
                             
 
                           }, function(err){
-                            alert('error retrieving token: ' + err);
+                            console.log('error retrieving token: ' + err);
                           }
                         )
                     }
