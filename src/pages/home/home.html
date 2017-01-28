@@ -59,7 +59,7 @@
       <ion-card >
         <ion-item>
           <ion-avatar item-left>
-            <img src="{{post.get('user').get('image').url()}}">
+            <img src="{{post.get('user').get('image')?.url()}}">
           </ion-avatar>
           <h2>{{post.get("user").get("username")}}</h2>
         </ion-item>
@@ -95,6 +95,9 @@
             
             <div *ngIf="comments_models[post.id] && comments_models[post.id].show">
               <ion-item *ngFor="let comment of comments_models[post.id].comments" text-wrap>
+                <ion-avatar item-left>
+                  <img src="{{comment.get('user').get('image')?.url()}}">
+                </ion-avatar>
                 <strong><small>{{comment.get("user").get("username")}}</small></strong><br>
                 <small>{{comment.get("text")}}</small>
               </ion-item>
@@ -123,5 +126,9 @@
     </ion-card>
     
   </div>
+
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+   <ion-infinite-scroll-content></ion-infinite-scroll-content>
+ </ion-infinite-scroll>
 
 </ion-content>

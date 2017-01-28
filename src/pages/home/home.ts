@@ -4,7 +4,6 @@ import {AlertController} from 'ionic-angular';
 import {LoadingController} from 'ionic-angular';
 import {Input, ViewChild} from '@angular/core';
 import { Events } from 'ionic-angular';
-
 import Parse from 'parse';
 
 import {FeedService} from '../../services/socialmedia-service';
@@ -21,18 +20,13 @@ import {FeedService} from '../../services/socialmedia-service';
 })
 export class HomePage {
   // slides for slider
-  public slides = [
-    "assets/img/categories/fruit.jpg",
-    "assets/img/categories/pizza.jpg",
-    "assets/img/categories/sushi.jpg"
-  ];
 
   public feed: any;
   public loader: any;
   public comment_box_models: any;
   public comments_models: any;
   public status_model: any;
-
+  private start:number=0;
   constructor(
     public nav: NavController, 
     public feedService: FeedService,
@@ -55,7 +49,7 @@ export class HomePage {
     this.comments_models = {};
 
     this.presentLoading();
-    feedService.getFeed().then((response) => {
+    feedService.getFeed(this.start++).then((response) => {
       return response;
     }).then((feed) => {
       console.log("posts count : " + feed);
@@ -64,6 +58,20 @@ export class HomePage {
     }).catch((ex) => {
       console.error('Error : ', ex);
       me.dismissLoading();
+    });
+  }
+
+  doInfinite(infiniteScroll) {
+    var me = this;
+    console.log('Begin async operation');
+    this.feedService.getFeed(this.start++).then((response) => {
+      return response;
+    }).then((feed) => {
+      me.feed = me.feed.concat(feed);
+      console.log('Async operation has ended');
+      infiniteScroll.complete();
+    }).catch((ex) => {
+      console.error('Error : ', ex);
     });
   }
 
@@ -97,20 +105,22 @@ export class HomePage {
   }
 
   addPost(){
-    if(this.status_model.text.length > 2 || me.status_model.attachment_photo){
-      var me = this;
-      this.presentLoading();
-      this.feedService.addPost(this.status_model).then((response) => {
-        return response;
-      }).then((post) => {
-        me.status_model = {};
-        me.feed.unshift(post);
-        me.dismissLoading();
-      }).catch((ex) => {
-        console.error('Error : ', ex);
-        me.dismissLoading();
-      });
+    var me = this;
+    if(this.status_model.text || me.status_model.attachment_photo){
+        var me = this;
+        this.presentLoading();
+        this.feedService.addPost(this.status_model).then((response) => {
+          return response;
+        }).then((post) => {
+          me.status_model = {};
+          me.feed.unshift(post);
+          me.dismissLoading();
+        }).catch((ex) => {
+          console.error('Error : ', ex);
+          me.dismissLoading();
+        });
     }
+    
   }
 
   getComments(post){
@@ -132,16 +142,18 @@ export class HomePage {
 
   addComment(post){
     var me = this;
-    this.presentLoading();
-    this.feedService.addComment(post,this.comment_box_models[post.id]).then((response) => {
-      return response;
-    }).then((p) => {
-      me.comment_box_models[post.id] = "";
-      me.dismissLoading();
-    }).catch((ex) => {
-      console.error('Error : ', ex);
-      me.dismissLoading();
-    });
+    if(this.comment_box_models[post.id] && this.comment_box_models[post.id].length != 0){
+      this.presentLoading();
+      this.feedService.addComment(post,this.comment_box_models[post.id]).then((response) => {
+        return response;
+      }).then((p) => {
+        me.comment_box_models[post.id] = "";
+        me.dismissLoading();
+      }).catch((ex) => {
+        console.error('Error : ', ex);
+        me.dismissLoading();
+      });
+    }
   }
 
   presentLoading() {

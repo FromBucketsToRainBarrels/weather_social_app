@@ -3,6 +3,8 @@ import {Platform} from 'ionic-angular';
 import {ViewChild} from '@angular/core';
 import {StatusBar} from 'ionic-native';
 import { Events } from 'ionic-angular';
+import { Pagination } from 'ionic2-pagination';
+
 
 import Parse from 'parse';
 

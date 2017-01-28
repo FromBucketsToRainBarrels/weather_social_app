@@ -11,14 +11,14 @@ export class FeedService {
   ) {
   }
 
-  getFeed(){
+  getFeed(n){
     var me = this;
     return new Promise((resolve, reject) => {
       var Post = Parse.Object.extend("Post");
       var post = new Parse.Query(Post);
       post.descending('createdAt');
-      post.limit(10);
-      post.skip(0*10);
+      post.limit(7);
+      post.skip(n*7);
       post.include("user");
       post.include("user.information");
       post.include("comments");
