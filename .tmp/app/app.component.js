@@ -65,6 +65,7 @@ export var MyApp = (function () {
             // Okay, so the platform is ready and our plugins are available.
             // Here you can do any higher level native things you might need.
             StatusBar.styleDefault();
+            userService.getUserInfo();
         });
     }
     MyApp.prototype.openPage = function (page) {
@@ -82,8 +83,9 @@ export var MyApp = (function () {
                 nav: new ViewChild('content')
             }
         }), 
-        __metadata('design:paramtypes', [Platform, Events, UserService])
+        __metadata('design:paramtypes', [(typeof (_a = typeof Platform !== 'undefined' && Platform) === 'function' && _a) || Object, (typeof (_b = typeof Events !== 'undefined' && Events) === 'function' && _b) || Object, (typeof (_c = typeof UserService !== 'undefined' && UserService) === 'function' && _c) || Object])
     ], MyApp);
     return MyApp;
+    var _a, _b, _c;
 }());
 //# sourceMappingURL=app.component.js.map
