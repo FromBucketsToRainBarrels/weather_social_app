@@ -1,0 +1,143 @@
+<!--
+  Generated template for the ProfilePage page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Weather</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content class="card-background-page">
+
+	<ion-item>
+	    <ion-searchbar
+	      [(ngModel)]="search.text"
+	      [showCancelButton]='search.showCancel'
+	      [placeholder]="search.placeholder"
+	      (ionInput)="onSearchInput($event)"
+	      (ionFocus)="onSearchFocus($event)"
+	      (ionBlur)="onSearchBlur($event)"
+	      (ionCancel)="onSearchCancel($event)"
+	      (search)="queryWeather()">
+	    </ion-searchbar>
+	    <ion-buttons start item-right (click)="queryWeather()">
+	      <button ion-button icon-only>
+	        <ion-icon name="search"></ion-icon>
+	      </button>
+	    </ion-buttons>
+
+	    <!-- <ion-buttons end item-right>
+	      <button ion-button icon-only>
+	        <ion-icon name="md-reorder"></ion-icon>
+	      </button>
+	    </ion-buttons> -->
+	</ion-item>
+  	
+
+    <div *ngIf="stations">
+    	<ion-slides>
+		  <ion-slide *ngFor="let station of stations let i = index" style="background-color: ">
+		    <ion-card>
+			  <ion-card-header>
+			    <div class="card-title">
+			    	{{station.get("name")}}, {{station.get("latestData").get("JSONDataObject")?.sys.country}}<br>
+			    </div>
+			    <div class="card-subtitle">
+			    	{{station.get("latestData").get("JSONDataObject")?.main.temp}} &#8451;<br>
+			    	{{station.get("latestData").get("JSONDataObject")?.weather[0].description}}<br>
+			    	<small>Last Sync : {{station.get("latestData").createdAt}}</small> <ion-icon name="md-sync" item-left (click)="getLatestData(station,i)"></ion-icon>
+			    </div>
+			  </ion-card-header>
+			  <ion-card-content>
+			  	
+			  </ion-card-content>
+			</ion-card>
+		    <ion-card>
+			    <ion-row center>
+				    <ion-col>
+					    <div>
+					    	<ion-icon name="md-home" item-left></ion-icon>
+							<strong>Wind</strong><br>
+		                  	<small>
+		                  		Speed {{station.get("latestData").get("JSONDataObject")?.wind.speed}}<br>
+		                  		Deg {{station.get("latestData").get("JSONDataObject")?.wind.deg}}<br>
+		                  	</small>
+					    </div>
+					</ion-col>
+				    <ion-col>
+					    <div>
+					    	<ion-icon name="ios-water" item-left></ion-icon>
+							<strong>Humidity</strong><br>
+		                  	<small>{{station.get("latestData").get("JSONDataObject")?.main.humidity}}<br></small>
+					    </div>
+					</ion-col>
+				    <ion-col>
+					    <div>
+					    	<ion-icon name="md-home" item-left></ion-icon>
+							<strong>Pressure</strong><br>
+		                  	<small>{{station.get("latestData").get("JSONDataObject")?.main.pressure}}<br></small>
+					    </div>
+					</ion-col>
+				    <ion-col>
+				      <div>
+				      		<ion-icon name="ios-sunny" item-left></ion-icon>
+							<strong>Sunrise</strong><br>
+		                  	<small>{{station.get("latestData").get("JSONDataObject")?.sys.sunrise}}<br></small>
+				      </div>
+				    </ion-col>
+				</ion-row>
+				<ion-row center>
+				    <ion-col>
+					    <div>
+					    	<ion-icon name="ios-thermometer-outline" item-left></ion-icon>
+							<strong>Min Temp</strong><br>
+		                  	<small>{{station.get("latestData").get("JSONDataObject")?.main.temp_min}}<br></small>
+					    </div>
+					</ion-col>
+				    <ion-col>
+					    <div>
+					    	<ion-icon name="ios-thermometer-outline" item-left></ion-icon>
+							<strong>Max Temp</strong><br>
+		                  	<small>{{station.get("latestData").get("JSONDataObject")?.main.temp_max}}<br></small>
+					    </div>
+					</ion-col>
+				    <ion-col>
+					    <div>
+					    	<ion-icon name="md-home" item-left></ion-icon>
+							<strong>Sea Level</strong><br>
+		                  	<small>{{station.get("latestData").get("JSONDataObject")?.main.sea_level}}<br></small>
+					    </div>
+					</ion-col>
+				    <ion-col>
+				      <div>
+				      		<ion-icon name="ios-partly-sunny" item-left></ion-icon>
+							<strong>Sunset</strong><br>
+		                  	<small>{{station.get("latestData").get("JSONDataObject")?.sys.sunset}}<br></small>
+				      </div>
+				    </ion-col>
+				</ion-row>
+			</ion-card>
+		  	<ion-list>
+				  <ion-item>
+				    <h2>Hourly Forecast</h2>
+				    <p>Upto 5 days</p>
+				    <button ion-button clear item-right>View</button>
+				  </ion-item>
+				  <ion-item>
+				    <h2>Daily Forecast</h2>
+				    <p>Upto 16 days</p>
+				    <button ion-button clear item-right>View</button>
+				  </ion-item>
+				</ion-list>
+		  </ion-slide>
+		</ion-slides>
+    </div>
+</ion-content>

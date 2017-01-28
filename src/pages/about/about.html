@@ -1,0 +1,81 @@
+<!--
+  Generated template for the ProfilePage page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>About</ion-title>
+    <ion-buttons end>
+      <button ion-button>
+        <ion-icon name="md-more"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding class="about gray-bg">
+  <h2 color="dark">El Gaucho restaurant </h2>
+  <span color="dark">225 Valencia St, San Francisco, CA</span>
+
+  <h3>About us</h3>
+
+  <p color="dark">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+    industry's
+    standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make
+    a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
+    remaining essentially unchanged</p>
+
+  <h3>Open hours</h3>
+
+  <ion-list class="list-full-border">
+    <ion-item *ngFor="let day of days">
+      <div>{{ day.name }}</div>
+      <span light-dark>{{ day.hours }}</span>
+    </ion-item>
+  </ion-list>
+
+  <h3>Get in touch</h3>
+
+  <ion-list class="list-full-border">
+    <ion-item>
+      <ion-icon name="call" item-left></ion-icon>
+      Call us
+    </ion-item>
+    <ion-item>
+      <ion-icon name="mail" item-left></ion-icon>
+      Send us and Email
+    </ion-item>
+    <ion-item>
+      <ion-icon name="navigate" item-left></ion-icon>
+      Find us / Get directions
+    </ion-item>
+  </ion-list>
+
+  <h4>Get social with us</h4>
+  <ion-list class="list-full-border">
+    <ion-item>
+      <ion-icon name="logo-facebook" item-left></ion-icon>
+      Visit us on Facebook
+    </ion-item>
+    <ion-item>
+      <ion-icon name="logo-instagram" item-left></ion-icon>
+      Follow us on Instagram
+    </ion-item>
+    <ion-item>
+      <ion-icon name="logo-twitter" item-left></ion-icon>
+      Follow us on Twitter
+    </ion-item>
+    <ion-item>
+      <ion-icon name="logo-pinterest" item-left></ion-icon>
+      Follow us on Pinterest
+    </ion-item>
+  </ion-list>
+</ion-content>
