@@ -36,7 +36,7 @@ export var UserService = (function () {
             me.weatherService.addStation(data).then(function (response) {
                 return response;
             }).then(function (station) {
-                var user = me.user.userParseObj;
+                var user = Parse.User.current();
                 me.find = station;
                 var indx = me.user.stations.findIndex(function (x) { return x.id == me.find.id; });
                 if (indx != -1)
@@ -49,6 +49,7 @@ export var UserService = (function () {
                     success: function (user) {
                         resolve(station);
                     }, error: function (user, error) {
+                        console.log(error);
                         reject(error);
                     }
                 });
