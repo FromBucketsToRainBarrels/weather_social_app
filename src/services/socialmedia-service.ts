@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import Parse from 'parse';
-import { Events } from 'ionic-angular';
+import {Events} from 'ionic-angular';
 
 @Injectable()
 export class FeedService {

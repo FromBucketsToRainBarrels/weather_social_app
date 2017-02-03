@@ -19,15 +19,6 @@ import { LoginPage } from '../pages/login/login';
 import { UserPage } from '../pages/user/user';
 import { LogoutPage } from '../pages/logout/logout';
 import { UserService } from '../services/user-service';
-// import {CategoriesPage} from '../pages/categories/categories';
-// import {FavoritePage} from '../pages/favorite/favorite';
-// import {CartPage} from '../pages/cart/cart';
-// import {OfferPage} from '../pages/offer/offer';
-// import {SettingPage} from '../pages/setting/setting';
-// import {NewsPage} from '../pages/news/news';
-// import {AboutPage} from '../pages/about/about';
-// import {ChatsPage} from '../pages/chats/chats';
-// end import pages
 export var MyApp = (function () {
     function MyApp(platform, events, userService) {
         var _this = this;
@@ -55,7 +46,7 @@ export var MyApp = (function () {
             }
         ];
         this.rootPage = LoginPage;
-        // Initialize Parse with your app's Application ID and JavaScript Key 
+        // Initialize Parse with your app's Application ID and JavaScript Key
         Parse.initialize('FromBucketsToRainBarrels');
         Parse.serverURL = 'http://162.243.118.87:1337/parse';
         events.subscribe('userFetch:complete', function (user) {

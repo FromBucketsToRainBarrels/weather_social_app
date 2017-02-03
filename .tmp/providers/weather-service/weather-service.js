@@ -119,7 +119,6 @@ export var WeatherService = (function () {
                             resolve(staion);
                         },
                         error: function (staion, error) {
-                            console.log(error);
                             reject(error);
                         }
                     });

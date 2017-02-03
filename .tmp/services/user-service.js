@@ -36,7 +36,7 @@ export var UserService = (function () {
             me.weatherService.addStation(data).then(function (response) {
                 return response;
             }).then(function (station) {
-                var user = Parse.User.current();
+                var user = me.user.userParseObj;
                 me.find = station;
                 var indx = me.user.stations.findIndex(function (x) { return x.id == me.find.id; });
                 if (indx != -1)
@@ -49,7 +49,6 @@ export var UserService = (function () {
                     success: function (user) {
                         resolve(station);
                     }, error: function (user, error) {
-                        console.log(error);
                         reject(error);
                     }
                 });
@@ -150,9 +149,8 @@ export var UserService = (function () {
     };
     UserService = __decorate([
         Injectable(), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof Events !== 'undefined' && Events) === 'function' && _a) || Object, (typeof (_b = typeof WeatherService !== 'undefined' && WeatherService) === 'function' && _b) || Object, (typeof (_c = typeof Http !== 'undefined' && Http) === 'function' && _c) || Object])
+        __metadata('design:paramtypes', [Events, WeatherService, Http])
     ], UserService);
     return UserService;
-    var _a, _b, _c;
 }());
 //# sourceMappingURL=user-service.js.map
