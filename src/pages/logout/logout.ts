@@ -19,7 +19,10 @@ export class LogoutPage {
   constructor(
   	public nav: NavController
   ) {
-  	Parse.User.logOut();
-    this.nav.setRoot(LoginPage);  	
+  	var me = this;
+  	Parse.User.logOut().then(() => {
+	  me.nav.setRoot(LoginPage);  	
+	});
+    
   }
 }

@@ -32,11 +32,11 @@
         <ion-icon name="ios-trash" item-right (click)="removeImage()" ></ion-icon>
       </ion-item>
     </div>
-    
+
     <ion-card-content style="background-color: #8db9ea;">
       <ion-item >
-       <ion-label floating>Whats on your mind ....</ion-label>
-       <ion-textarea elastic [(ngModel)]="status_model.text" ></ion-textarea>
+        <ion-label floating>Whats on your mind ....</ion-label>
+        <ion-textarea elastic [(ngModel)]="status_model.text" ></ion-textarea>
       </ion-item>
       <ion-list >
         <ion-item style="background-color: #8db9ea;">
@@ -44,7 +44,7 @@
             <ion-icon name="ios-camera"></ion-icon>
           </button>
           <input hidden="true" id="profile_upload" (change)="getPic($event)" type="file">
-          
+
           <button ion-button outline item-right icon-left round (click)="addPost()">
             <ion-icon name="ios-send"></ion-icon>
             Post
@@ -53,7 +53,7 @@
       </ion-list>
     </ion-card-content>
   </ion-card>
-  
+
   <div *ngFor="let post of feed">
     <ion-card style="background-color: #8db9ea;" >
       <ion-card >
@@ -85,50 +85,50 @@
             </button>
           </ion-item>
         </ion-list>
-          
+
         <ion-list *ngIf="post.get('comments_count')!=0">
-            
-            <ion-item (click)="getComments(post)">
-              <small><a href="#">{{post.get('comments_count')}} comments</a></small>
+
+          <ion-item (click)="getComments(post)">
+            <small><a href="#">{{post.get('comments_count')}} comments</a></small>
+          </ion-item>
+
+
+          <div *ngIf="comments_models[post.id] && comments_models[post.id].show">
+            <ion-item *ngFor="let comment of comments_models[post.id].comments" text-wrap>
+              <ion-avatar item-left>
+                <img src="{{comment.get('user').get('image')?.url()}}">
+              </ion-avatar>
+              <strong><small>{{comment.get("user").get("username")}}</small></strong><br>
+              <small>{{comment.get("text")}}</small>
             </ion-item>
-            
-            
-            <div *ngIf="comments_models[post.id] && comments_models[post.id].show">
-              <ion-item *ngFor="let comment of comments_models[post.id].comments" text-wrap>
-                <ion-avatar item-left>
-                  <img src="{{comment.get('user').get('image')?.url()}}">
-                </ion-avatar>
-                <strong><small>{{comment.get("user").get("username")}}</small></strong><br>
-                <small>{{comment.get("text")}}</small>
-              </ion-item>
-            </div>
-            
+          </div>
+
         </ion-list>
 
         <ion-list *ngIf="post.get('comments_count')==0">
-            <ion-item (click)="setFocus(post)">
-              <small><a href="#">Be the first one to comment</a></small>
-            </ion-item>
+          <ion-item (click)="setFocus(post)">
+            <small><a href="#">Be the first one to comment</a></small>
+          </ion-item>
         </ion-list>
 
         <ion-list >
-           <ion-item style="background-color: #b7c7e0;">
-              <ion-item >
-                <ion-input id="post_comment_{{post.id}}" placeholder="Write a comment" [(ngModel)]="comment_box_models[post.id]"></ion-input>
-                <button ion-button round item-right icon-left (click)="addComment(post)">
-                  <ion-icon name="ios-send"></ion-icon>
-                </button>
-              </ion-item>
-           </ion-item>
-          
+          <ion-item style="background-color: #b7c7e0;">
+            <ion-item >
+              <ion-input id="post_comment_{{post.id}}" placeholder="Write a comment" [(ngModel)]="comment_box_models[post.id]"></ion-input>
+              <button ion-button round item-right icon-left (click)="addComment(post)">
+                <ion-icon name="ios-send"></ion-icon>
+              </button>
+            </ion-item>
+          </ion-item>
+
         </ion-list>
       </ion-card>
     </ion-card>
-    
+
   </div>
 
   <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
-   <ion-infinite-scroll-content></ion-infinite-scroll-content>
- </ion-infinite-scroll>
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 
 </ion-content>

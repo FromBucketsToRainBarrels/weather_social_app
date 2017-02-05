@@ -29,7 +29,7 @@ export class WeatherPage {
   	public alertCtrl: AlertController,
     public loadingCtrl: LoadingController
   ) {
-  	
+
     // get sample data only
     this.stations=[];
     this.search = {
@@ -38,25 +38,25 @@ export class WeatherPage {
     	placeholder:"Search Location",
     	filter: "byCity"
     };
-    
+
     this.stations = this.userService.getUserStations();
-    
+
   }
 
   onSearchFocus(event){
     console.log("ionFocus : " + event);
-  
+
   }
 
   onSearchBlur(event){
     //this.search.ngModel ="";
     console.log("onSearchBlur : "+ event);
-  
+
   }
 
   onSearchInput(event){
     console.log("onSearchInput " + event);
-    
+
   }
 
   queryWeather(){
@@ -102,7 +102,7 @@ export class WeatherPage {
   }
 
   dismissLoading(){
-    this.loader.dismiss();
+    this.loader.dismiss().catch(() => {});
   }
 
   showRadio(data) {

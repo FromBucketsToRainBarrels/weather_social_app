@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 import {NavController} from 'ionic-angular';
 import {AlertController} from 'ionic-angular';
 import {LoadingController} from 'ionic-angular';
-import {Input, ViewChild} from '@angular/core';
 import { Events } from 'ionic-angular';
 import Parse from 'parse';
 
@@ -28,7 +27,7 @@ export class HomePage {
   public status_model: any;
   private start:number=0;
   constructor(
-    public nav: NavController, 
+    public nav: NavController,
     public feedService: FeedService,
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
@@ -43,7 +42,7 @@ export class HomePage {
     });
 
     // set data for feed
-    var me = this;
+    let me = this;
     this.status_model = {};
     this.comment_box_models = {};
     this.comments_models = {};
@@ -52,9 +51,8 @@ export class HomePage {
     feedService.getFeed(this.start++).then((response) => {
       return response;
     }).then((feed) => {
-      console.log("posts count : " + feed);
       me.feed = feed;
-      me.dismissLoading();
+      //me.dismissLoading();
     }).catch((ex) => {
       console.error('Error : ', ex);
       me.dismissLoading();
@@ -82,19 +80,19 @@ export class HomePage {
   getPic(fileInput: any){
     var me = this;
 
-      if (fileInput.target.files && fileInput.target.files[0]) {
-        var reader = new FileReader();
-        
-        reader.onload = function (e : any) {
-            if(e.target.result){
-                me.status_model.attachment_photo_src = e.target.result;
-                me.status_model.attachment_photo = true;
-                var parseFile = new Parse.File( fileInput.target.files[0].name, { base64: e.target.result });
-                me.status_model.attachment_photo_parseFile = parseFile;
-            }
+    if (fileInput.target.files && fileInput.target.files[0]) {
+      var reader = new FileReader();
+
+      reader.onload = function (e : any) {
+        if(e.target.result){
+          me.status_model.attachment_photo_src = e.target.result;
+          me.status_model.attachment_photo = true;
+          var parseFile = new Parse.File( fileInput.target.files[0].name, { base64: e.target.result });
+          me.status_model.attachment_photo_parseFile = parseFile;
         }
-        reader.readAsDataURL(fileInput.target.files[0]);
       }
+      reader.readAsDataURL(fileInput.target.files[0]);
+    }
   }
 
   removeImage(){
@@ -107,20 +105,20 @@ export class HomePage {
   addPost(){
     var me = this;
     if(this.status_model.text || me.status_model.attachment_photo){
-        var me = this;
-        this.presentLoading();
-        this.feedService.addPost(this.status_model).then((response) => {
-          return response;
-        }).then((post) => {
-          me.status_model = {};
-          me.feed.unshift(post);
-          me.dismissLoading();
-        }).catch((ex) => {
-          console.error('Error : ', ex);
-          me.dismissLoading();
-        });
+      var me = this;
+      this.presentLoading();
+      this.feedService.addPost(this.status_model).then((response) => {
+        return response;
+      }).then((post) => {
+        me.status_model = {};
+        me.feed.unshift(post);
+        me.dismissLoading();
+      }).catch((ex) => {
+        console.error('Error : ', ex);
+        me.dismissLoading();
+      });
     }
-    
+
   }
 
   getComments(post){
@@ -166,7 +164,7 @@ export class HomePage {
   }
 
   dismissLoading(){
-    this.loader.dismiss();
+    this.loader.dismiss().catch(() => {});
   }
 
   setFocus(post){

@@ -25,7 +25,7 @@ export class LoginPage {
   public loader: any;
 
   constructor(
-    public nav: NavController, 
+    public nav: NavController,
     public viewCtrl: ViewController,
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
@@ -49,24 +49,24 @@ export class LoginPage {
     this.presentLoading();
     //this.presentLoading(); // dismiss not working for some reason ! :@
     if(this.user.username && this.user.password){
-      
+
       Parse.User.logIn(this.user.username, this.user.password, {
         success: function(user) {
           //navigate to home page
           me.events.publish('userFetch:complete', Parse.User.current());
-          // me.dismissLoading(); 
+          // me.dismissLoading();
           me.nav.setRoot(HomePage);
         },
         error: function(user, error) {
           // The login failed. Check error to see why.
           me.dismissLoading();
-          me.invalidCredentialsAlert(); 
+          me.invalidCredentialsAlert();
         }
       });
     }else{
       me.dismissLoading();
       this.invalidCredentialsAlert();
-    } 
+    }
   }
 
   invalidCredentialsAlert() {
@@ -88,6 +88,6 @@ export class LoginPage {
   }
 
   dismissLoading(){
-    this.loader.dismiss();
+    this.loader.dismiss().catch(() => {});
   }
 }

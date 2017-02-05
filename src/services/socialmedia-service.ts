@@ -48,7 +48,7 @@ export class FeedService {
       post.set("text",post_data.text);
       post.set("likes_count",0);
       post.set("comments_count",0);
-      
+
       if(post_data.attachment_photo){
         post.set("type","photo");
         var Image = Parse.Object.extend("Image");
@@ -75,23 +75,23 @@ export class FeedService {
           reject(ex);
         });
       }
-      
-      
+
+
     });
   }
 
   savePost(post){
     var me = this;
     return new Promise((resolve, reject) => {
-        post.save(null, {
-          success: function(post){
-            me.feed.unshift();
-            resolve(post);
-          },
-          error: function(post,error){
-            reject(error);
-          }
-        });
+      post.save(null, {
+        success: function(post){
+          me.feed.unshift();
+          resolve(post);
+        },
+        error: function(post,error){
+          reject(error);
+        }
+      });
     });
   }
 
@@ -107,7 +107,7 @@ export class FeedService {
       comment.set("isDeleted", false);
       comment.set("type","text");
       comment.set("text",c);
-      
+
       comment.save(null, {
         success: function(comment) {
           me.events.publish('comment_post_complete', comment);
@@ -134,31 +134,31 @@ export class FeedService {
   getComments(post){
     return new Promise((resolve, reject) => {
       var relation = post.relation("comments");
-       var query = relation.query();
-       query.ascending("createdAt");
-       query.find({
-          success: function(comments){
-            resolve(comments);
-          },
-          error: function(comments,error){
-            reject(error);
-          }
-        });
+      var query = relation.query();
+      query.ascending("createdAt");
+      query.find({
+        success: function(comments){
+          resolve(comments);
+        },
+        error: function(comments,error){
+          reject(error);
+        }
+      });
     });
 
-     
+
   }
 
   getLikes(post){
-     var relation = post.relation("likes");
-     var query = relation.query();
-     query.limit(10);
-     query.skip(0*10);
-     query.find({
-        success: function(likes){
-          
-        }
-      });
+    var relation = post.relation("likes");
+    var query = relation.query();
+    query.limit(10);
+    query.skip(0*10);
+    query.find({
+      success: function(likes){
+
+      }
+    });
   }
 
   likeUnlikePost(post){

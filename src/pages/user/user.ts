@@ -28,7 +28,6 @@ export class UserPage {
   ) {
   	this.user = {};
   	this.user = JSON.parse(JSON.stringify(Parse.User.current()));
-  	console.log(this.user);
   }
 
   	uploadPic(){
@@ -39,7 +38,7 @@ export class UserPage {
 		var me = this;
 		if (fileInput.target.files && fileInput.target.files[0]) {
 		  var reader = new FileReader();
-		  
+
 		  reader.onload = function (e : any) {
 		      if(e.target.result){
 		      	if(!me.user.image)me.user.image = {};
@@ -48,7 +47,7 @@ export class UserPage {
 		      	var parseFile = new Parse.File( fileInput.target.files[0].name, { base64: e.target.result });
 		      	me.user.parseImageFile = parseFile;
 		      }else{
-		      	me.user.upload_new_image = false;		      	
+		      	me.user.upload_new_image = false;
 		      }
 		  }
 		  reader.readAsDataURL(fileInput.target.files[0]);
@@ -113,7 +112,7 @@ export class UserPage {
 	  }
 
 	  dismissLoading(){
-	    this.loader.dismiss();
+	    this.loader.dismiss().catch(() => {});
 	  }
 
 }

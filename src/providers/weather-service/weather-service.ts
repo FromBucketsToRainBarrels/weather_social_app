@@ -34,7 +34,7 @@ export class WeatherService {
 
 
   getWeatherForStation(station) {
-    
+
     // if (this.data[station.id]) {
     //   // already loaded data
     //   return Promise.resolve(this.data);
@@ -80,12 +80,12 @@ export class WeatherService {
           success: function(station){
             if(station.length==0){
               var WeatherStation = Parse.Object.extend("WeatherStation");
-              var WeatherStation = new WeatherStation();
-              WeatherStation.set("coord", data.coord);
-              WeatherStation.set("country", data.sys.country);
-              WeatherStation.set("name", data.name);
-              WeatherStation.set("station_external_id", data.id);
-              WeatherStation.save(null, {
+              var weatherStation = new WeatherStation();
+              weatherStation.set("coord", data.coord);
+              weatherStation.set("country", data.sys.country);
+              weatherStation.set("name", data.name);
+              weatherStation.set("station_external_id", data.id);
+              weatherStation.save(null, {
                 success: function(station){
                   var weatherData = {JSONDataObject : data};
                   me.saveLatestWeatherDataForStation(weatherData,station).then((response) => {
@@ -111,7 +111,7 @@ export class WeatherService {
   saveLatestWeatherDataForStation(data,station){
     var WeatherData = Parse.Object.extend("WeatherData");
     var weatherData = new WeatherData();
-    
+
     if(data.JSONDataObject){
       weatherData.set("JSONDataObject", data.JSONDataObject);
     }
@@ -136,6 +136,6 @@ export class WeatherService {
         }
       });
     });
-  }  
+  }
 }
 

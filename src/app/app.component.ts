@@ -1,83 +1,91 @@
-import {Component} from '@angular/core';
-import {Platform} from 'ionic-angular';
-import {ViewChild} from '@angular/core';
-import {StatusBar} from 'ionic-native';
-import { Events } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { Nav, Platform, Events } from 'ionic-angular';
+import { StatusBar, Splashscreen } from 'ionic-native';
+
 
 import Parse from 'parse';
 
-// import pages
 import {HomePage} from '../pages/home/home';
 import {WeatherPage} from '../pages/weather/weather';
 import {LoginPage} from '../pages/login/login';
-import {UserPage} from '../pages/user/user';
 import {LogoutPage} from '../pages/logout/logout';
-
-// end import pages
+import {UserPage} from '../pages/user/user';
 
 //import services
 import {UserService} from '../services/user-service';
 
+
 @Component({
-  templateUrl: 'app.html',
-  queries: {
-    nav: new ViewChild('content')
-  }
+  templateUrl: 'app.html'
 })
 export class MyApp {
+  @ViewChild(Nav) nav: Nav;
 
-  public rootPage: any;
-
+  rootPage: any = LoginPage;
   public user: any;
 
-  public nav: any;
-
-  public pages = [
-    {
-      title: 'Home',
-      icon: 'ios-home-outline',
-      count: 0,
-      component: HomePage
-    },
-
-    {
-      title: 'Weather',
-      icon: 'ios-cloud',
-      count: 0,
-      component: WeatherPage
-    },
-
-    {
-      title: 'Logout',
-      icon: 'ios-exit-outline',
-      count: 0,
-      component: LogoutPage
-    }
-    // import menu
-
-
-  ];
+  pages: Array<{
+    title: string,
+    icon: string,
+    count: 0,
+    component: any
+  }>;
 
   constructor(
     public platform: Platform,
     public events: Events,
     public userService : UserService
   ) {
-    this.rootPage = LoginPage;
 
+    events.subscribe('userFetch:complete', user => {
+      this.user = user;
+    });
+
+    this.initializeParse();
+    this.initializeApp();
+
+    // used for an example of ngFor and navigation
+    this.pages = [
+      {
+        title: 'Home',
+        icon: 'ios-home-outline',
+        count: 0,
+        component: HomePage
+      },
+
+      {
+        title: 'Weather',
+        icon: 'ios-cloud',
+        count: 0,
+        component: WeatherPage
+      },
+
+      {
+        title: 'Logout',
+        icon: 'ios-exit-outline',
+        count: 0,
+        component: LogoutPage
+      }
+      // import menu
+    ];
+
+  }
+
+  initializeParse(){
     // Initialize Parse with your app's Application ID and JavaScript Key
     Parse.initialize('FromBucketsToRainBarrels');
     Parse.serverURL = 'http://162.243.118.87:1337/parse';
+  }
 
-    events.subscribe('userFetch:complete', user => {
-      this.user = user[0];
-    });
-
-    platform.ready().then(() => {
+  initializeApp() {
+    let me = this;
+    this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       StatusBar.styleDefault();
-      userService.getUserInfo();
+      me.userService.getUserInfo().then(() => {
+        Splashscreen.hide();
+      });
     });
   }
 
@@ -92,5 +100,3 @@ export class MyApp {
     this.nav.setRoot(UserPage);
   }
 }
-
-

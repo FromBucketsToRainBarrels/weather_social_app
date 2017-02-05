@@ -104,6 +104,6 @@ export class RegisterPage {
   }
 
   dismissLoading(){
-    this.loader.dismiss();
+    this.loader.dismiss().catch(() => {});
   }
 }
