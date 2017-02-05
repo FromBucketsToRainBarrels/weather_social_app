@@ -15,10 +15,13 @@ import {LogoutPage} from '../pages/logout/logout';
 import {RegisterPage} from '../pages/register/register';
 import {UserPage} from '../pages/user/user';
 
+//import modals
+import {CommentsModal} from '../pages/comment-modal/modal-content';
 
 @NgModule({
   declarations: [
     MyApp,
+    CommentsModal,
     HomePage,
     WeatherPage,
     LoginPage,
@@ -56,6 +59,7 @@ import {UserPage} from '../pages/user/user';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    CommentsModal,
     HomePage,
     WeatherPage,
     LoginPage,

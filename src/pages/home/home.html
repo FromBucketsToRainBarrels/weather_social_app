@@ -22,7 +22,7 @@
 
 <ion-content>
   <!-- new status card goes here -->
-  <ion-card>
+  <ion-card style="background-color: #8db9ea;">
 
     <div *ngIf="status_model.attachment_photo">
       <ion-item>
@@ -32,101 +32,56 @@
         <ion-icon name="ios-trash" item-right (click)="removeImage()" ></ion-icon>
       </ion-item>
     </div>
+    
+    <ion-item >
+      <ion-label floating>Whats on your mind ....</ion-label>
+      <ion-textarea elastic [(ngModel)]="status_model.text" ></ion-textarea>
+    </ion-item>
 
-    <ion-card-content style="background-color: #8db9ea;">
-      <ion-item >
-        <ion-label floating>Whats on your mind ....</ion-label>
-        <ion-textarea elastic [(ngModel)]="status_model.text" ></ion-textarea>
-      </ion-item>
-      <ion-list >
-        <ion-item style="background-color: #8db9ea;">
-          <button ion-button outline round (click)="selectPic()">
-            <ion-icon name="ios-camera"></ion-icon>
-          </button>
-          <input hidden="true" id="profile_upload" (change)="getPic($event)" type="file">
+    <ion-item>
+      <ion-icon name="ios-camera" item-left (click)="selectPic()"></ion-icon>
+      <input hidden="true" id="profile_upload" (change)="getPic($event)" type="file">
+      <ion-badge ion-button item-right  (click)="addPost()"><ion-icon name="ios-send"></ion-icon>Post</ion-badge>
+    </ion-item>
 
-          <button ion-button outline item-right icon-left round (click)="addPost()">
-            <ion-icon name="ios-send"></ion-icon>
-            Post
-          </button>
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
   </ion-card>
 
-  <div *ngFor="let post of feed">
-    <ion-card style="background-color: #8db9ea;" >
-      <ion-card >
-        <ion-item>
-          <ion-avatar item-left>
-            <img src="{{post.get('user').get('image')?.url()}}">
-          </ion-avatar>
-          <h2>{{post.get("user").get("username")}}</h2>
-        </ion-item>
-        <ion-item *ngIf="post.get('type')== 'photo'">
-          <ion-thumbnail item-left>
-            <img  src="{{post.get('images')[0]}}" imageViewer/>
-          </ion-thumbnail>
-        </ion-item>
+  <ion-card *ngFor="let post of feed">
+    <ion-item>
+      <ion-avatar item-left>
+        <img src="{{post.get('user').get('image')?.url()}}">
+      </ion-avatar>
+      <h2>{{post.get("user").get("username")}}</h2>
+    </ion-item>
 
-        <ion-card-content>
-          <p>{{post.get("text")}}</p>
-        </ion-card-content>
+    <ion-item *ngIf="post.get('type')== 'photo'">
+      <ion-thumbnail item-left>
+        <img  src="{{post.get('images')[0]}}" imageViewer/>
+      </ion-thumbnail>
+    </ion-item>
 
-        <ion-list >
-          <ion-item >
-            <button ion-button icon-left clear small (click)="feedService.likeUnlikePost(post)">
-              <ion-icon name="thumbs-up"></ion-icon>
-              <div>{{post.get("likes_count")}} Likes</div>
-            </button>
-            <button ion-button icon-left clear small (click)="setFocus(post)">
-              <ion-icon name="text"></ion-icon>
-              <div>Comment</div>
-            </button>
-          </ion-item>
-        </ion-list>
+    <ion-card-content>
+      <p>{{post.get("text")}}</p>
+    </ion-card-content>
 
-        <ion-list *ngIf="post.get('comments_count')!=0">
-
-          <ion-item (click)="getComments(post)">
-            <small><a href="#">{{post.get('comments_count')}} comments</a></small>
-          </ion-item>
-
-
-          <div *ngIf="comments_models[post.id] && comments_models[post.id].show">
-            <ion-item *ngFor="let comment of comments_models[post.id].comments" text-wrap>
-              <ion-avatar item-left>
-                <img src="{{comment.get('user').get('image')?.url()}}">
-              </ion-avatar>
-              <strong><small>{{comment.get("user").get("username")}}</small></strong><br>
-              <small>{{comment.get("text")}}</small>
-            </ion-item>
-          </div>
-
-        </ion-list>
-
-        <ion-list *ngIf="post.get('comments_count')==0">
-          <ion-item (click)="setFocus(post)">
-            <small><a href="#">Be the first one to comment</a></small>
-          </ion-item>
-        </ion-list>
-
-        <ion-list >
-          <ion-item style="background-color: #b7c7e0;">
-            <ion-item >
-              <ion-input id="post_comment_{{post.id}}" placeholder="Write a comment" [(ngModel)]="comment_box_models[post.id]"></ion-input>
-              <button ion-button round item-right icon-left (click)="addComment(post)">
-                <ion-icon name="ios-send"></ion-icon>
-              </button>
-            </ion-item>
-          </ion-item>
-
-        </ion-list>
-      </ion-card>
-    </ion-card>
-
-  </div>
-
+    <ion-row>
+      
+      <ion-col center text-center (click)="feedService.likeUnlikePost(post)">
+        <button ion-button icon-left clear small>
+          <ion-icon name="thumbs-up"></ion-icon>
+          <div>{{post.get("likes_count")}} Likes</div>
+        </button>
+      </ion-col>
+      
+      <ion-col center text-center (click)="openCommentsModal(post)">
+        <button ion-button icon-left clear small>
+          <ion-icon name="text"></ion-icon>
+          <div>{{post.get('comments_count')}} Comments</div>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+  
   <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>
   </ion-infinite-scroll>

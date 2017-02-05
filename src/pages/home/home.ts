@@ -2,11 +2,12 @@ import {Component} from '@angular/core';
 import {NavController} from 'ionic-angular';
 import {AlertController} from 'ionic-angular';
 import {LoadingController} from 'ionic-angular';
+import { ModalController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 import Parse from 'parse';
 
 import {FeedService} from '../../services/socialmedia-service';
-
+import {CommentsModal} from '../comment-modal/modal-content';
 /*
  Generated class for the LoginPage page.
 
@@ -26,11 +27,15 @@ export class HomePage {
   public comments_models: any;
   public status_model: any;
   private start:number=0;
+
+  private currPost: any;
+
   constructor(
     public nav: NavController,
     public feedService: FeedService,
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
+    public modalCtrl:ModalController,
     public events: Events,
   ) {
     let me = this;
@@ -160,6 +165,13 @@ export class HomePage {
         me.dismissLoading();
       });
     }
+  }
+
+  openCommentsModal(post) {
+    this.currPost = post;
+    this.getComments(post);
+    let modal = this.modalCtrl.create(CommentsModal,this);
+    modal.present();
   }
 
   presentLoading() {
