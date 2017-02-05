@@ -110,12 +110,13 @@ export class FeedService {
 
       comment.save(null, {
         success: function(comment) {
-          me.events.publish('comment_post_complete', comment);
           var relation = post.relation("comments");
           relation.add(comment);
           post.set("comments_count",post.get("comments_count") + 1);
           post.save(null, {
-            success: function(post){
+            success: function(p){
+              console.log("post saved successfully");
+              me.events.publish('comment_post_complete', comment);
               resolve(comment);
             },
             error: function(post, error){

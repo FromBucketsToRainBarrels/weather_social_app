@@ -33,19 +33,22 @@ export class HomePage {
     public loadingCtrl: LoadingController,
     public events: Events,
   ) {
-
-    events.subscribe('comment_post_complete', comment => {
-      console.log("Event : comment_post_complete");
-      if(this.comments_models[comment[0].get("post").id]){
-        this.comments_models[comment[0].get("post").id].comments.unshift(comment[0]);
-      }
-    });
+    let me = this;
 
     // set data for feed
-    let me = this;
     this.status_model = {};
     this.comment_box_models = {};
     this.comments_models = {};
+
+    events.subscribe('comment_post_complete', comment => {
+      console.log("Event : comment_post_complete");
+      if(me.comments_models[comment.get("post").id]){
+        me.comments_models[comment.get("post").id].comments.push(comment);
+        me.comments_models[comment.get("post").id].show = true;
+      }else{
+        me.fetchComments(comment.get("post"));
+      }
+    });
 
     this.presentLoading();
     feedService.getFeed(this.start++).then((response) => {
@@ -126,23 +129,28 @@ export class HomePage {
     if(me.comments_models[post.id]){
       me.comments_models[post.id].show = !(me.comments_models[post.id].show);
     }else{
-      this.feedService.getComments(post).then((response) => {
-        return response;
-      }).then((comments) => {
-        me.comments_models[post.id]={comments: comments, show: true};
-        me.dismissLoading();
-      }).catch((ex) => {
-        console.error('Error : ', ex);
-        me.dismissLoading();
-      });
+      me.fetchComments(post);
     }
+  }
+
+  fetchComments(post){
+    var me = this;
+    me.feedService.getComments(post).then((response) => {
+      return response;
+    }).then((comments) => {
+      me.comments_models[post.id]={comments: comments, show: true};
+      me.dismissLoading();
+    }).catch((ex) => {
+      console.error('Error : ', ex);
+      me.dismissLoading();
+    });
   }
 
   addComment(post){
     var me = this;
-    if(this.comment_box_models[post.id] && this.comment_box_models[post.id].length != 0){
-      this.presentLoading();
-      this.feedService.addComment(post,this.comment_box_models[post.id]).then((response) => {
+    if(me.comment_box_models[post.id] && me.comment_box_models[post.id].length != 0){
+      me.presentLoading();
+      me.feedService.addComment(post,me.comment_box_models[post.id]).then((response) => {
         return response;
       }).then((p) => {
         me.comment_box_models[post.id] = "";
