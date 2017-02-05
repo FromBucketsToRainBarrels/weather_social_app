@@ -131,9 +131,7 @@ export class HomePage {
 
   getComments(post){
     var me = this;
-    if(me.comments_models[post.id]){
-      me.comments_models[post.id].show = !(me.comments_models[post.id].show);
-    }else{
+    if(!me.comments_models[post.id]){
       me.fetchComments(post);
     }
   }
@@ -149,22 +147,6 @@ export class HomePage {
       console.error('Error : ', ex);
       me.dismissLoading();
     });
-  }
-
-  addComment(post){
-    var me = this;
-    if(me.comment_box_models[post.id] && me.comment_box_models[post.id].length != 0){
-      me.presentLoading();
-      me.feedService.addComment(post,me.comment_box_models[post.id]).then((response) => {
-        return response;
-      }).then((p) => {
-        me.comment_box_models[post.id] = "";
-        me.dismissLoading();
-      }).catch((ex) => {
-        console.error('Error : ', ex);
-        me.dismissLoading();
-      });
-    }
   }
 
   openCommentsModal(post) {

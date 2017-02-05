@@ -4,9 +4,6 @@ import { AlertController } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
 import {FeedService} from '../../services/socialmedia-service';
 
-
-import Parse from 'parse';
-
 @Component({
   templateUrl: 'modal-content.html'
 })
@@ -26,14 +23,9 @@ export class CommentsModal {
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController
   ) {
-
     this.post = this.params.get('currPost');
     this.comment_box_models = this.params.get('comment_box_models');
     this.comments_models = this.params.get('comments_models');
-
-    console.log("comment_box_models : " + this.comment_box_models);
-    console.log("comments_models : " + this.comments_models);
-
   }
 
   addComment(post){
