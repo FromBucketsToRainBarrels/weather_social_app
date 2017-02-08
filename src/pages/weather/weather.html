@@ -40,103 +40,134 @@
 	      </button>
 	    </ion-buttons> -->
 	</ion-item>
-  	
+
 
     <div *ngIf="stations">
     	<ion-slides>
-		  <ion-slide *ngFor="let station of stations let i = index" style="background-color: ">
-		    <ion-card>
-			  <ion-card-header>
-			    <div class="card-title">
-			    	{{station.get("name")}}, {{station.get("latestData").get("JSONDataObject")?.sys.country}}<br>
-			    </div>
-			    <div class="card-subtitle">
-			    	{{station.get("latestData").get("JSONDataObject")?.main.temp}} &#8451;<br>
-			    	{{station.get("latestData").get("JSONDataObject")?.weather[0].description}}<br>
-			    	<small>Last Sync : {{station.get("latestData").createdAt}}</small> <ion-icon name="md-sync" item-left (click)="getLatestData(station,i)"></ion-icon>
-			    </div>
-			  </ion-card-header>
-			  <ion-card-content>
-			  	
-			  </ion-card-content>
-			</ion-card>
-		    <ion-card>
-			    <ion-row center>
-				    <ion-col>
-					    <div>
-					    	<ion-icon name="md-home" item-left></ion-icon>
-							<strong>Wind</strong><br>
-		                  	<small>
-		                  		Speed {{station.get("latestData").get("JSONDataObject")?.wind.speed}}<br>
-		                  		Deg {{station.get("latestData").get("JSONDataObject")?.wind.deg}}<br>
-		                  	</small>
-					    </div>
-					</ion-col>
-				    <ion-col>
-					    <div>
-					    	<ion-icon name="ios-water" item-left></ion-icon>
-							<strong>Humidity</strong><br>
-		                  	<small>{{station.get("latestData").get("JSONDataObject")?.main.humidity}}<br></small>
-					    </div>
-					</ion-col>
-				    <ion-col>
-					    <div>
-					    	<ion-icon name="md-home" item-left></ion-icon>
-							<strong>Pressure</strong><br>
-		                  	<small>{{station.get("latestData").get("JSONDataObject")?.main.pressure}}<br></small>
-					    </div>
-					</ion-col>
-				    <ion-col>
-				      <div>
-				      		<ion-icon name="ios-sunny" item-left></ion-icon>
-							<strong>Sunrise</strong><br>
-		                  	<small>{{station.get("latestData").get("JSONDataObject")?.sys.sunrise}}<br></small>
-				      </div>
-				    </ion-col>
-				</ion-row>
-				<ion-row center>
-				    <ion-col>
-					    <div>
-					    	<ion-icon name="ios-thermometer-outline" item-left></ion-icon>
-							<strong>Min Temp</strong><br>
-		                  	<small>{{station.get("latestData").get("JSONDataObject")?.main.temp_min}}<br></small>
-					    </div>
-					</ion-col>
-				    <ion-col>
-					    <div>
-					    	<ion-icon name="ios-thermometer-outline" item-left></ion-icon>
-							<strong>Max Temp</strong><br>
-		                  	<small>{{station.get("latestData").get("JSONDataObject")?.main.temp_max}}<br></small>
-					    </div>
-					</ion-col>
-				    <ion-col>
-					    <div>
-					    	<ion-icon name="md-home" item-left></ion-icon>
-							<strong>Sea Level</strong><br>
-		                  	<small>{{station.get("latestData").get("JSONDataObject")?.main.sea_level}}<br></small>
-					    </div>
-					</ion-col>
-				    <ion-col>
-				      <div>
-				      		<ion-icon name="ios-partly-sunny" item-left></ion-icon>
-							<strong>Sunset</strong><br>
-		                  	<small>{{station.get("latestData").get("JSONDataObject")?.sys.sunset}}<br></small>
-				      </div>
-				    </ion-col>
-				</ion-row>
-			</ion-card>
-		  	<ion-list>
-				  <ion-item>
-				    <h2>Hourly Forecast</h2>
-				    <p>Upto 5 days</p>
-				    <button ion-button clear item-right>View</button>
-				  </ion-item>
-				  <ion-item>
-				    <h2>Daily Forecast</h2>
-				    <p>Upto 16 days</p>
-				    <button ion-button clear item-right>View</button>
-				  </ion-item>
-				</ion-list>
+		  <ion-slide *ngFor="let station of stations let i = index" >
+        <ion-card>
+            <ion-card-header>
+
+              <div class="card-title">
+                <ion-item text-wrap>
+                  <ion-thumbnail item-left>
+                    <img src='http://openweathermap.org/img/w/{{station.get("latestData").get("JSONDataObject")?.weather[0].icon}}.png'>
+                  </ion-thumbnail>
+                  {{station.get("name")}}, {{station.get("latestData").get("JSONDataObject")?.sys.country}}<br>
+                  {{station.get("latestData").get("JSONDataObject")?.main.temp}} &#8451;<br>
+                {{station.get("latestData").get("JSONDataObject")?.weather[0].description}}<br>
+                <small >Last Sync : {{station.get("latestData").createdAt | date:'hh:mm:ss a'}}</small> <ion-icon name="md-sync" item-right (click)="getLatestData(station,i)"></ion-icon>
+                </ion-item>
+              </div>
+            </ion-card-header>
+
+          <ion-card-content class="current-details">
+
+            <ion-buttons end item-right >
+              <button (click)="showDetails(i)"><ion-icon name="ios-arrow-down-outline"></ion-icon></button>
+            </ion-buttons>
+
+            <ion-list no-border *ngIf="station.showDetails">
+
+              <ion-item *ngIf="station.get('latestData').get('JSONDataObject').rain">
+                  <ion-avatar item-left>
+                    <img src='http://openweathermap.org/img/w/04d.png'>
+                  </ion-avatar>
+                  <h4>Rain</h4>
+                  <p item-right >last 3 hours {{station.get("latestData").get("JSONDataObject")?.rain["3h"]}} mm</p>
+              </ion-item>
+
+              <ion-item *ngIf="station.get('latestData').get('JSONDataObject').snow">
+                  <ion-avatar item-left>
+                    <img src='http://openweathermap.org/img/w/04d.png'>
+                  </ion-avatar>
+                  <h4>Snow</h4>
+                  <p item-right >last 3 hours {{station.get("latestData").get("JSONDataObject")?.snow["3h"]}} mm</p>
+              </ion-item>
+
+                <ion-item>
+                  <ion-avatar item-left>
+                    <img src='http://openweathermap.org/img/w/04d.png'>
+                  </ion-avatar>
+                  <h4>Cloud</h4>
+                  <p item-right >Cloudiness {{station.get("latestData").get("JSONDataObject")?.clouds.all}} %</p>
+              </ion-item>
+
+                <ion-item>
+                  <ion-avatar item-left>
+                    <img src='http://openweathermap.org/img/w/04d.png'>
+                  </ion-avatar>
+                  <h4>Wind</h4>
+                  <p item-right >Speed {{station.get("latestData").get("JSONDataObject")?.wind.speed}} m/s Dir {{station.get("latestData").get("JSONDataObject")?.wind.deg}}</p>
+              </ion-item>
+
+              <ion-item>
+                  <ion-icon name="ios-water" item-left></ion-icon>
+                <h4>Humidity</h4>
+                <p item-right >
+                  {{station.get("latestData").get("JSONDataObject")?.main.humidity}} %
+                </p>
+              </ion-item>
+
+              <ion-item>
+                  <ion-avatar item-left>
+                    <img src='http://openweathermap.org/img/w/50d.png'>
+                  </ion-avatar>
+                  <h2>Pressure</h2>
+                  <p item-right >{{station.get("latestData").get("JSONDataObject")?.main.pressure}} hPa</p>
+              </ion-item>
+
+              <ion-item>
+                  <ion-icon name="ios-thermometer-outline" item-left></ion-icon>
+                  <h2>Min Temp</h2>
+                  <p item-right >{{station.get("latestData").get("JSONDataObject")?.main.temp_min}} &#8451;</p>
+              </ion-item>
+
+              <ion-item>
+                  <ion-icon name="ios-thermometer-outline" item-left></ion-icon>
+                  <h2>Max Temp</h2>
+                  <p item-right >{{station.get("latestData").get("JSONDataObject")?.main.temp_max}} &#8451;</p>
+              </ion-item>
+
+              <ion-item>
+                  <ion-avatar item-left>
+                    <img src='http://openweathermap.org/img/w/50d.png'>
+                  </ion-avatar>
+                  <h2>Pressure Sea Level</h2>
+                  <p item-right >{{station.get("latestData").get("JSONDataObject")?.main.sea_level}} hPa</p>
+              </ion-item>
+
+              <ion-item>
+                  <ion-icon name="ios-partly-sunny" item-left></ion-icon>
+                  <h2>Sunset</h2>
+                  <p item-right >{{station.get("latestData").get("JSONDataObject")?.sys.sunset | date:'hh:mm a'}}</p>
+              </ion-item>
+
+              <ion-item>
+                  <ion-icon name="ios-sunny" item-left></ion-icon>
+                  <h2>Sunrise</h2>
+                  <p item-right >{{station.get("latestData").get("JSONDataObject")?.sys.sunrise | date:'hh:mm a'}}</p>
+              </ion-item>
+
+
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card>
+          <ion-list>
+              <ion-item>
+                <h2>Hourly Forecast</h2>
+                <p>Upto 5 days</p>
+                <button ion-button clear item-right (click)="goToForecastPage(station,'forecast5')">View</button>
+              </ion-item>
+              <ion-item>
+                <h2>Daily Forecast</h2>
+                <p>Upto 16 days</p>
+                <button ion-button clear item-right (click)="goToForecastPage(station,'forecast16')">View</button>
+              </ion-item>
+          </ion-list>
+        </ion-card>
 		  </ion-slide>
 		</ion-slides>
     </div>

@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Sell
+    </ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">
+        <span color="primary" showWhen="ios">Cancel</span>
+        <ion-icon name="md-close" showWhen="android,windows"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    
+    <ion-item>
+      <ion-label floating>Ad Title</ion-label>
+      <ion-input type="text" [(ngModel)]="ad.title"></ion-input>
+    </ion-item>
+
+    <ion-item >
+      <ion-label floating>Description</ion-label>
+      <ion-textarea elastic [(ngModel)]="ad.description" ></ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Address</ion-label>
+      <ion-input type="text" [(ngModel)]="ad.address"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <div *ngIf="ad.attachment_photo">
+        <ion-item>
+          <ion-thumbnail item-left>
+            <img  src="{{ad.attachment_photo_src}}"/>
+          </ion-thumbnail>
+          <ion-icon name="ios-trash" item-right (click)="removeImage()" ></ion-icon>
+        </ion-item>
+      </div>
+
+      <button ion-button icon-right (click)="selectPic()">
+        Select Image
+        <ion-icon name="ios-image-outline"></ion-icon>
+      </button>
+      <input hidden="true" id="ad_pic_upload" (change)="getPic($event)" type="file">
+    </ion-item>
+
+    
+  
+  </ion-list>
+
+</ion-content>
+
+<ion-footer>
+  <ion-navbar color="primary">
+    <ion-buttons end item-right (click)="addPost()">
+      <button ion-button icon-only>
+        <ion-icon name="md-done-all"></ion-icon>
+        Post
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+  
+</ion-footer>

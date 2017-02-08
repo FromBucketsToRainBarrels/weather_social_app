@@ -10,6 +10,7 @@ import {WeatherPage} from '../pages/weather/weather';
 import {LoginPage} from '../pages/login/login';
 import {LogoutPage} from '../pages/logout/logout';
 import {UserPage} from '../pages/user/user';
+import {MarketPage} from '../pages/market/market';
 
 //import services
 import {UserService} from '../services/user-service';
@@ -48,16 +49,23 @@ export class MyApp {
     this.pages = [
       {
         title: 'Home',
-        icon: 'ios-home-outline',
+        icon: 'ios-water-outline',
         count: 0,
         component: HomePage
       },
 
       {
         title: 'Weather',
-        icon: 'ios-cloud',
+        icon: 'ios-cloud-outline',
         count: 0,
         component: WeatherPage
+      },
+
+      {
+        title: 'Market',
+        icon: 'ios-infinite-outline',
+        count: 0,
+        component: MarketPage
       },
 
       {

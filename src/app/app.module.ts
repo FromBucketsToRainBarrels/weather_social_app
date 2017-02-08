@@ -1,6 +1,7 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
+import { ChartsModule } from 'ng2-charts';
 
 // import services
 import {FeedService} from '../services/socialmedia-service';
@@ -14,20 +15,27 @@ import {LoginPage} from '../pages/login/login';
 import {LogoutPage} from '../pages/logout/logout';
 import {RegisterPage} from '../pages/register/register';
 import {UserPage} from '../pages/user/user';
+import {MarketPage} from '../pages/market/market';
+import {ForecastPage} from '../pages/forecast/forecast';
 
 //import modals
 import {CommentsModal} from '../pages/comment-modal/modal-content';
+import {SellModal} from '../pages/sell-modal/modal-content';
+
 
 @NgModule({
   declarations: [
     MyApp,
     CommentsModal,
+    SellModal,
     HomePage,
     WeatherPage,
     LoginPage,
     LogoutPage,
     RegisterPage,
-    UserPage
+    UserPage,
+    MarketPage,
+    ForecastPage
   ],
   imports: [
     IonicModule.forRoot(MyApp
@@ -54,18 +62,22 @@ import {CommentsModal} from '../pages/comment-modal/modal-content';
       /*
        * END MODIFY
        */
-      )
+      ),
+    ChartsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     CommentsModal,
+    SellModal,
     HomePage,
     WeatherPage,
     LoginPage,
     LogoutPage,
     RegisterPage,
-    UserPage
+    UserPage,
+    MarketPage,
+    ForecastPage
   ],
   providers: [
     {provide: ErrorHandler, useClass: IonicErrorHandler},

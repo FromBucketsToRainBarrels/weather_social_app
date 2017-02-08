@@ -7,17 +7,23 @@ import Parse from 'parse';
 export class WeatherService {
 
   public data: any;
+  public api: any;
 
   constructor(
     public http: Http
   ) {
     this.data = {};
+    this.api = {
+      params: {
+        units: "metric"
+      }
+    };
   }
 
   query(searchObject){
     return new Promise((resolve, reject) => {
       var me = this;
-      var url = 'http://api.openweathermap.org/data/2.5/weather?q='+searchObject.text+'&appid=a2cd6d38297c74aacd283ff499d3441e';
+      var url = 'http://api.openweathermap.org/data/2.5/weather?q='+searchObject.text+'&appid=a2cd6d38297c74aacd283ff499d3441e&units='+me.api.params.units;
       this.http.get(url).map(res => res.json())
         .subscribe(data => {
           // we've got back the raw data, now generate the core schedule data
@@ -31,7 +37,31 @@ export class WeatherService {
     });
   }
 
+  getForecastForStation(station,forecastType){
+    return new Promise((resolve, reject) => {
 
+      let me = this;
+      var url;
+
+      if(forecastType == "forecast5"){
+        url= 'http://api.openweathermap.org/data/2.5/forecast?id='+station.get("station_external_id")+'&appid=a2cd6d38297c74aacd283ff499d3441e'+'&units='+me.api.params.units;
+      }else{
+        url= 'http://api.openweathermap.org/data/2.5/forecast/daily?id='+station.get("station_external_id")+'&appid=a2cd6d38297c74aacd283ff499d3441e'+'&units='+me.api.params.units;
+      }
+
+      this.http.get(url)
+      .map(res => res.json())
+      .subscribe(data => {
+          // we've got back the raw data, now generate the core schedule data
+          // and save the data for later reference
+          resolve(data);
+      },
+      err => {
+        reject(err);
+      });
+
+    })
+  }
 
   getWeatherForStation(station) {
 
@@ -46,7 +76,7 @@ export class WeatherService {
       // then on the response, it'll map the JSON data to a parsed JS object.
       // Next, we process the data and resolve the promise with the new data.
       var me = this;
-      var url = 'http://api.openweathermap.org/data/2.5/weather?id='+station.get("station_external_id")+'&appid=a2cd6d38297c74aacd283ff499d3441e';
+      var url = 'http://api.openweathermap.org/data/2.5/weather?id='+station.get("station_external_id")+'&appid=a2cd6d38297c74aacd283ff499d3441e'+'&units='+me.api.params.units;
       this.http.get(url)
         .map(res => res.json())
         .subscribe(data => {

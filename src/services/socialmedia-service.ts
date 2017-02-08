@@ -14,18 +14,27 @@ export class FeedService {
   getFeed(n){
     var me = this;
     return new Promise((resolve, reject) => {
-      var Post = Parse.Object.extend("Post");
-      var post = new Parse.Query(Post);
-      post.descending('createdAt');
-      post.limit(7);
-      post.skip(n*7);
-      post.include("user");
-      post.include("user.information");
-      post.include("comments");
-      post.include("likes");
-      post.descending("createdAt");
-      post.equalTo("isDeleted", false);
-      post.find({
+      // var Post = Parse.Object.extend("Post");
+      // var post = new Parse.Query(Post);
+      
+      var textPost = new Parse.Query("Post");
+      textPost.equalTo("type", "text");
+      var imagePost = new Parse.Query("Post");
+      imagePost.equalTo("type", "photo");
+
+      var mainQuery = Parse.Query.or(textPost, imagePost);
+      
+      mainQuery.descending('createdAt');
+      mainQuery.limit(5);
+      mainQuery.skip(n*5);
+      mainQuery.include("user");
+      mainQuery.include("user.information");
+      mainQuery.include("comments");
+      mainQuery.include("likes");
+      mainQuery.descending("createdAt");
+      mainQuery.equalTo("isDeleted", false);
+
+      mainQuery.find({
         success: function(posts) {
           me.feed = posts;
           resolve(me.feed);

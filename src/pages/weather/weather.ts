@@ -5,6 +5,8 @@ import {LoadingController} from 'ionic-angular';
 import { ViewChild } from '@angular/core';
 import {UserService} from '../../services/user-service';
 import {WeatherService} from '../../providers/weather-service/weather-service';
+import {LoadingService} from "../../services/loading-service";
+import {ForecastPage} from '../forecast/forecast';
 
 /*
  Generated class for the LoginPage page.
@@ -14,11 +16,12 @@ import {WeatherService} from '../../providers/weather-service/weather-service';
  */
 @Component({
   selector: 'page-weather',
-  templateUrl: 'weather.html'
+  templateUrl: 'weather.html',
 })
 export class WeatherPage {
 	@ViewChild(Slides) slides: Slides;
-	public search: any;
+
+  public search: any;
 	public stations: any;
 	public loader: any;
 	public find: any;
@@ -27,10 +30,8 @@ export class WeatherPage {
   	public userService: UserService,
   	public weatherProvider: WeatherService,
   	public alertCtrl: AlertController,
-    public loadingCtrl: LoadingController
+    public loadingCtrl: LoadingController,
   ) {
-
-    // get sample data only
     this.stations=[];
     this.search = {
     	text:"",
@@ -38,9 +39,16 @@ export class WeatherPage {
     	placeholder:"Search Location",
     	filter: "byCity"
     };
-
     this.stations = this.userService.getUserStations();
+  }
 
+  goToForecastPage(station,forecastType){
+    this.nav.push(ForecastPage, { station: station, forecastType: forecastType });
+  }
+
+  showDetails(index){
+    let me = this;
+    (!me.stations[index].showDetails) ? me.stations[index].showDetails=true : me.stations[index].showDetails=false;
   }
 
   onSearchFocus(event){

@@ -151,7 +151,8 @@ export class HomePage {
 
   openCommentsModal(post) {
     this.currPost = post;
-    this.getComments(post);
+    // this.getComments(post);
+    this.fetchComments(post);
     let modal = this.modalCtrl.create(CommentsModal,this);
     modal.present();
   }

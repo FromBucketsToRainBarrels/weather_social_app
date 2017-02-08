@@ -1,0 +1,47 @@
+page-forecast,
+.forecast {
+  .label-md {
+    margin: 0px 0px 0px 0;
+  }
+
+  .inner-card {
+    margin: 1px;
+    width: initial;
+  }
+
+  img{
+    height: 70vh;
+    width: auto;
+    margin: auto;
+    display: block;
+    border-bottom: 0px;
+  }
+
+  .card-background-page {
+
+    ion-card {
+      text-align: center;
+    }
+
+    .card-title {
+      font-size: 1.5em;
+      width: 100%;
+      font-weight: bold;
+    }
+
+    .card-subtitle{
+      font-size: 1.0em;
+      width: 100%;
+    }
+
+  }
+
+  .canvas{
+    position: static;
+    width: 100%;
+    height: 13em;
+  }
+}
+
+
+
