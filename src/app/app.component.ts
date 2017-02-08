@@ -41,7 +41,7 @@ export class MyApp {
     events.subscribe('userFetch:complete', user => {
       this.user = user;
     });
-
+    console.log("initializing pasrse ..");
     this.initializeParse();
     this.initializeApp();
 
@@ -91,8 +91,13 @@ export class MyApp {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       StatusBar.styleDefault();
-      me.userService.getUserInfo().then(() => {
+      me.userService.getUserInfo().then((response) => {
+        return response;
+      }).then((data) => {
+        console.log("getUserInfo() response : " + data);
         Splashscreen.hide();
+      }).catch((ex) => {
+        console.error('Error getUserInfo() : ', ex);
       });
     });
   }

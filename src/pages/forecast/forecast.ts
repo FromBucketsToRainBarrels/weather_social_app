@@ -28,7 +28,6 @@ export class ForecastPage {
   public forecastType: any;
   public forecastData: any;
   public chart: LineChart;
-  public weekday: any = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 
   constructor(
     public nav: NavController,
