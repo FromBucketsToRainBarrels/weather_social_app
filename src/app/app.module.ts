@@ -4,6 +4,7 @@ import { MyApp } from './app.component';
 
 import { Storage } from '@ionic/storage';
 import { ChartsModule } from 'ng2-charts';
+import 'chart.js/src/chart.js';
 
 // import services
 import {FeedService} from '../services/socialmedia-service';
