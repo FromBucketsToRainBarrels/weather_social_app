@@ -1,9 +1,13 @@
 import {Injectable} from "@angular/core";
 import {Events} from 'ionic-angular';
-import {WeatherService} from '../providers/weather-service/weather-service';
+import {Storage} from '@ionic/storage';
 import {Http} from '@angular/http';
 import 'rxjs/add/operator/map';
+import {plainToClass} from "class-transformer";
+import {serialize} from "class-transformer";
 import Parse from 'parse';
+
+import {WeatherService} from '../providers/weather-service/weather-service';
 
 @Injectable()
 export class UserService {
@@ -14,18 +18,35 @@ export class UserService {
   constructor(
     public events: Events,
     public weatherService: WeatherService,
-    public http: Http
+    public http: Http,
+    public storage: Storage
   ) {
+    let me = this;
     this.user = {
-      stations: []
+      stations: [],
+      userParseObj: null
     };
+    
     events.subscribe('userFetch:complete', user => {
-      this.user = {
-        userParseObj: user[0],
-        stations: []
-      };
-      this.getFullUser();
+      me.getFullUser(user);
     });
+
+  }
+
+
+
+  deseriallizeFullUser(fullUserFromStorage){
+    let me = this;
+    //deseriallize user
+    fullUserFromStorage.userParseObj.className = "_User" 
+    me.user.userParseObj = Parse.Object.fromJSON(fullUserFromStorage.userParseObj);
+    
+    //deseriallize user stations array one by one
+    let stations = [];
+    for(var i=0;i<fullUserFromStorage.stations.length; i++){
+      fullUserFromStorage.stations[i].className = "WeatherStation";
+      me.user.stations.push(Parse.Object.fromJSON(fullUserFromStorage.stations[i]));
+    }
   }
 
   addStation(data){
@@ -55,36 +76,51 @@ export class UserService {
     });
   }
 
-  getFullUser(){
+  getFullUser(user){
+    let me = this;
+    me.user.userParseObj = user[0];
+    me.storage.get('fullUser').then((val) => {
+      me.deseriallizeFullUser(val);
+    })
+
+    //data saver
+    me.fetchFullUserFromParse();
+  }
+
+  fetchFullUserFromParse(){
     var me = this;
     var userQuery = new Parse.Query(Parse.User);
     userQuery.equalTo("objectId", Parse.User.current().id);
     userQuery.include("stations");
     userQuery.include("defaultStation");
     userQuery.include("defaultStation.latestData");
-    return new Promise((resolve, reject) => {
-      userQuery.find({
-        success: function(userRetrieved)
-        {
-          me.user.userParseObj = userRetrieved[0];
-          var stations = userRetrieved[0].relation("stations");
-          var query = stations.query();
-          query.notEqualTo("objectId", userRetrieved[0].get("defaultStation").id);
-          query.include("latestData");
-          query.find({
-            success: function(stations) {
-              stations.unshift(userRetrieved[0].get("defaultStation"));
-              me.user.stations = stations;
-              resolve(me.user);
-            }
-          });
-        },
-        error: function(error)
-        {
-          reject(error);
-        }
-      });
-    })
+    userQuery.find({
+      success: function(userRetrieved)
+      {
+        me.user.userParseObj = userRetrieved[0];
+        var stations = userRetrieved[0].relation("stations");
+        var query = stations.query();
+        query.notEqualTo("objectId", userRetrieved[0].get("defaultStation").id);
+        query.include("latestData");
+        query.find({
+          success: function(stations) {
+            stations.unshift(userRetrieved[0].get("defaultStation"));
+            me.user.stations = stations;
+            //successfully fetched fulluser object
+            //store user to local storage for offline support
+            var fullUser = JSON.parse(JSON.stringify(me.user));
+            me.storage.set('fullUser', fullUser);
+          },
+          error: function(stations,error){
+            console.log("Error :fetchFullUserFromParse() :  userQuery.find() : stationsQuery.find() : " + error);
+          }
+        });
+      },
+      error: function(error)
+      {
+        console.log("Error :fetchFullUserFromParse() :  userQuery.find() : " + error);
+      }
+    });
   }
 
   getUser(){

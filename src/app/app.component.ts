@@ -39,9 +39,9 @@ export class MyApp {
   ) {
 
     events.subscribe('userFetch:complete', user => {
+      // no need for full user object
       this.user = user;
     });
-    console.log("initializing pasrse ..");
     this.initializeParse();
     this.initializeApp();
 

@@ -1,6 +1,8 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
+
+import { Storage } from '@ionic/storage';
 import { ChartsModule } from 'ng2-charts';
 
 // import services
@@ -83,7 +85,8 @@ import {SellModal} from '../pages/sell-modal/modal-content';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     FeedService,
     UserService,
-    WeatherService
+    WeatherService,
+    Storage
     /* import services */
     ]
 })

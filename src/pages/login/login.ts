@@ -32,12 +32,10 @@ export class LoginPage {
     public events: Events
   ) {
     this.user = {};
-    console.log("Parse.User.current() : " + Parse.User.current());
+    
     if(Parse.User.current()){
       this.events.publish('userFetch:complete', Parse.User.current());
       this.nav.setRoot(HomePage);
-    }else{
-
     }
   }
 

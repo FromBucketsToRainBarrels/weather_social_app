@@ -56,15 +56,15 @@ export class HomePage {
     });
 
     this.presentLoading();
-    feedService.getFeed(this.start++).then((response) => {
-      return response;
-    }).then((feed) => {
-      me.feed = feed;
-      //me.dismissLoading();
-    }).catch((ex) => {
-      console.error('Error : ', ex);
-      me.dismissLoading();
-    });
+    // feedService.getFeed(this.start++).then((response) => {
+    //   return response;
+    // }).then((feed) => {
+    //   me.feed = feed;
+    //   //me.dismissLoading();
+    // }).catch((ex) => {
+    //   console.error('Error : ', ex);
+    //   me.dismissLoading();
+    // });
   }
 
   doInfinite(infiniteScroll) {
