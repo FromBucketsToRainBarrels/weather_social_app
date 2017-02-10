@@ -3,7 +3,7 @@ os:
 
 before_install:
 - export LANG=en_US.UTF-8
-- npm install -g npm
+- npm --v
 - npm install -g ionic cordova
 
 script:
