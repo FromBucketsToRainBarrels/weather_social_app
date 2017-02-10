@@ -20,3 +20,4 @@ script:
 - ionic build browser
 - ls
 - ls www/
+- $CMND $PARAMS $SRC_PATH $USER$SERVER_IP$DEST_PATH
