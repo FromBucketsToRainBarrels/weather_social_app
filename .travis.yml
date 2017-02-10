@@ -8,8 +8,10 @@ before_install:
 - npm install npm@latest -g
 - npm install -g ionic cordova
 
-script:
+install:
 - npm install
+
+script:
 - ionic platform add browser
 - ionic build browser
 - ls
