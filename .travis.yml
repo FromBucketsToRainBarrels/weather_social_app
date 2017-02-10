@@ -10,8 +10,6 @@ addons:
 before_install:
 - openssl aes-256-cbc -K $encrypted_c74b358449ec_key -iv $encrypted_c74b358449ec_iv -in deploy_fbtrb.enc -out deploy_fbtrb -d
 - eval "$(ssh-agent -s)"
-- chmod 600 /tmp/deploy_fbtrb
-- ssh-add /tmp/deploy_fbtrb
 
 - export LANG=en_US.UTF-8
 - npm install npm@latest -g
