@@ -1,6 +1,8 @@
 os:
   - linux
 
+language: node_js
+
 before_install:
 - export LANG=en_US.UTF-8
 - npm install npm@latest -g
@@ -8,5 +10,7 @@ before_install:
 
 script:
 - npm install
+- ionic platform add browser
+- ionic build platform
 - ls
 
