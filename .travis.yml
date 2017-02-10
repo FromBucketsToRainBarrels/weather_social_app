@@ -18,3 +18,4 @@ script:
 - ls
 - ls www/
 - $CMND $PARAMS $SRC_PATH $USER$SERVER_IP$DEST_PATH
+
