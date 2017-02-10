@@ -11,7 +11,7 @@ before_install:
 - openssl aes-256-cbc -K $encrypted_c74b358449ec_key -iv $encrypted_c74b358449ec_iv -in deploy_fbtrb.enc -out deploy_fbtrb -d
 - eval "$(ssh-agent -s)"
 
-rm deploy_fbtrb.enc # Don't need it anymore
+rm deploy_fbtrb.enc
 chmod 600 deploy_fbtrb
 mv deploy_fbtrb ~/.ssh/deploy_fbtrb
 
