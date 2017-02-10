@@ -19,4 +19,4 @@ script:
 - ionic platform add browser
 - ionic build browser
 - ls
-
+- ls www/
