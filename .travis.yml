@@ -2,6 +2,8 @@ os:
   - linux
 
 language: node_js
+node_js:
+  - "6"
 
 before_install:
 - export LANG=en_US.UTF-8
@@ -9,9 +11,11 @@ before_install:
 - npm install -g ionic cordova
 
 install:
-- npm install
+
 
 script:
+- npm install
+- mkdir www
 - ionic platform add browser
 - ionic build browser
 - ls
