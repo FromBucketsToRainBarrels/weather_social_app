@@ -11,6 +11,6 @@ before_install:
 script:
 - npm install
 - ionic platform add browser
-- ionic build platform
+- ionic build browser
 - ls
 
