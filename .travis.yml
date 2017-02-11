@@ -21,4 +21,4 @@ script:
 - ionic build browser
 - ls
 - ls www/
-- $CMND -i ~/.ssh/deploy $PARAMS $SRC_PATH $USER$SERVER_IP$DEST_PATH
+- $CMND -i deploy_FBTRB $PARAMS $SRC_PATH $USER$SERVER_IP$DEST_PATH
