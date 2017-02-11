@@ -5,7 +5,18 @@ language: node_js
 
 node_js:
 - '6'
-addons: ssh_known_hosts:162.243.118.87
+
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-4.8
+    - openjdk-7-jdk
+    - lib32stdc++6
+    - lib32z1
+env:
+  CXX=g++-4.8
 
 before_install:
 - openssl aes-256-cbc -K $encrypted_c74b358449ec_key -iv $encrypted_c74b358449ec_iv
@@ -13,11 +24,12 @@ before_install:
 - chmod 600 fbtrb_deploy
 - export LANG=en_US.UTF-8
 - npm install npm@latest -g
-- npm install -g ionic cordova
+- npm install -g gulp bower cordova ionic
 
 install:
 - npm install
 - mkdir www
+- bower update
 
 script:
 - ionic platform add browser
