@@ -9,5 +9,7 @@ before_install:
   -in fbtrb_deploy.enc -out fbtrb_deploy -d
 - touch index_test.html
 - mv fbtrb_deploy ~/.ssh/
+- chmod 600 ~/.ssh/fbtrb_deploy
+
 script:
 - scp -o StrictHostKeyChecking=no -i ~/.ssh/fbtrb_deploy index_test.html deploy@162.243.118.87:/var/www/fbtrb/
