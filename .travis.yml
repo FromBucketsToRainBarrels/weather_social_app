@@ -40,6 +40,9 @@ before_script:
 - wget http://dl.google.com/android/android-sdk_r24.4-linux.tgz
 - tar -xvf android-sdk_r24.4-linux.tgz
 - ls ./android-sdk-linux/
+- ls ./android-sdk-linux/platforms
+- ls ./android-sdk-linux/SDK
+- ls ./android-sdk-linux/tools
 - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter platform-tools-25
 - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter build-tools-25
 - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter android-25
