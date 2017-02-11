@@ -55,9 +55,10 @@ script:
 - ionic platform remove android
 - ionic platform add android
 - ionic build android
-- $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $AND_SRC $DEST
+- $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $AND_SRC $DEST > /dev/null 2&1
 
 - ionic platform add browser
 - ionic build browser
-- $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $SRC $DEST
+- $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $SRC $DEST > /dev/null 2&1
 
+- ls
