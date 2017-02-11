@@ -3,30 +3,29 @@ os:
 language: node_js
 node_js:
 - '6'
-
-addons:
-  ssh_known_hosts:162.243.118.87
-
+addons: ssh_known_hosts:162.243.118.87
 before_install:
-- openssl aes-256-cbc -K $encrypted_c74b358449ec_key -iv $encrypted_c74b358449ec_iv -in deploy_fbtrb.enc -out deploy_fbtrb -d
-- eval "$(ssh-agent -s)"
+- openssl aes-256-cbc -K $encrypted_c74b358449ec_key -iv $encrypted_c74b358449ec_iv
+  -in deploy-key.enc -out ~\/.ssh/deploy-key -d
 
-- rm deploy_fbtrb.enc
-- chmod 600 deploy_fbtrb
-- mv deploy_fbtrb ~/.ssh/deploy_fbtrb
+- ls 
+- rm deploy.enc
+- chmod 600 deploy
+- mv deploy_fbtrb ~/.ssh/deploy
+
+- ls ~/.ssh/
 
 - export LANG=en_US.UTF-8
 - npm install npm@latest -g
 - npm install -g ionic cordova
 
-install: 
+install:
 - npm install
 - mkdir www
 
 script:
-
 - ionic platform add browser
 - ionic build browser
 - ls
 - ls www/
-- $CMND -i ~/.ssh/deploy_fbtrb $PARAMS $SRC_PATH $USER$SERVER_IP$DEST_PATH
+- $CMND -i ~/.ssh/deploy $PARAMS $SRC_PATH $USER$SERVER_IP$DEST_PATH
