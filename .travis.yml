@@ -1,23 +1,25 @@
 os:
 - linux
+
 language: node_js
+
 node_js:
 - '6'
 addons: ssh_known_hosts:162.243.118.87
+
 before_install:
 - openssl aes-256-cbc -K $encrypted_c74b358449ec_key -iv $encrypted_c74b358449ec_iv
   -in fbtrb_deploy.enc -out fbtrb_deploy -d
 - chmod 600 fbtrb_deploy
-
 - export LANG=en_US.UTF-8
 - npm install npm@latest -g
 - npm install -g ionic cordova
+
 install:
 - npm install
 - mkdir www
+
 script:
 - ionic platform add browser
 - ionic build browser
-- ls
-- ls www/
-- $CMND -o StrictHostKeyChecking=no -i fbtrb_deploy $SRC $DEST
+- $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $SRC $DEST
