@@ -54,6 +54,9 @@ before_script:
 script:
 - ionic platform remove android
 - ionic platform add android
+- cordova platform update android@6.1.0
+- ionic resources android
+
 - ionic build android
 - $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $AND_SRC $DEST >/dev/null
 
