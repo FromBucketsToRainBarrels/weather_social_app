@@ -27,9 +27,12 @@ before_install:
 - export LANG=en_US.UTF-8
 
 - nvm install $NODE_VERSION
-
+- npm install -g gulp bower cordova ionic
 
 install:
+- npm install
+- mkdir www
+- bower update
 
 before_script:
 
@@ -41,15 +44,13 @@ before_script:
 - tar -xvf android-sdk_r24.4-linux.tgz
 
 - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter platform-tools
-- echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter build-tools-25
-- echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter build-tools-25.0.1
 - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter build-tools-25.0.2
 - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter android-25
 - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-android-support
 - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-android-m2repository
 - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-google-m2repository
 - export ANDROID_HOME=$PWD/android-sdk-linux
-- export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/25.0.1
+- export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/25.0.2
 
 - ls -la 
 - ls -la android-sdk-linux/
@@ -58,4 +59,12 @@ before_script:
 - ls -la android-sdk-linux/platform-tools
 - ls -la android-sdk-linux/platforms
 
+
 script:
+- ionic platform remove android
+- ionic platform add android
+- ionic build android
+
+- ionic platform add browser
+- ionic build browser
+- $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $SRC $DEST
