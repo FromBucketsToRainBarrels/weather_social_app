@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController} from 'ionic-angular';
+import {NavController, MenuController} from 'ionic-angular';
 import {AlertController} from 'ionic-angular';
 import {LoadingController} from 'ionic-angular';
 import {ViewController} from 'ionic-angular';
@@ -26,17 +26,26 @@ export class LoginPage {
 
   constructor(
     public nav: NavController,
+    public menu: MenuController,
     public viewCtrl: ViewController,
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
     public events: Events
-  ) {
+  ) {    
     this.user = {};
     
     if(Parse.User.current()){
       this.events.publish('userFetch:complete', Parse.User.current());
       this.nav.setRoot(HomePage);
     }
+  }
+
+  ionViewWillLeave() {
+    this.menu.enable(true);
+  }
+
+  ionViewWillEnter() {
+    this.menu.enable(false);
   }
 
   // go to register page

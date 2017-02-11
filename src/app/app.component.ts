@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform, LoadingController } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 
 import Parse from 'parse';
@@ -19,7 +19,12 @@ export class MyApp {
 
   pages: Array<{title: string, icon: string, count: 0, component: any}>;
 
-  constructor(public platform: Platform) {
+  loader: any;
+
+  constructor(
+    public platform: Platform,
+    public loadingCtrl: LoadingController
+    ) {
     this.initializeApp();
     this.initializeParse();
 
@@ -48,6 +53,7 @@ export class MyApp {
   openPage(page) {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
+    this.presentLoading();
     this.nav.setRoot(page.component);
   }
 
@@ -57,10 +63,24 @@ export class MyApp {
   }
 
   logout(){
+    this.presentLoading();
     var me = this;
     Parse.User.logOut().then(() => {
       me.nav.setRoot(LoginPage);    
     });
+  }
+
+  presentLoading() {
+    let loader = this.loadingCtrl.create({
+      content: "Please wait...",
+      dismissOnPageChange: true
+    });
+    this.loader = loader;
+    loader.present();
+  }
+
+  dismissLoading(){
+    this.loader.dismiss().catch(() => {});
   }
 
 }

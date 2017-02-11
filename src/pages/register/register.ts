@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController} from 'ionic-angular';
+import {NavController, MenuController} from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 import Parse from 'parse';
@@ -27,9 +27,18 @@ export class RegisterPage {
   constructor(
     public nav: NavController,
     public loadingCtrl: LoadingController,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    public menu: MenuController,
   ) {
     this.user = {};
+  }
+
+  ionViewWillLeave() {
+    this.menu.enable(true);
+  }
+
+  ionViewWillEnter() {
+    this.menu.enable(false);
   }
 
   // register and go to home page
