@@ -9,6 +9,12 @@ jdk:
 env:
   - NODE_VERSION=6.7.0
 
+
+licenses:
+  - 'android-sdk-preview-license-.+'
+  - 'android-sdk-license-.+'
+  - 'google-gdk-license-.+'
+    
 addons:
   apt:
     sources:
