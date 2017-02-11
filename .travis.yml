@@ -57,7 +57,7 @@ script:
 - cordova platform update android@6.1.0
 - ionic plugin remove cordova-plugin-splashscreen
 - ionic plugin add cordova-plugin-splashscreen
-- ionic resources android
+- ionic resources
 
 - ionic build android
 - $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $AND_SRC $DEST >/dev/null

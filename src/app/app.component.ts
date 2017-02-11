@@ -7,7 +7,6 @@ import Parse from 'parse';
 
 import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
-import { RegisterPage } from '../pages/register/register';
 
 
 @Component({
@@ -26,7 +25,7 @@ export class MyApp {
 
     // used for an example of ngFor and navigation
     this.pages = [
-      
+      {title: 'Home',icon: 'ios-water-outline',count: 0,component: HomePage}
     ];
 
   }
@@ -51,4 +50,17 @@ export class MyApp {
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
   }
+
+  // view my profile
+  viewMyProfile() {
+    // this.nav.setRoot(UserPage);
+  }
+
+  logout(){
+    var me = this;
+    Parse.User.logOut().then(() => {
+      me.nav.setRoot(LoginPage);    
+    });
+  }
+
 }
