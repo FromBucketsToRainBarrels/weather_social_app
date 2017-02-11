@@ -7,9 +7,17 @@ addons: ssh_known_hosts:162.243.118.87
 before_install:
 - openssl aes-256-cbc -K $encrypted_c74b358449ec_key -iv $encrypted_c74b358449ec_iv
   -in fbtrb_deploy.enc -out fbtrb_deploy -d
-- touch index_test.html
-- mv fbtrb_deploy ~/.ssh/
-- chmod 600 ~/.ssh/fbtrb_deploy
+- chmod 600 fbtrb_deploy
 
+- export LANG=en_US.UTF-8
+- npm install npm@latest -g
+- npm install -g ionic cordova
+install:
+- npm install
+- mkdir www
 script:
-- scp -o StrictHostKeyChecking=no -i ~/.ssh/fbtrb_deploy index_test.html deploy@162.243.118.87:/var/www/fbtrb/
+- ionic platform add browser
+- ionic build browser
+- ls
+- ls www/
+- $CMND -o StrictHostKeyChecking=no -i fbtrb_deploy $SRC $DEST
