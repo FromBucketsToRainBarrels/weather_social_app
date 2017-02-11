@@ -8,5 +8,6 @@ before_install:
 - openssl aes-256-cbc -K $encrypted_c74b358449ec_key -iv $encrypted_c74b358449ec_iv
   -in fbtrb_deploy.enc -out fbtrb_deploy -d
 - touch index_test.html
-- ls -la
+
 script:
+- ls -la
