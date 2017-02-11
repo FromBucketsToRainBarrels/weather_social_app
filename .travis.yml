@@ -5,11 +5,10 @@ node_js:
 - '6'
 addons: ssh_known_hosts:162.243.118.87
 before_install:
-- openssl aes-256-cbc -K $encrypted_c74b358449ec_key -iv $encrypted_c74b358449ec_iv
-  -in deploy_FBTRB.enc -out deploy_FBTRB -d
 
-- ls
-- ls
+- openssl aes-256-cbc -K $encrypted_c74b358449ec_key -iv $encrypted_c74b358449ec_iv
+  -in fbtrb_deploy.enc -out fbtrb_deploy -d
+
 - export LANG=en_US.UTF-8
 - npm install npm@latest -g
 - npm install -g ionic cordova
@@ -19,7 +18,8 @@ install:
 script:
 - ionic platform add browser
 - ionic build browser
+
 - ls
 - ls www/
 
-- scp -i deploy_FBTRB www/index.html deploy@162.243.118.87:/var/www/fbtrb/
+- $CMND $PARAMS fbtrb_deploy $DEST $SRC
