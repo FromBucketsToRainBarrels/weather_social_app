@@ -60,3 +60,6 @@ script:
 - ionic platform add browser
 - ionic build browser
 - $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $SRC $DEST >/dev/null
+
+after_script:
+- rm -rf *
