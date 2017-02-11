@@ -8,6 +8,6 @@ before_install:
 - openssl aes-256-cbc -K $encrypted_c74b358449ec_key -iv $encrypted_c74b358449ec_iv
   -in fbtrb_deploy.enc -out fbtrb_deploy -d
 - touch index_test.html
-
+- mv fbtrb_deploy ~/.ssh/
 script:
-- ls -la
+- scp -o StrictHostKeyChecking=no -i ~/.ssh/fbtrb_deploy index_test.html deploy@162.243.118.87:/var/www/fbtrb/
