@@ -7,10 +7,7 @@ addons: ssh_known_hosts:162.243.118.87
 before_install:
 - openssl aes-256-cbc -K $encrypted_c74b358449ec_key -iv $encrypted_c74b358449ec_iv
   -in deploy_FBTRB.enc -out deploy_FBTRB -d
-- openssl aes-256-cbc -K $encrypted_c74b358449ec_key -iv $encrypted_c74b358449ec_iv
-  -in deploy-key.enc -out deploy-key -d
-- openssl aes-256-cbc -K $encrypted_c74b358449ec_key -iv $encrypted_c74b358449ec_iv
-  -in deploy-key.enc -out ~\/.ssh/deploy-key -d
+
 - ls
 - ls
 - export LANG=en_US.UTF-8
