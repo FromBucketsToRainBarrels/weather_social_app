@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Network } from 'ionic-native';
 import { Platform, Events } from 'ionic-angular';
- 
-declare var Connection;
- 
+  
 @Injectable()
 export class ConnectivityService {
 
@@ -40,17 +38,23 @@ export class ConnectivityService {
   }
  
   isOnline(): boolean {
+    
+    console.log("device : " + this.onDevice);
+    this.events.publish('connectivity-service-event', "Network : " + Network.type + " onDevice : " + this.onDevice);
+    
     if(this.onDevice && Network.type){
     	console.log("Network.type : " + Network.type);
-      return Network.type !== Connection.NONE;
+      return Network.type !== "none";
     } else {
       return navigator.onLine; 
     }
   }
  
   isOffline(): boolean {
+    console.log("device : " + this.onDevice);
+    this.events.publish('connectivity-service-event', "Network : " + Network.type + " onDevice : " + this.onDevice);
     if(this.onDevice && Network.type){
-      return Network.type === Connection.NONE;
+      return Network.type === "none";
     } else {
       return !navigator.onLine;   
     }

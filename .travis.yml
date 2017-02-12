@@ -56,6 +56,7 @@ script:
 - ionic platform add android
 - cordova platform update android@6.1.0
 
+- ionic plugin add cordova-plugin-device
 - ionic plugin add cordova-plugin-splashscreen
 - cordova plugin add cordova-plugin-network-information
 - ionic plugin add cordova-plugin-x-toast

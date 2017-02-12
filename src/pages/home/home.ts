@@ -30,7 +30,7 @@ export class HomePage {
   }
 
   checkConnection(){
-  	this.presentToast("Network isOnline : "+this.connectivityService.isOnline(), "bottom");
+  	this.connectivityService.isOnline();
   }
 
   presentToast(message, position) {
