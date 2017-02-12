@@ -59,10 +59,13 @@ export class HomePage {
   }
 
   subscribeEvents(){
-    this.events.subscribe('networkDisconnect', message => {
+    //subscribe to connectivity-service-event
+    this.events.subscribe('connectivity-service-event', message => {
       this.presentToast(message, "bottom");
     });
-    this.events.subscribe('networkConnect', message => {
+
+    //subscribe to error-handler-service-event
+    this.events.subscribe('error-handler-service-event', message => {
       this.presentToast(message, "bottom");
     });
   }

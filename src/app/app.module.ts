@@ -6,6 +6,7 @@ import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
 import { RegisterPage } from '../pages/register/register';
 
+import { ErrorHandlerService } from '../providers/error-handler-service';
 import { ConnectivityService } from '../providers/connectivity-service';
 import { ParseProvider } from '../providers/parse-provider';
 import { Storage } from '@ionic/storage';
@@ -55,6 +56,7 @@ import { Storage } from '@ionic/storage';
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},
     ParseProvider,
     ConnectivityService,
-    Storage]
+    Storage,
+    ErrorHandlerService]
 })
 export class AppModule {}

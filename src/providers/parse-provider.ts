@@ -4,6 +4,7 @@ import {Events} from 'ionic-angular';
 import Parse from 'parse';
 
 import { ConnectivityService } from '../providers/connectivity-service';
+import { ErrorHandlerService } from '../providers/error-handler-service';
 
 /*
   Generated class for the ParseProvider provider.
@@ -21,7 +22,8 @@ export class ParseProvider {
   constructor(
   	public storage: Storage,
   	public events: Events,
-    public connectivityService: ConnectivityService
+    public connectivityService: ConnectivityService,
+    public errorHandlerService: ErrorHandlerService
   ) {
   	Parse.initialize('FromBucketsToRainBarrels');
     Parse.serverURL = 'http://162.243.118.87:1337/parse';
@@ -41,6 +43,7 @@ export class ParseProvider {
 	Parse.User.logOut().then(function(user){
 
     }, function(error){
+    	me.errorHandlerService.handleError(error);
       	console.error(error);
     });
   }
@@ -48,19 +51,22 @@ export class ParseProvider {
   login(user,pass){
   	let me = this;
   	return new Promise((resolve, reject) => {
-  		if(me.connectivityService.isOnline()){
+  		// if(me.connectivityService.isOnline()){
   			Parse.User.logIn(user, pass, {
 		        success: function(user) {
 		          console.log(user);
 		          resolve(user);
 		        },
 		        error: function(user, error) {
+		          me.errorHandlerService.handleError(error);
 		          reject(error);
 		        }
 		    });
-  		}else{
-  			reject("No internet connection");
-  		}
+  		// }else{
+  		// 	let error = {message: "No internet connection"}
+			 //  me.errorHandlerService.handleError(error);
+  		// 	reject(error);
+  		// }
 	  		
   	});
   }

@@ -34,6 +34,7 @@ export class LoginPage {
     public parse: ParseProvider,
     private toastCtrl: ToastController
   ) {    
+    this.subscribeEvents();
     let me = this;
     me.user ={};
     if(me.parse.getCurrentUser()){
@@ -80,9 +81,8 @@ export class LoginPage {
         return response;
       }).then((response) => {
         me.nav.setRoot(HomePage);
-      }).catch((ex) => {
+      }).catch((error) => {
         me.dismissLoading();
-        this.presentToast("Unable to connect", "bottom")
       }); 
 
     }else{
@@ -116,6 +116,18 @@ export class LoginPage {
       console.log(response)
     }).catch((error) => {
       console.log(error);
+    });
+  }
+
+  subscribeEvents(){
+    //subscribe to connectivity-service-event
+    this.events.subscribe('connectivity-service-event', message => {
+      this.presentToast(message, "bottom");
+    });
+
+    //subscribe to error-handler-service-event
+    this.events.subscribe('error-handler-service-event', message => {
+      this.presentToast(message, "bottom");
     });
   }
 }

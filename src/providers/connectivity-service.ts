@@ -20,7 +20,7 @@ export class ConnectivityService {
     
     // watch network for a disconnect
     this.disconnectSubscription = Network.onDisconnect().subscribe(() => {
-      this.events.publish('networkDisconnect', "Network was disconnected");
+      this.events.publish('connectivity-service-event', "Network was disconnected");
       console.log('network was disconnected :-(');
     });
 
@@ -32,7 +32,7 @@ export class ConnectivityService {
       // prior to doing any api requests as well.
       setTimeout(() => {
         if (Network.type === 'wifi') {
-          this.events.publish('networkConnect', Network.type + " connected");
+          this.events.publish('connectivity-service-event', Network.type + " connected");
           console.log('we got a wifi connection, woohoo!');
         }
       }, 3000);
