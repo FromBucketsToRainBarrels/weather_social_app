@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, Alert, LoadingController } from 'ionic-angular';
+import { Nav, Platform, Alert, LoadingController, Events, ToastController } from 'ionic-angular';
 import { StatusBar, Splashscreen, Network } from 'ionic-native';
 
 import { LoginPage } from '../pages/login/login';
@@ -21,7 +21,10 @@ export class MyApp {
     public platform: Platform,
     public loadingCtrl: LoadingController,
     public parse: ParseProvider,
+    public events: Events,
+    private toastCtrl: ToastController,
     ) {
+    this.subscribeEvents();
     this.initializeApp();
     // used for an example of ngFor and navigation
     this.pages = [
@@ -34,6 +37,7 @@ export class MyApp {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
+      console.log(document);
       StatusBar.styleDefault();
       Splashscreen.hide();
     });
@@ -73,4 +77,31 @@ export class MyApp {
     this.loader.dismiss().catch(() => {});
   }
 
+  subscribeEvents(){
+    //subscribe to connectivity-service-event
+    this.events.subscribe('connectivity-service-event', message => {
+      this.presentToast(message, "bottom");
+    });
+
+    //subscribe to error-handler-service-event
+    this.events.subscribe('error-handler-service-event', message => {
+      this.presentToast(message, "bottom");
+    });
+  }
+
+  presentToast(message, position) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 2500,
+      showCloseButton: true,
+      position: position,
+      dismissOnPageChange: false
+    });
+
+    toast.onDidDismiss(() => {
+      // console.log('Dismissed toast');
+    });
+
+    toast.present();
+  }
 }

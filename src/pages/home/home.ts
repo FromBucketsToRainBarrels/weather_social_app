@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, ToastController, Events } from 'ionic-angular';
+import { NavController, NavParams, AlertController, Events } from 'ionic-angular';
 import { ConnectivityService } from '../../providers/connectivity-service';
 
 /*
@@ -19,10 +19,7 @@ export class HomePage {
   	public navParams: NavParams,
   	public connectivityService: ConnectivityService,
   	public alertCtrl: AlertController,
-    private toastCtrl: ToastController,
-    public events: Events,
   ) {
-  	this.subscribeEvents();
   }
 
   ionViewDidLoad() {
@@ -30,23 +27,7 @@ export class HomePage {
   }
 
   checkConnection(){
-  	this.connectivityService.isOnline();
-  }
-
-  presentToast(message, position) {
-    let toast = this.toastCtrl.create({
-      message: message,
-      duration: 2500,
-      showCloseButton: true,
-      position: position,
-      dismissOnPageChange: false
-    });
-
-    toast.onDidDismiss(() => {
-      // console.log('Dismissed toast');
-    });
-
-    toast.present();
+  	this.connectivityService.hasInernet();
   }
 
   alert(message) {
@@ -58,16 +39,6 @@ export class HomePage {
     alert.present();
   }
 
-  subscribeEvents(){
-    //subscribe to connectivity-service-event
-    this.events.subscribe('connectivity-service-event', message => {
-      this.presentToast(message, "bottom");
-    });
-
-    //subscribe to error-handler-service-event
-    this.events.subscribe('error-handler-service-event', message => {
-      this.presentToast(message, "bottom");
-    });
-  }
+  
 
 }
