@@ -25,10 +25,31 @@ export class ErrorHandlerService {
     
   }
 
-
-  handleError(error){
-    console.log("Error Handler : " + error);
-    this.connectivityService.testInternetAccess();
+  // {error:error, function:function, context:context, args: args}
+  handleError(obj){
+    console.log(obj);
+    if(obj.error){
+      this.events.publish('error-handler-service-event', obj.error.message);
+    }
+    this.connectivityService.testInternetAccess();    
+    if(obj.retry){
+      setTimeout(function(obj){
+        var login = wrapFunction(obj.function, obj.context, obj.args);
+        (login)();
+      }, 5000, obj);
+    }
   }
 
+  wrapFunction(fn, context, params) {
+    return function() {
+        fn.apply(context, params);
+    };
+  }
+
+}
+
+var wrapFunction = function(fn, context, params) {
+    return function() {
+        fn.apply(context, params);
+    };
 }

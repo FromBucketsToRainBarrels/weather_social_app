@@ -34,8 +34,8 @@ export class LoginPage {
     public parse: ParseProvider,
     private toastCtrl: ToastController
   ) {    
-    
     let me = this;
+    me.subscribeEvents();
     me.user ={};
     if(me.parse.getCurrentUser()){
       me.nav.setRoot(HomePage);
@@ -77,17 +77,10 @@ export class LoginPage {
     this.presentLoading();
     //this.presentLoading(); // dismiss not working for some reason ! :@
     if(this.user.username && this.user.password){
-      me.parse.login(this.user.username,this.user.password).then((response) => {
-        return response;
-      }).then((response) => {
-        me.nav.setRoot(HomePage);
-      }).catch((error) => {
-        me.dismissLoading();
-      }); 
-
+      me.parse.login(this.user.username,this.user.password);
     }else{
-      me.dismissLoading();
       this.presentToast("Credentials missing", "bottom")
+      me.dismissLoading();
     }
   }
 
@@ -116,6 +109,16 @@ export class LoginPage {
       console.log(response)
     }).catch((error) => {
       console.log(error);
+    });
+  }
+
+  subscribeEvents(){
+    let me = this;
+    this.events.subscribe('loginSuccess', user => {
+      me.nav.setRoot(HomePage);
+    });
+    this.events.subscribe('loginFail', user => {
+      if(me.loader)me.dismissLoading();
     });
   }
 }

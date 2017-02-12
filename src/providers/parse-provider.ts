@@ -46,31 +46,45 @@ export class ParseProvider {
 
       },function(error){
       	console.error(error);
-        me.errorHandlerService.handleError(error);
+        me.errorHandlerService.handleError({
+          retry: false,
+          error:error,
+          function: me.logout,
+          context: me,
+          args: []
+        });
       });
   }
 
   login(user,pass){
   	let me = this;
-  	return new Promise((resolve, reject) => {
   		if(me.connectivityService.hasInernet()){
-  			Parse.User.logIn(user, pass, {
+        Parse.User.logIn(user, pass, {
 		        success: function(user) {
 		          console.log(user);
-		          resolve(user);
-		        },
+		          me.events.publish("loginSuccess",user);
+            },
 		        error: function(user, error) {
-		          me.errorHandlerService.handleError(error);
-		          reject(error);
+		          me.events.publish("loginFail",user);
+              me.errorHandlerService.handleError({
+                retry: false,
+                error:error,
+                function: me.login,
+                context: me,
+                args: Array.from(arguments)
+              });
 		        }
 		    });
   		}else{
-  			let error = {message: "No internet connection"}
-			  me.errorHandlerService.handleError(error);
-  			reject(error);
+        me.events.publish("loginFail",user);
+			  me.errorHandlerService.handleError({
+          retry: true,
+          error:null,
+          function: me.login,
+          context: me,
+          args: Array.from(arguments)
+        });
   		}
-	  		
-  	});
   }
 
   deseriallizeUser(user){
