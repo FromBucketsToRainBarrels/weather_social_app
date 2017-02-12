@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, MenuController} from 'ionic-angular';
+import {NavController, MenuController, ToastController} from 'ionic-angular';
 import {AlertController} from 'ionic-angular';
 import {LoadingController} from 'ionic-angular';
 import {ViewController} from 'ionic-angular';
@@ -15,6 +15,9 @@ import { ParseProvider } from '../../providers/parse-provider';
  See http://ionicframework.com/docs/v2/components/#navigation for more info on
  Ionic pages and navigation.
  */
+
+declare var window: any;
+
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html'
@@ -31,7 +34,8 @@ export class LoginPage {
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
     public events: Events,
-    public parse: ParseProvider
+    public parse: ParseProvider,
+    private toastCtrl: ToastController
   ) {    
     let me = this;
     me.user ={};
@@ -46,6 +50,22 @@ export class LoginPage {
 
   ionViewWillEnter() {
     this.menu.enable(false);
+  }
+
+  presentToast(message, position) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000,
+      showCloseButton: true,
+      position: position,
+      dismissOnPageChange: true
+    });
+
+    toast.onDidDismiss(() => {
+      console.log('Dismissed toast');
+    });
+
+    toast.present();
   }
 
   // go to register page
@@ -64,14 +84,13 @@ export class LoginPage {
       }).then((response) => {
         me.nav.setRoot(HomePage);
       }).catch((ex) => {
-        console.error(ex);
         me.dismissLoading();
-        me.alert(ex);
+        this.presentToast(ex, "bottom")
       }); 
 
     }else{
       me.dismissLoading();
-      this.alert("Credentials missing");
+      this.presentToast("Credentials missing", "bottom")
     }
   }
 
