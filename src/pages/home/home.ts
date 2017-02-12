@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, ToastController, Events } from 'ionic-angular';
 import { ConnectivityService } from '../../providers/connectivity-service';
 
 /*
@@ -19,8 +19,10 @@ export class HomePage {
   	public navParams: NavParams,
   	public connectivityService: ConnectivityService,
   	public alertCtrl: AlertController,
+    private toastCtrl: ToastController,
+    public events: Events,
   ) {
-  	
+  	this.subscribeEvents();
   }
 
   ionViewDidLoad() {
@@ -28,7 +30,23 @@ export class HomePage {
   }
 
   checkConnection(){
-  	this.alert(this.connectivityService.isOnline());
+  	this.presentToast("Network isOnline : "+this.connectivityService.isOnline(), "bottom");
+  }
+
+  presentToast(message, position) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 2500,
+      showCloseButton: true,
+      position: position,
+      dismissOnPageChange: false
+    });
+
+    toast.onDidDismiss(() => {
+      // console.log('Dismissed toast');
+    });
+
+    toast.present();
   }
 
   alert(message) {
@@ -38,6 +56,15 @@ export class HomePage {
       buttons: ['OK']
     });
     alert.present();
+  }
+
+  subscribeEvents(){
+    this.events.subscribe('networkDisconnect', message => {
+      this.presentToast(message, "bottom");
+    });
+    this.events.subscribe('networkConnect', message => {
+      this.presentToast(message, "bottom");
+    });
   }
 
 }

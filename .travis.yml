@@ -56,11 +56,6 @@ script:
 - ionic platform add android
 - cordova platform update android@6.1.0
 
-- ionic plugin remove cordova-plugin-splashscreen
-- cordova plugin remove cordova-plugin-network-information
-- ionic plugin remove cordova-plugin-x-toast
-- ionic plugin remove cordova-plugin-geolocation
-
 - ionic plugin add cordova-plugin-splashscreen
 - cordova plugin add cordova-plugin-network-information
 - ionic plugin add cordova-plugin-x-toast

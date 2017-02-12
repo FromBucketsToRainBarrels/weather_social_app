@@ -55,7 +55,7 @@ export class ParseProvider {
 		          resolve(user);
 		        },
 		        error: function(user, error) {
-		          reject(error.message);
+		          reject(error);
 		        }
 		    });
   		}else{

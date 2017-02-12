@@ -1,11 +1,8 @@
 import {Component} from '@angular/core';
-import {NavController, MenuController, ToastController} from 'ionic-angular';
-import {AlertController} from 'ionic-angular';
-import {LoadingController} from 'ionic-angular';
-import {ViewController} from 'ionic-angular';
+import {NavController, MenuController, ToastController, Events, LoadingController, ViewController, AlertController} from 'ionic-angular';
+
 import {RegisterPage} from "../register/register";
 import {HomePage} from "../home/home";
-import {Events} from 'ionic-angular';
 
 import { ParseProvider } from '../../providers/parse-provider';
 
@@ -55,14 +52,14 @@ export class LoginPage {
   presentToast(message, position) {
     let toast = this.toastCtrl.create({
       message: message,
-      duration: 3000,
+      duration: 2500,
       showCloseButton: true,
       position: position,
-      dismissOnPageChange: true
+      dismissOnPageChange: false
     });
 
     toast.onDidDismiss(() => {
-      console.log('Dismissed toast');
+      // console.log('Dismissed toast');
     });
 
     toast.present();
@@ -85,7 +82,7 @@ export class LoginPage {
         me.nav.setRoot(HomePage);
       }).catch((ex) => {
         me.dismissLoading();
-        this.presentToast(ex, "bottom")
+        this.presentToast("Unable to connect", "bottom")
       }); 
 
     }else{
