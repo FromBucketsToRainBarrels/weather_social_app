@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { ConnectivityService } from '../../providers/connectivity-service';
 
 /*
@@ -17,15 +17,28 @@ export class HomePage {
   constructor(
   	public navCtrl: NavController, 
   	public navParams: NavParams,
-  	public connectivityService: ConnectivityService
-  ) {}
+  	public connectivityService: ConnectivityService,
+  	public alertCtrl: AlertController,
+  ) {
+  	window.addEventListener('offline', function(e) { console.log('offline'); });
+	window.addEventListener('online', function(e) { console.log('online'); });
+  }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad HomePage');
   }
 
   checkConnection(){
-  	alert(this.connectivityService.isOnline());
+  	this.alert(this.connectivityService.isOnline());
+  }
+
+  alert(message) {
+    let alert = this.alertCtrl.create({
+      title: 'Error',
+      subTitle: message,
+      buttons: ['OK']
+    });
+    alert.present();
   }
 
 }
