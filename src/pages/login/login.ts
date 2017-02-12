@@ -35,11 +35,8 @@ export class LoginPage {
   ) {    
     let me = this;
     me.user ={};
-    me.presentLoading();
     if(me.parse.getCurrentUser()){
       me.nav.setRoot(HomePage);
-    }else{
-      me.dismissLoading();
     }
   }
 
@@ -97,6 +94,12 @@ export class LoginPage {
   }
 
   dismissLoading(){
-    this.loader.dismiss().catch(() => {});
+    this.loader.dismiss().then((response) => {
+      return response;
+    }).then((response) => {
+      console.log(response)
+    }).catch((error) => {
+      console.log(error);
+    });
   }
 }

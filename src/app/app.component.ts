@@ -56,15 +56,8 @@ export class MyApp {
   logout(){
     let me = this;
     me.presentLoading();
-    me.parse.logout().then((response) => {
-      return response;
-    }).then((response) => {
-      console.log(response)
-      me.nav.setRoot(LoginPage);
-    }).catch((ex) => {
-      console.error(ex);
-      me.nav.setRoot(LoginPage);
-    }); 
+    me.parse.logout();
+    me.nav.setRoot(LoginPage); 
   }
 
   presentLoading() {
