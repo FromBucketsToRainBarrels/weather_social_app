@@ -3,6 +3,8 @@ import {Storage} from '@ionic/storage';
 import {Events} from 'ionic-angular';
 import Parse from 'parse';
 
+import { ConnectivityService } from '../providers/connectivity-service';
+
 /*
   Generated class for the ParseProvider provider.
 
@@ -17,7 +19,8 @@ export class ParseProvider {
 
   constructor(
   	public storage: Storage,
-  	public events: Events
+  	public events: Events,
+    public connectivityService: ConnectivityService
   ) {
   	Parse.initialize('FromBucketsToRainBarrels');
     Parse.serverURL = 'http://162.243.118.87:1337/parse';
@@ -33,7 +36,6 @@ export class ParseProvider {
 
   logout(){
   	let me = this;
-  	localStorage.clear();
   	return new Promise((resolve, reject) => {
     	Parse.User.logOut().then(function(user){
         	resolve(user);

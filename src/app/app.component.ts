@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, LoadingController } from 'ionic-angular';
-import { StatusBar, Splashscreen } from 'ionic-native';
+import { Nav, Platform, Alert, LoadingController } from 'ionic-angular';
+import { StatusBar, Splashscreen, Network } from 'ionic-native';
 
 import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
@@ -20,20 +20,14 @@ export class MyApp {
   constructor(
     public platform: Platform,
     public loadingCtrl: LoadingController,
-    public parse: ParseProvider
+    public parse: ParseProvider,
     ) {
     this.initializeApp();
-    this.initializeParse();
-
     // used for an example of ngFor and navigation
     this.pages = [
       {title: 'Home',icon: 'ios-water-outline',count: 0,component: HomePage}
     ];
 
-  }
-
-  initializeParse(){
-    // Initialize Parse with your app's Application ID and JavaScript Key
   }
 
   initializeApp() {

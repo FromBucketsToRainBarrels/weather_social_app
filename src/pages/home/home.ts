@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import { ConnectivityService } from '../../providers/connectivity-service';
 
 /*
   Generated class for the Home page.
@@ -13,10 +14,18 @@ import { NavController, NavParams } from 'ionic-angular';
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {}
+  constructor(
+  	public navCtrl: NavController, 
+  	public navParams: NavParams,
+  	public connectivityService: ConnectivityService
+  ) {}
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad HomePage');
+  }
+
+  checkConnection(){
+  	alert(this.connectivityService.isOnline());
   }
 
 }
