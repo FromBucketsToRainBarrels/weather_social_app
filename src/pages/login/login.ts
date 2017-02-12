@@ -6,8 +6,8 @@ import {ViewController} from 'ionic-angular';
 import {RegisterPage} from "../register/register";
 import {HomePage} from "../home/home";
 import {Events} from 'ionic-angular';
-import Parse from 'parse';
 
+import { ParseProvider } from '../../providers/parse-provider';
 
 /*
  Generated class for the LoginPage page.
@@ -30,13 +30,16 @@ export class LoginPage {
     public viewCtrl: ViewController,
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
-    public events: Events
+    public events: Events,
+    public parse: ParseProvider
   ) {    
-    this.user = {};
-    
-    if(Parse.User.current()){
-      this.events.publish('userFetch:complete', Parse.User.current());
-      this.nav.setRoot(HomePage);
+    let me = this;
+    me.user ={};
+    me.presentLoading();
+    if(me.parse.getCurrentUser()){
+      me.nav.setRoot(HomePage);
+    }else{
+      me.dismissLoading();
     }
   }
 
@@ -59,30 +62,26 @@ export class LoginPage {
     this.presentLoading();
     //this.presentLoading(); // dismiss not working for some reason ! :@
     if(this.user.username && this.user.password){
+      me.parse.login(this.user.username,this.user.password).then((response) => {
+        return response;
+      }).then((response) => {
+        me.nav.setRoot(HomePage);
+      }).catch((ex) => {
+        console.error(ex);
+        me.dismissLoading();
+        me.alert(ex);
+      }); 
 
-      Parse.User.logIn(this.user.username, this.user.password, {
-        success: function(user) {
-          //navigate to home page
-          me.events.publish('userFetch:complete', Parse.User.current());
-          // me.dismissLoading();
-          me.nav.setRoot(HomePage);
-        },
-        error: function(user, error) {
-          // The login failed. Check error to see why.
-          me.dismissLoading();
-          me.invalidCredentialsAlert();
-        }
-      });
     }else{
       me.dismissLoading();
-      this.invalidCredentialsAlert();
+      this.alert("Credentials missing");
     }
   }
 
-  invalidCredentialsAlert() {
+  alert(message) {
     let alert = this.alertCtrl.create({
       title: 'Error',
-      subTitle: 'Invalid credentials',
+      subTitle: message,
       buttons: ['OK']
     });
     alert.present();

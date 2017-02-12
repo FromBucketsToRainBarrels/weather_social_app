@@ -2,12 +2,10 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, LoadingController } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 
-import Parse from 'parse';
-
-
 import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
 
+import { ParseProvider } from '../providers/parse-provider';
 
 @Component({
   templateUrl: 'app.html'
@@ -16,14 +14,13 @@ export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = LoginPage;
-
   pages: Array<{title: string, icon: string, count: 0, component: any}>;
-
   loader: any;
 
   constructor(
     public platform: Platform,
-    public loadingCtrl: LoadingController
+    public loadingCtrl: LoadingController,
+    public parse: ParseProvider
     ) {
     this.initializeApp();
     this.initializeParse();
@@ -37,8 +34,6 @@ export class MyApp {
 
   initializeParse(){
     // Initialize Parse with your app's Application ID and JavaScript Key
-    Parse.initialize('FromBucketsToRainBarrels');
-    Parse.serverURL = 'http://162.243.118.87:1337/parse';
   }
 
   initializeApp() {
@@ -59,15 +54,23 @@ export class MyApp {
 
   // view my profile
   viewMyProfile() {
+    this.presentLoading();
     // this.nav.setRoot(UserPage);
+    this.dismissLoading();
   }
 
   logout(){
-    this.presentLoading();
-    var me = this;
-    Parse.User.logOut().then(() => {
-      me.nav.setRoot(LoginPage);    
-    });
+    let me = this;
+    me.presentLoading();
+    me.parse.logout().then((response) => {
+      return response;
+    }).then((response) => {
+      console.log(response)
+      me.nav.setRoot(LoginPage);
+    }).catch((ex) => {
+      console.error(ex);
+      me.nav.setRoot(LoginPage);
+    }); 
   }
 
   presentLoading() {

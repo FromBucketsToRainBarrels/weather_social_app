@@ -6,6 +6,9 @@ import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
 import { RegisterPage } from '../pages/register/register';
 
+import { ParseProvider } from '../providers/parse-provider';
+import { Storage } from '@ionic/storage';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -48,6 +51,8 @@ import { RegisterPage } from '../pages/register/register';
     RegisterPage,
     HomePage
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},
+    ParseProvider,
+    Storage]
 })
 export class AppModule {}
