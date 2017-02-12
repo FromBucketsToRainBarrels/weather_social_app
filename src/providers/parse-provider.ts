@@ -40,18 +40,20 @@ export class ParseProvider {
   logout(){
   	let me = this;
   	me.current = null;
-	Parse.User.logOut().then(function(user){
+	  
+    Parse.User.logOut().then(
+      function(user){
 
-    }, function(error){
-    	me.errorHandlerService.handleError(error);
+      },function(error){
       	console.error(error);
-    });
+        me.errorHandlerService.handleError(error);
+      });
   }
 
   login(user,pass){
   	let me = this;
   	return new Promise((resolve, reject) => {
-  		// if(me.connectivityService.isOnline()){
+  		if(me.connectivityService.hasInernet()){
   			Parse.User.logIn(user, pass, {
 		        success: function(user) {
 		          console.log(user);
@@ -62,11 +64,11 @@ export class ParseProvider {
 		          reject(error);
 		        }
 		    });
-  		// }else{
-  		// 	let error = {message: "No internet connection"}
-			 //  me.errorHandlerService.handleError(error);
-  		// 	reject(error);
-  		// }
+  		}else{
+  			let error = {message: "No internet connection"}
+			  me.errorHandlerService.handleError(error);
+  			reject(error);
+  		}
 	  		
   	});
   }

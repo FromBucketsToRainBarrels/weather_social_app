@@ -22,11 +22,13 @@ export class ErrorHandlerService {
   	public events: Events,
     public connectivityService: ConnectivityService
   ) {
-    console.log('Hello ErrorHandlerService Provider');
+    
   }
 
+
   handleError(error){
-  	this.events.publish('error-handler-service-event', error.message);
+    console.log("Error Handler : " + error);
+    this.connectivityService.testInternetAccess();
   }
 
 }

@@ -26,8 +26,12 @@ export class HomePage {
     console.log('ionViewDidLoad HomePage');
   }
 
-  checkConnection(){
-  	this.connectivityService.hasInernet();
+  hasNetwork(){
+  	this.connectivityService.hasNetwork();
+  }
+
+  hasInernet(){
+    this.connectivityService.hasInernet();
   }
 
   alert(message) {

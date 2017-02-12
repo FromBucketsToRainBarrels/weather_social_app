@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Platform, Events } from 'ionic-angular';
 import { Network } from 'ionic-native';
-import {Http} from '@angular/http';
+import {Http, Headers} from '@angular/http';
 import 'rxjs/Rx';
 
   
@@ -11,7 +11,7 @@ export class ConnectivityService {
   connectSubscription: any;
   disconnectSubscription : any;
   onDevice: boolean;
-  hasInternetAccess: boolean;
+  hasInternetAccess: boolean = true;
  
   constructor(
     public platform: Platform,
@@ -20,7 +20,6 @@ export class ConnectivityService {
   ){
 
     this.testInternetAccess();
-
     this.onDevice = this.platform.is('cordova');
     console.log("this.onDevice : " + this.onDevice);
 
@@ -41,8 +40,6 @@ export class ConnectivityService {
   }
 
   hasNetwork(){
-    console.log("device : " + this.onDevice);
-    this.events.publish('connectivity-service-event', "Network : " + Network.type + " onDevice : " + this.onDevice);
     if(this.onDevice && Network.type){
       return Network.type !== "none";
     } else {
@@ -50,30 +47,22 @@ export class ConnectivityService {
     }
   }
  
-  hasInernet(): boolean {
-    console.log("checking internet access");
-    if(!this.hasInternetAccess){
-      this.testInternetAccess();
-    }
+  hasInernet(){
     return this.hasInternetAccess;
   }
 
   networkConnected(){
     let me = this;
     setTimeout(() => {
-      if (Network.type === 'wifi') {
-        me.events.publish('connectivity-service-event', Network.type + " connected");
-      }
+      me.events.publish('connectivity-service-event', Network.type + " connected");
+      me.testInternetAccess();
     }, 3000);
   }
 
   networkDisconnected(){
+    this.hasInternetAccess = false;
     this.events.publish('connectivity-service-event', "Network was disconnected");
     console.log('network was disconnected :-(');
-  }
-
-  noInternetAccess(){
-    this.events.publish('connectivity-service-event', "No internet access");
   }
 
   stopNetworkDisconnectWatch(){
@@ -89,18 +78,25 @@ export class ConnectivityService {
   testInternetAccess(){
       console.log("testInternetAccess()");
       let me = this;
-      var url = 'http://blank.org/';
-      
-      this.http.get(url)
-      .timeout(2000, new Error('delay exceeded'))
-      .map(res => res)
-      .subscribe(data => {
-        me.hasInternetAccess = true;
-        console.log("internet access is good");
-      },
-      err => {
-        me.hasInternetAccess = false;
-        console.log("no internet access");
-      });
+      let url = 'http://blank.org/';
+      let headers = new Headers();
+      headers.append('Pragma','no-cache');
+      headers.append('Cache-Control','no-cache');
+      headers.append('Expires',"0");
+
+      this.http.get(url, {
+          headers: headers
+        })
+        .timeout(2000, new Error('delay exceeded'))
+        .map(res => res)
+        .subscribe(data => {
+          if(!me.hasInternetAccess){this.events.publish('connectivity-service-event', "Internet access OK");}
+          me.hasInternetAccess = true;          
+        },
+        err => {
+          me.hasInternetAccess = false;
+          this.events.publish('connectivity-service-event', "No internet access");
+          console.log("no internet access");
+        });
   }
 }
