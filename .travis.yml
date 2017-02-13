@@ -60,6 +60,8 @@ script:
 - cordova plugin add cordova-plugin-network-information
 - ionic plugin add cordova-plugin-x-toast
 - ionic plugin add cordova-plugin-geolocation
+- cordova plugin add cordova-plugin-file
+- cordova plugin add cordova-plugin-file-transfer
 
 - cordova plugins
 
