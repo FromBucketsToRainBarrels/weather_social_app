@@ -22,24 +22,33 @@ export class LazyImgComponent implements OnInit {
 
   constructor(public el: ElementRef) {
     this.hidden = true;
+    console.log(el);
   };
 
   ngOnInit() {
+    let me = this;
+    console.log("init");
     this.img = this.el.nativeElement.querySelector('img');
     this.img.className = this.el.nativeElement.className;
     this.img.crossOrigin = 'Anonymous';
 
     // check if the images are already cached
+    console.log("src : " + this.src);
     ImgCache.isCached(this.src, (path: string, success: boolean) => {
-
+      
+      console.log("success : " + success);
       // if not, it will be cached
       if (success) {
 
-        ImgCache.useCachedFile(this.img, () => {  });
+        ImgCache.useCachedFile(this.img, () => { 
+          
+        });
 
       } else {
 
-        ImgCache.cacheFile(this.src, () => { });
+        ImgCache.cacheFile(this.src, () => {
+
+        });
 
       }
 
