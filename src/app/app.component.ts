@@ -19,8 +19,7 @@ export class MyApp {
   loader: any;
   user: any;
   imageCacheInit: boolean = false;
-  rootPage: any = LoginPage;
-  
+
   constructor(
     public platform: Platform,
     public loadingCtrl: LoadingController,
@@ -53,7 +52,6 @@ export class MyApp {
         this.nav.setRoot(LoginPage);
         Splashscreen.hide(); 
       },()=>{ 
-        this.presentToast('ImgCache init: error! Check the log for errors', "bottom");
         console.error('ImgCache init: error! Check the log for errors');
       });
 

@@ -30,7 +30,6 @@ before_install:
 - npm install -g gulp bower cordova ionic
 
 install:
-- npm install
 - mkdir www
 - bower update
 

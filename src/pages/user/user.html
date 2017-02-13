@@ -20,9 +20,11 @@
   <div class="profile-cover">
     <ion-grid>
       <ion-row>
-        <ion-col width-33 text-center (click)="uploadPic()">
-          <img class="profile-picture circle" src="{{user?.image?.url}}">
-        </ion-col>
+        
+          <ion-col *ngIf="parse?.imageCacheService&&user?.image?.url" width-33 text-center (click)="uploadPic()">
+            <lazy-img class="profile-picture circle" src="{{user?.image?.url}}"></lazy-img>
+          </ion-col>
+
 
         <ion-col width-66>
           <h3 padding no-margin color="light">{{user.username}}</h3>
