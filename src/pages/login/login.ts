@@ -44,6 +44,7 @@ export class LoginPage {
 
   ionViewWillLeave() {
     this.menu.enable(true);
+    this.unsubscribeEvents();
   }
 
   ionViewWillEnter() {
@@ -60,7 +61,6 @@ export class LoginPage {
     });
 
     toast.onDidDismiss(() => {
-      // console.log('Dismissed toast');
     });
 
     toast.present();
@@ -74,13 +74,13 @@ export class LoginPage {
   // login and go to home page
   login() {
     var me = this;
-    this.presentLoading();
+    me.presentLoading();
     //this.presentLoading(); // dismiss not working for some reason ! :@
     if(this.user.username && this.user.password){
-      me.parse.login(this.user.username,this.user.password);
+      me.parse.login(this.user.username,this.user.password,this);
     }else{
       this.presentToast("Credentials missing", "bottom")
-      me.dismissLoading();
+      me.dismissLoading(me);
     }
   }
 
@@ -95,30 +95,38 @@ export class LoginPage {
 
   presentLoading() {
     let loader = this.loadingCtrl.create({
-      content: "Please wait...",
-      dismissOnPageChange: true
+      content: "Please wait..."
     });
     this.loader = loader;
     loader.present();
   }
 
-  dismissLoading(){
-    this.loader.dismiss().then((response) => {
-      return response;
-    }).then((response) => {
-      console.log(response)
-    }).catch((error) => {
-      console.log(error);
-    });
+  dismissLoading(context){
+    if(context.loader){
+      context.loader.dismiss().then((response) => {
+        return response;
+      }).then((response) => {
+      }).catch((error) => {
+        console.error(error);
+      });
+    }
+      
   }
 
   subscribeEvents(){
     let me = this;
-    this.events.subscribe('loginSuccess', user => {
-      me.nav.setRoot(HomePage);
-    });
-    this.events.subscribe('loginFail', user => {
-      if(me.loader)me.dismissLoading();
-    });
+    this.events.subscribe('loginSuccess', me.goToHome);
+    this.events.subscribe('loginFail', me.dismissLoading);
+  }
+
+  unsubscribeEvents(){
+    let me = this;
+    this.events.unsubscribe('loginSuccess', me.goToHome);
+    this.events.unsubscribe('loginFail', me.dismissLoading);
+  }
+
+  goToHome(context){
+    context.nav.setRoot(HomePage);
+    context.dismissLoading(context);
   }
 }

@@ -8,8 +8,8 @@
   <div class="login-content">
 
     <!-- Logo -->
-    <div padding text-center>
-      <img src="assets/img/drawable-xxhdpi-icon.png">
+    <div padding text-center *ngIf="parse?.imageCacheService">
+      <lazy-img src="assets/img/drawable-xxhdpi-icon.png"></lazy-img>
     </div>
 
     <!-- Login form -->

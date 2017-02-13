@@ -1,22 +1,30 @@
 import { NgModule, ErrorHandler } from '@angular/core';
+import { Storage } from '@ionic/storage';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
 import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
 import { RegisterPage } from '../pages/register/register';
+import { UserPage } from '../pages/user/user';
 
 import { ErrorHandlerService } from '../providers/error-handler-service';
 import { ConnectivityService } from '../providers/connectivity-service';
+import { LocalDBService } from '../providers/local-db-service';
 import { ParseProvider } from '../providers/parse-provider';
-import { Storage } from '@ionic/storage';
+
+import { LazyImgComponent } from '../components/lazy-img.component';
+
+
 
 @NgModule({
   declarations: [
     MyApp,
     LoginPage,
     RegisterPage,
-    HomePage
+    HomePage,
+    LazyImgComponent,
+    UserPage
 
   ],
   imports: [
@@ -51,12 +59,15 @@ import { Storage } from '@ionic/storage';
     MyApp,
     LoginPage,
     RegisterPage,
-    HomePage
+    HomePage,
+    LazyImgComponent,
+    UserPage
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},
     ParseProvider,
     ConnectivityService,
     Storage,
-    ErrorHandlerService]
+    ErrorHandlerService,
+    LocalDBService]
 })
 export class AppModule {}

@@ -21,7 +21,6 @@ export class ConnectivityService {
 
     this.testInternetAccess();
     this.onDevice = this.platform.is('cordova');
-    console.log("this.onDevice : " + this.onDevice);
 
     // watch network for a disconnect
     document.addEventListener("offline", this.networkDisconnected, false);
@@ -54,7 +53,6 @@ export class ConnectivityService {
   networkConnected(){
     let me = this;
     setTimeout(() => {
-      me.events.publish('connectivity-service-event', Network.type + " connected");
       me.testInternetAccess();
     }, 3000);
   }
@@ -62,7 +60,6 @@ export class ConnectivityService {
   networkDisconnected(){
     this.hasInternetAccess = false;
     this.events.publish('connectivity-service-event', "Network was disconnected");
-    console.log('network was disconnected :-(');
   }
 
   stopNetworkDisconnectWatch(){
@@ -76,7 +73,6 @@ export class ConnectivityService {
   }
 
   testInternetAccess(){
-      console.log("testInternetAccess()");
       let me = this;
       let url = 'http://blank.org/';
       let headers = new Headers();
@@ -96,7 +92,6 @@ export class ConnectivityService {
         err => {
           me.hasInternetAccess = false;
           this.events.publish('connectivity-service-event', "No internet access");
-          console.log("no internet access");
         });
   }
 }

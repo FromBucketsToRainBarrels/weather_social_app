@@ -25,9 +25,32 @@ export class ErrorHandlerService {
     
   }
 
-  // {error:error, function:function, context:context, args: args}
-  handleError(obj){
-    console.log(obj);
+  /*
+  
+    !!! IMPORTANT !!!
+
+    retry: Boolean, 
+      if true handleError will pass function to synchronizer service with the provided contect and arguments
+    error: Object or null,
+      if not null will publish event 'error-handler-service-event' with error.message
+    function: function call,
+      the function which called the handleError
+    context: function context,
+      the context (this) of the funcion that called the handleError
+    args: Array
+      the array of arguments for the function that called the handleError
+  
+  */
+  handleError(retry,error,f,context,args){
+    
+    let obj = {
+      retry: retry,
+      error:error,
+      function: f,
+      context: context,
+      args: args
+    };
+
     if(obj.error){
       this.events.publish('error-handler-service-event', obj.error.message);
     }

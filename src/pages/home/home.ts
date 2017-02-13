@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, Events } from 'ionic-angular';
 import { ConnectivityService } from '../../providers/connectivity-service';
-
+import { ParseProvider } from '../../providers/parse-provider';
 /*
   Generated class for the Home page.
 
@@ -19,13 +19,11 @@ export class HomePage {
   	public navParams: NavParams,
   	public connectivityService: ConnectivityService,
   	public alertCtrl: AlertController,
+    public parse: ParseProvider
   ) {
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad HomePage');
-  }
-
+  
   hasNetwork(){
   	this.connectivityService.hasNetwork();
   }

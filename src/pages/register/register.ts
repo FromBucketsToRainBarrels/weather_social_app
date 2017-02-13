@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {NavController, MenuController} from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
+import { ParseProvider } from '../../providers/parse-provider';
 import Parse from 'parse';
 
 import {HomePage} from "../home/home";
@@ -29,6 +30,7 @@ export class RegisterPage {
     public loadingCtrl: LoadingController,
     public alertCtrl: AlertController,
     public menu: MenuController,
+    public parse: ParseProvider,
   ) {
     this.user = {};
   }
@@ -105,8 +107,7 @@ export class RegisterPage {
 
   presentLoading() {
     let loader = this.loadingCtrl.create({
-      content: "Please wait...",
-      dismissOnPageChange: true
+      content: "Please wait..."
     });
     this.loader = loader;
     loader.present();

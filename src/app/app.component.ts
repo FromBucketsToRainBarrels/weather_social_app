@@ -4,8 +4,10 @@ import { StatusBar, Splashscreen, Network } from 'ionic-native';
 
 import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
+import { UserPage } from '../pages/user/user';
 
 import { ParseProvider } from '../providers/parse-provider';
+import ImgCache from 'imgcache.js';
 
 @Component({
   templateUrl: 'app.html'
@@ -13,9 +15,10 @@ import { ParseProvider } from '../providers/parse-provider';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = LoginPage;
   pages: Array<{title: string, icon: string, count: 0, component: any}>;
   loader: any;
+  user: any;
+  imageCacheInit: boolean = false;
 
   constructor(
     public platform: Platform,
@@ -34,12 +37,24 @@ export class MyApp {
   }
 
   initializeApp() {
+    let me = this;
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      console.log(document);
       StatusBar.styleDefault();
-      Splashscreen.hide();
+      
+      // activated debug mode
+      ImgCache.options.debug = false;
+      // page is set until img cache has started
+      ImgCache.init(()=>{ 
+        me.events.publish("ImgCache.init.success",true);
+        me.imageCacheInit = true;
+        this.nav.setRoot(LoginPage);
+        Splashscreen.hide(); 
+      },()=>{ 
+        console.error('ImgCache init: error! Check the log for errors');
+      });
+
     });
   }
 
@@ -53,7 +68,7 @@ export class MyApp {
   // view my profile
   viewMyProfile() {
     this.presentLoading();
-    // this.nav.setRoot(UserPage);
+    this.nav.setRoot(UserPage);
     this.dismissLoading();
   }
 
@@ -61,23 +76,36 @@ export class MyApp {
     let me = this;
     me.presentLoading();
     me.parse.logout();
-    me.nav.setRoot(LoginPage); 
+    me.nav.setRoot(LoginPage);
+    me.dismissLoading();
   }
 
   presentLoading() {
     let loader = this.loadingCtrl.create({
-      content: "Please wait...",
-      dismissOnPageChange: true
+      content: "Please wait..."
     });
     this.loader = loader;
     loader.present();
   }
 
   dismissLoading(){
-    this.loader.dismiss().catch(() => {});
+    if(this.loader){
+      this.loader.dismiss().then((response) => {
+        return response;
+      }).then((response) => {
+        console.info(response)
+      }).catch((error) => {
+        console.error(error);
+      });
+    }
   }
 
   subscribeEvents(){
+    
+    this.events.subscribe('getUserEvent', user => {
+      this.user = user.userParseObj;
+    });
+
     //subscribe to connectivity-service-event
     this.events.subscribe('connectivity-service-event', message => {
       this.presentToast(message, "bottom");
