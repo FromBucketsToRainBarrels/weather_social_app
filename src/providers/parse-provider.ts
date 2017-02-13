@@ -96,6 +96,7 @@ export class ParseProvider {
     });
   }
 
+
   getUserFomParse(){
     var me = this;
     var userQuery = new Parse.Query(Parse.User);
@@ -109,21 +110,9 @@ export class ParseProvider {
       {
         if(userRetrieved[0]){
           me.user.userParseObj = userRetrieved[0];
-          var stations = userRetrieved[0].relation("stations");
-          var query = stations.query();
-          query.notEqualTo("objectId", userRetrieved[0].get("defaultStation").id);
-          query.include("latestData");
-          query.find({
-            success: function(stations) {
-              stations.unshift(userRetrieved[0].get("defaultStation"));
-              me.user.stations = stations;
-              me.events.publish("getUserEvent", me.user);
-              me.localDBStorage.saveUser(me.user);
-            },
-            error: function(stations,error){
-              console.error(error);
-            }
-          });
+          me.getUserStations(me.user.userParseObj);
+          me.events.publish("getUserEvent", me.user);
+          me.localDBStorage.saveUser(me.user);
         }
       },
       error: function(error)
@@ -131,6 +120,57 @@ export class ParseProvider {
         console.error(error);
       }
     });
+  }
+
+  //will get all stations that user follows with the default one at index 0
+  //results stored in this.user.stations array
+  getUserStations(user){
+    let me = this;
+    let stations = user.relation("stations");
+    let query = stations.query();
+    query.notEqualTo("objectId", user.get("defaultStation").id);
+    query.include("latestData");
+    query.find({
+      success: function(stations) {
+        stations.unshift(user.get("defaultStation"));
+        me.user.stations = stations;
+        me.events.publish("getUserStationsEvent", me.user.stations);
+        me.localDBStorage.saveUser(me.user);
+      },
+      error: function(stations,error){
+        console.error(error);
+      }
+    });
+  }
+
+  saveUserFromJSON(JSONUser){
+    let me = this;
+    let user = me.user.userParseObj;
+    user.set("name",JSONUser.name);
+    user.set("phone",JSONUser.phone);
+    user.set("email",JSONUser.email);
+    if(JSONUser.image.upload){
+      user.set("image",JSONUser.image.parseImageFile);
+    }
+    user.save(null,{
+      success: function(user){
+        console.log("UpdateComplete");
+        me.localDBStorage.saveUser(me.user);
+      },
+      error: function(user,error){
+        console.log("Error : " + error.message);
+      }
+    });
+  }
+
+  // name : String,  encoding : base64-encoded 
+  getParseFile(name, encoding){
+    let parseFile = new Parse.File( name, encoding);
+    return parseFile;
+  }
+
+  getUserAsJSON(){
+    return JSON.parse(JSON.stringify(this.user.userParseObj));
   }
   
   getArguments(a){

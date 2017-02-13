@@ -1,7 +1,8 @@
 import {Component} from '@angular/core';
 import {NavController, AlertController, LoadingController, ViewController} from 'ionic-angular';
 import {HomePage} from "../home/home";
-
+import { ParseProvider } from '../../providers/parse-provider';
+import { ImageService } from '../../providers/image-service';
 import Parse from 'parse';
 
 /*
@@ -22,10 +23,11 @@ export class UserPage {
   constructor(public nav: NavController,
   	public viewCtrl: ViewController,
     public alertCtrl: AlertController,
-    public loadingCtrl: LoadingController
+    public loadingCtrl: LoadingController,
+    public parse: ParseProvider,
+    public imageSerive: ImageService
   ) {
-  	this.user = {};
-  	this.user = JSON.parse(JSON.stringify(Parse.User.current()));
+  	this.user = parse.getUserAsJSON();
   }
 
   	uploadPic(){
@@ -34,22 +36,13 @@ export class UserPage {
 
 	doUploadProfilePic(fileInput: any){
 		var me = this;
-		if (fileInput.target.files && fileInput.target.files[0]) {
-		  var reader = new FileReader();
-
-		  reader.onload = function (e : any) {
-		      if(e.target.result){
-		      	if(!me.user.image)me.user.image = {};
-		      	me.user.image.url = e.target.result;
-		      	me.user.upload_new_image = true;
-		      	var parseFile = new Parse.File( fileInput.target.files[0].name, { base64: e.target.result });
-		      	me.user.parseImageFile = parseFile;
-		      }else{
-		      	me.user.upload_new_image = false;
-		      }
-		  }
-		  reader.readAsDataURL(fileInput.target.files[0]);
-		}
+		me.imageSerive.getImage(fileInput).then((img) => {
+			console.log(img);
+			if(!me.user.image)me.user.image = {};
+			me.user.image = img
+        }).catch((ex) => {
+        	console.error(ex);
+        });
 	}
 
 	cancel(){
@@ -59,27 +52,10 @@ export class UserPage {
 	}
 
 	save(){
+		let me = this;
 		this.presentLoading();
-		var me = this;
-		var user = Parse.User.current();
-		user.set("name",me.user.name);
-		user.set("phone",me.user.phone);
-		user.set("email",me.user.email);
-		if(me.user.upload_new_image){
-			user.set("image",me.user.parseImageFile);
-		}
-		user.save(null,{
-			success: function(user){
-				me.dismissLoading();
-				me.user = JSON.parse(JSON.stringify(user));
-				me.presentAlert("Update ","Complete ",null);
-			},
-			error: function(user,error){
-				console.log("Error : " + error.message);
-				me.dismissLoading();
-				me.presentAlert("Error",error.message,null);
-			}
-		});
+		this.parse.saveUserFromJSON(me.user);
+		me.dismissLoading();
 	}
 
 	presentAlert(title,message,call) {

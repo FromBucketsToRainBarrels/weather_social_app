@@ -12,6 +12,7 @@ import { ErrorHandlerService } from '../providers/error-handler-service';
 import { ConnectivityService } from '../providers/connectivity-service';
 import { LocalDBService } from '../providers/local-db-service';
 import { ParseProvider } from '../providers/parse-provider';
+import { ImageService } from '../providers/image-service';
 
 import { LazyImgComponent } from '../components/lazy-img.component';
 
@@ -68,6 +69,7 @@ import { LazyImgComponent } from '../components/lazy-img.component';
     ConnectivityService,
     Storage,
     ErrorHandlerService,
-    LocalDBService]
+    LocalDBService,
+    ImageService]
 })
 export class AppModule {}
