@@ -67,7 +67,7 @@ script:
 
 # - ionic resources
 
-- $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $CLOUD_CODE_SRC $CLOUD_CODE_DEST >/dev/null
+- $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $CLOUD_CODE_SRC $CLOUD_CODE_DEST >/dev/null --silent
 
 # - ionic build android
 # - $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $AND_SRC $DEST >/dev/null
@@ -76,7 +76,7 @@ script:
 # - ionic build browser
 # - $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $SRC $DEST >/dev/null
 - ls -la 
-- ssh -o StrictHostKeyChecking=no -i fbtrb_deploy $SEVER $CLOUD_CODE_DEPLOY >/dev/null
+- ssh -o StrictHostKeyChecking=no -i fbtrb_deploy $SEVER $CLOUD_CODE_DEPLOY >/dev/null --silent
 
 after_script:
 - rm -rf *
