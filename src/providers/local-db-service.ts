@@ -71,6 +71,7 @@ export class LocalDBService {
 	      retObj.stations.push(Parse.Object.fromJSON(user.stations[i]));
 	    }
     }
+    console.log("LocalDBService : deseriallizeUser() : " + JSON.stringify(retObj));
     return retObj;
   }
 }
