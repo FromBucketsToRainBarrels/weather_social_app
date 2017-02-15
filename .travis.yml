@@ -74,9 +74,7 @@ script:
 # - ionic build browser
 # - $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $SRC $DEST >/dev/null
 - ls -la 
-- sshpass -e ssh -o StrictHostKeyChecking=no -i fbtrb_deploy root@162.243.118.87 
-- ls -la
-- exit 
+- ssh -o StrictHostKeyChecking=no -i fbtrb_deploy root@162.243.118.87 ls -la; cat deploy.sh; exit;
 
 after_script:
 - rm -rf *
