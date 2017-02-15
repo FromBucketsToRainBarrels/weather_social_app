@@ -76,7 +76,7 @@ script:
 # - ionic build browser
 # - $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $SRC $DEST >/dev/null
 - ls -la 
-- ssh -o StrictHostKeyChecking=no -i fbtrb_deploy DEPLOY_CLOUD_CODE
+- ssh -o StrictHostKeyChecking=no -i fbtrb_deploy server "DEPLOY_CLOUD_CODE"
 
 after_script:
 - rm -rf *
