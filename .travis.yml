@@ -67,7 +67,7 @@ script:
 
 # - ionic resources
 
-- $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy CLOUD_CODE_SRC root@162.243.118.87:/root/socialWeatherAppServer/cloud/ >/dev/null
+- $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy main.js CLOUD_CODE_DEST >/dev/null
 
 # - ionic build android
 # - $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $AND_SRC $DEST >/dev/null
