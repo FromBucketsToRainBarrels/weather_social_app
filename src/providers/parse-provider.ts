@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import {Events} from 'ionic-angular';
 import Parse from 'parse';
-
 import { ConnectivityService } from '../providers/connectivity-service';
 import { ErrorHandlerService } from '../providers/error-handler-service';
 import { LocalDBService } from '../providers/local-db-service';
-
 /*
   Generated class for the ParseProvider provider.
 
