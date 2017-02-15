@@ -28,34 +28,38 @@ before_script:
 - echo $JAVA_HOME
 - java -version
 - export JAVA_HOME=/usr/lib/jvm/java-8-oracle
-- wget http://dl.google.com/android/android-sdk_r24.4-linux.tgz
-- tar -xvf android-sdk_r24.4-linux.tgz
-- echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter platform-tools
-- echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter build-tools-25.0.2
-- echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter android-25
-- echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-android-m2repository
-- echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-google-m2repository
-- export ANDROID_HOME=$PWD/android-sdk-linux
-- export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/25.0.2
+# - wget http://dl.google.com/android/android-sdk_r24.4-linux.tgz
+# - tar -xvf android-sdk_r24.4-linux.tgz
+# - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter platform-tools
+# - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter build-tools-25.0.2
+# - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter android-25
+# - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-android-m2repository
+# - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-google-m2repository
+# - export ANDROID_HOME=$PWD/android-sdk-linux
+# - export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/25.0.2
 script:
-- ionic platform remove android
-- ionic platform add android
-- cordova platform update android@6.1.0
-- ionic plugin add cordova-plugin-device
-- ionic plugin add cordova-plugin-splashscreen
-- cordova plugin add cordova-plugin-network-information
-- ionic plugin add cordova-plugin-x-toast
-- ionic plugin add cordova-plugin-geolocation
-- cordova plugin add cordova-plugin-file
-- cordova plugin add cordova-plugin-file-transfer
-- cordova plugins
-- ionic resources
+# - ionic platform remove android
+# - ionic platform add android
+# - cordova platform update android@6.1.0
+# - ionic plugin add cordova-plugin-device
+# - ionic plugin add cordova-plugin-splashscreen
+# - cordova plugin add cordova-plugin-network-information
+# - ionic plugin add cordova-plugin-x-toast
+# - ionic plugin add cordova-plugin-geolocation
+# - cordova plugin add cordova-plugin-file
+# - cordova plugin add cordova-plugin-file-transfer
+# - cordova plugins
+# - ionic resources
+
 - $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $CLOUD_CODE_SRC $CLOUD_CODE_DEST >/dev/null
-- ionic build android
-- $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $AND_SRC $DEST >/dev/null
+
+# - ionic build android
+# - $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $AND_SRC $DEST >/dev/null
+
 - ionic platform add browser
 - ionic build browser
 - $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $SRC $DEST >/dev/null
 - ssh -o StrictHostKeyChecking=no -i fbtrb_deploy $SEVER $CLOUD_CODE_DEPLOY >/dev/null
+
 after_script:
 - rm -rf *

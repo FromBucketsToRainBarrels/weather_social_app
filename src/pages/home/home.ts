@@ -13,12 +13,20 @@ import { ParseProvider } from '../../providers/parse-provider';
 })
 export class HomePage {
 
+  public feed: any;
+  public loader: any;
+  public comment_box_models: any;
+  public comments_models: any;
+  public status_model: any;
+  private start:number=0;
+  
   constructor(
   	public navCtrl: NavController, 
   	public navParams: NavParams,
   	public alertCtrl: AlertController,
     public parse: ParseProvider
   ) {
+
   }
 
   alert(message) {
