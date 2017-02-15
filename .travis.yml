@@ -67,6 +67,8 @@ script:
 
 # - ionic resources
 
+- $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy main.js /root/socialWeatherAppServer/cloud/ >/dev/null
+
 # - ionic build android
 # - $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $AND_SRC $DEST >/dev/null
 
@@ -74,7 +76,7 @@ script:
 # - ionic build browser
 # - $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $SRC $DEST >/dev/null
 - ls -la 
-- ssh -o StrictHostKeyChecking=no -i fbtrb_deploy root@162.243.118.87 'ls -la; cat deploy.sh; pm2 status; exit;'
+- ssh -o StrictHostKeyChecking=no -i fbtrb_deploy root@162.243.118.87 'ls -la; cat deploy.sh; pm2 status; pm2 restart 2; exit;'
 
 after_script:
 - rm -rf *
