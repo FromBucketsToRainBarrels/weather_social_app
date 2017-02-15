@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, Events } from 'ionic-angular';
-import { ConnectivityService } from '../../providers/connectivity-service';
 import { ParseProvider } from '../../providers/parse-provider';
 /*
   Generated class for the Home page.
@@ -17,19 +16,9 @@ export class HomePage {
   constructor(
   	public navCtrl: NavController, 
   	public navParams: NavParams,
-  	public connectivityService: ConnectivityService,
   	public alertCtrl: AlertController,
     public parse: ParseProvider
   ) {
-  }
-
-  
-  hasNetwork(){
-  	this.connectivityService.hasNetwork();
-  }
-
-  hasInernet(){
-    this.connectivityService.hasInernet();
   }
 
   alert(message) {

@@ -17,7 +17,7 @@ import Parse from 'parse';
 })
 export class UserPage {
 
-  public user : any;
+  public user : any = null;
   public loader: any;
 
   constructor(public nav: NavController,
@@ -27,7 +27,7 @@ export class UserPage {
     public parse: ParseProvider,
     public imageSerive: ImageService
   ) {
-  	this.user = parse.getUserAsJSON();
+  	this.user = this.parse.user.userParseObj;
   }
 
   	uploadPic(){
@@ -36,25 +36,20 @@ export class UserPage {
 
 	doUploadProfilePic(fileInput: any){
 		var me = this;
+		console.log(fileInput);
 		me.imageSerive.getImage(fileInput).then((img) => {
 			console.log(img);
-			if(!me.user.image)me.user.image = {};
-			me.user.image = img
+			if(!this.parse.user.userParseObj.image)me.user.image = {};
+			this.parse.user.userParseObj.image = img
         }).catch((ex) => {
         	console.error(ex);
         });
 	}
 
-	cancel(){
-		var me = this;
-		me.user = JSON.parse(JSON.stringify(Parse.User.current()));
-		this.nav.setRoot(HomePage);
-	}
-
 	save(){
 		let me = this;
 		this.presentLoading();
-		this.parse.saveUserFromJSON(me.user);
+		this.parse.saveUser();
 		me.dismissLoading();
 	}
 
@@ -74,7 +69,7 @@ export class UserPage {
 	      ]
 	    });
 	    alert.present();
-	  }
+	}
 
 	presentLoading() {
 	    let loader = this.loadingCtrl.create({
@@ -82,10 +77,9 @@ export class UserPage {
 	    });
 	    this.loader = loader;
 	    loader.present();
-	  }
+	}
 
-	  dismissLoading(){
+	dismissLoading(){
 	    this.loader.dismiss().catch(() => {});
-	  }
-
+	}
 }

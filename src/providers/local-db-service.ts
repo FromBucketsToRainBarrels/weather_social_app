@@ -24,7 +24,7 @@ export class LocalDBService {
   	let me = this;
   	return new Promise((resolve, reject) => {
   		me.storage.get('user').then((user) => {
-	      resolve(me.deseriallizeUser(user));
+	      resolve(user);
 	    });
   	});
   }
@@ -34,10 +34,25 @@ export class LocalDBService {
   	me.storage.set('user', me.seriallize(user));
   }
 
+  getJobsQueue(){
+    let me = this;
+    return new Promise((resolve, reject) => {
+      me.storage.get('jobsQueue').then((jobsQueue) => {
+        resolve(jobsQueue);
+      });
+    });
+  }
+
+  saveJobsQueue(jobsQueue){
+    let me = this;
+    me.storage.set('jobsQueue', jobsQueue);
+  }
+
   seriallize(obj){
   	return JSON.parse(JSON.stringify(obj));
   }
 
+  //do not deseriallizeUser
   deseriallizeUser(user){
     let me = this;
     let retObj = {userParseObj: null, stations:[]};  
@@ -46,7 +61,7 @@ export class LocalDBService {
     	
     	//deseriallize user
     	if(Parse.User.current()){user.userParseObj.sessionToken = Parse.User.current().getSessionToken()}
-		user.userParseObj.className = "_User" 
+		  user.userParseObj.className = "_User" 
 	    retObj.userParseObj = Parse.Object.fromJSON(user.userParseObj);
 	    
 	    //deseriallize user stations array one by one

@@ -6,6 +6,7 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
 import { ConnectivityService } from '../providers/connectivity-service';
+import { SyncService } from '../providers/sync-service';
 
 /*
   Generated class for the ErrorHandlerService provider.
@@ -20,7 +21,8 @@ export class ErrorHandlerService {
   	public http: Http,
   	public storage: Storage,
   	public events: Events,
-    public connectivityService: ConnectivityService
+    public connectivityService: ConnectivityService,
+    public syncService: SyncService
   ) {
     
   }
@@ -52,23 +54,18 @@ export class ErrorHandlerService {
     };
 
     if(obj.error){
-      this.events.publish('error-handler-service-event', obj.error.message);
+      console.error(error);
+      // this.events.publish('error-handler-service-event', obj.error.message);
     }
     this.connectivityService.testInternetAccess();    
     if(obj.retry){
-      setTimeout(function(obj){
-        var login = wrapFunction(obj.function, obj.context, obj.args);
-        (login)();
-      }, 5000, obj);
+      this.syncService.addToJobsQueue(obj);
+      // setTimeout(function(obj){
+      //   var login = wrapFunction(obj.function, obj.context, obj.args);
+      //   (login)();
+      // }, 5000, obj);
     }
   }
-
-  wrapFunction(fn, context, params) {
-    return function() {
-        fn.apply(context, params);
-    };
-  }
-
 }
 
 var wrapFunction = function(fn, context, params) {

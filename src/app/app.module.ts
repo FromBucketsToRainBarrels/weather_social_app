@@ -10,10 +10,10 @@ import { UserPage } from '../pages/user/user';
 
 import { ErrorHandlerService } from '../providers/error-handler-service';
 import { ConnectivityService } from '../providers/connectivity-service';
+import { SyncService } from '../providers/sync-service';
 import { LocalDBService } from '../providers/local-db-service';
 import { ParseProvider } from '../providers/parse-provider';
 import { ImageService } from '../providers/image-service';
-
 import { LazyImgComponent } from '../components/lazy-img.component';
 
 
@@ -70,6 +70,7 @@ import { LazyImgComponent } from '../components/lazy-img.component';
     Storage,
     ErrorHandlerService,
     LocalDBService,
-    ImageService]
+    ImageService,
+    SyncService]
 })
 export class AppModule {}

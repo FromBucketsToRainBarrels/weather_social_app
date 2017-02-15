@@ -86,12 +86,12 @@ export class ConnectivityService {
         .timeout(2000, new Error('delay exceeded'))
         .map(res => res)
         .subscribe(data => {
-          if(!me.hasInternetAccess){this.events.publish('connectivity-service-event', "Internet access OK");}
+          if(!me.hasInternetAccess){this.events.publish('connectivity-service-event:internet', true);}
           me.hasInternetAccess = true;          
         },
         err => {
           me.hasInternetAccess = false;
-          this.events.publish('connectivity-service-event', "No internet access");
+          this.events.publish('connectivity-service-event:internet', false);
         });
   }
 }

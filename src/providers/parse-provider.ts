@@ -30,12 +30,25 @@ export class ParseProvider {
       this.imageCacheService  = val;
     });
 
+    events.subscribe("syncServiceExecuteJob", (val) =>{
+      let me = this;
+      me.syncEventExecuter(val);
+    });
+
     Parse.initialize('FromBucketsToRainBarrels');
     Parse.serverURL = 'http://162.243.118.87:1337/parse';
     this.current = Parse.User.current();
     if(this.current){
       this.getUser();
   	}
+  }
+
+  syncEventExecuter(val){
+    console.log("syncServiceExecuteJob");
+    console.log(val);
+    if(this.constructor.name == val.context){
+      this[val.function](val.args);
+    }
   }
 
   getCurrentUser(){
@@ -51,7 +64,7 @@ export class ParseProvider {
 
       },function(error){
       	console.error(error);
-        me.errorHandlerService.handleError(false, error, me.logout, me, []);
+        me.errorHandlerService.handleError(false, error, "logout", "ParseProvider", []);
       });
   }
 
@@ -66,12 +79,12 @@ export class ParseProvider {
             },
 		        error: function(user, error) {
 		          me.events.publish("loginFail",context);
-              me.errorHandlerService.handleError(false, error, me.login, me, me.getArguments(arguments));
+              me.errorHandlerService.handleError(false, error, "login", "ParseProvider", me.getArguments(arguments));
 		        }
 		    });
   		}else{
         me.events.publish("loginFail",context);
-			  me.errorHandlerService.handleError(false, {message:"No internet access"}, me.login, me, me.getArguments(arguments));
+			  me.errorHandlerService.handleError(false, {message:"No internet access"}, "login", "ParseProvider", me.getArguments(arguments));
   		}
   }
 
@@ -84,93 +97,109 @@ export class ParseProvider {
       if(me.user.userParseObj!=null){
         me.events.publish("getUserEvent", me.user);
       }
-      //if internet connection available fetch latest data here
-      if(me.connectivityService.hasInernet()){
-        me.getUserFomParse();
-      }else{
-        //no internet connection report to error handler
-        me.errorHandlerService.handleError(true,null,me.getUserFomParse,me,[]);
-      }
+      me.getUserFomParse();
     }).catch((ex) => {
+      me.getUserFomParse();
       console.error('Error getting user from localDBStorage: ', ex);
     });
   }
 
-
   getUserFomParse(){
     var me = this;
-    var userQuery = new Parse.Query(Parse.User);
-    userQuery.equalTo("objectId", Parse.User.current().id);
-    if(me.user.userParseObj){userQuery.notEqualTo("updatedAt"),me.user.userParseObj.updatedAt}
-    userQuery.include("stations");
-    userQuery.include("defaultStation");
-    userQuery.include("defaultStation.latestData");
-    userQuery.find({
-      success: function(userRetrieved)
-      {
-        if(userRetrieved[0]){
-          me.user.userParseObj = userRetrieved[0];
-          me.getUserStations(me.user.userParseObj);
-          me.events.publish("getUserEvent", me.user);
-          me.localDBStorage.saveUser(me.user);
+    if(me.connectivityService.hasInernet()){
+      var userQuery = new Parse.Query(Parse.User);
+      userQuery.equalTo("objectId", Parse.User.current().id);
+      if(me.user.userParseObj){userQuery.notEqualTo("updatedAt"),me.user.userParseObj.updatedAt}
+      userQuery.include("stations");
+      userQuery.include("defaultStation");
+      userQuery.include("defaultStation.latestData");
+      userQuery.find({
+        success: function(userRetrieved)
+        {
+          if(userRetrieved[0]){
+            me.user.userParseObj = me.getUserAsJSON(userRetrieved[0]);
+            me.events.publish("getUserEvent", me.user);
+            me.localDBStorage.saveUser(me.user);
+          }
+        },
+        error: function(error)
+        {
+          console.error(error);
         }
-      },
-      error: function(error)
-      {
-        console.error(error);
-      }
-    });
+      });
+    }else{
+      me.errorHandlerService.handleError(false,null,"getUserFomParse","ParseProvider",[]);
+    }
   }
 
   //will get all stations that user follows with the default one at index 0
   //results stored in this.user.stations array
-  getUserStations(user){
+  getUserStations(){
     let me = this;
-    let stations = user.relation("stations");
-    let query = stations.query();
-    query.notEqualTo("objectId", user.get("defaultStation").id);
-    query.include("latestData");
-    query.find({
-      success: function(stations) {
-        stations.unshift(user.get("defaultStation"));
-        me.user.stations = stations;
-        me.events.publish("getUserStationsEvent", me.user.stations);
-        me.localDBStorage.saveUser(me.user);
-      },
-      error: function(stations,error){
-        console.error(error);
-      }
-    });
+    let user = Parse.User.current();
+    if(me.connectivityService.hasInernet()){
+      let stations = user.relation("stations");
+      let query = stations.query();
+      query.notEqualTo("objectId", user.get("defaultStation").id);
+      query.include("latestData");
+      query.find({
+        success: function(stations) {
+          stations.unshift(user.get("defaultStation"));
+          me.user.stations = stations;
+          me.events.publish("getUserStationsEvent", me.user.stations);
+          me.localDBStorage.saveUser(me.user);
+        },
+        error: function(stations,error){
+          console.error(error);
+        }
+      });
+    }else{
+      me.errorHandlerService.handleError(true,null,"getUserStations","ParseProvider",me.getArguments(arguments));
+    }
   }
 
-  saveUserFromJSON(JSONUser){
+  saveUser(){
     let me = this;
-    let user = me.user.userParseObj;
-    user.set("name",JSONUser.name);
-    user.set("phone",JSONUser.phone);
-    user.set("email",JSONUser.email);
-    if(JSONUser.image.upload){
-      user.set("image",JSONUser.image.parseImageFile);
-    }
-    user.save(null,{
-      success: function(user){
-        console.log("UpdateComplete");
-        me.localDBStorage.saveUser(me.user);
-      },
-      error: function(user,error){
-        console.log("Error : " + error.message);
+    me.localDBStorage.saveUser(me.user);
+    if(me.connectivityService.hasInernet()){
+      
+      let user = Parse.User.current();
+      user.set("name",me.user.userParseObj.name);
+      user.set("phone",me.user.userParseObj.phone);
+      user.set("email",me.user.userParseObj.email);
+      
+      if(me.user.userParseObj.image.upload){
+        user.set("image",me.user.userParseObj.image.parseImageFile);
       }
-    });
+      user.save(null,{
+        success: function(user){
+          console.log("UpdateComplete");
+          console.log(me.user);
+          me.user.userParseObj.image.url = user.get("image").url();
+          me.localDBStorage.saveUser(me.user);
+        },
+        error: function(user,error){
+          me.errorHandlerService.handleError(false,error,"saveUser","ParseProvider",me.getArguments(arguments));
+        }
+      });
+    }else{
+      me.errorHandlerService.handleError(true,null,"saveUser","ParseProvider",[]);
+    }
   }
 
   // name : String,  encoding : base64-encoded 
   getParseFile(name, encoding){
+    name = name.replace(/[^a-zA-Z0-9_.]/g, '');
     let parseFile = new Parse.File( name, encoding);
     return parseFile;
   }
 
-  getUserAsJSON(){
-    return JSON.parse(JSON.stringify(this.user.userParseObj));
+  getParseUserFromJSON(){
+
+  }
+
+  getUserAsJSON(user){
+    return JSON.parse(JSON.stringify(user));
   }
   
   getArguments(a){
