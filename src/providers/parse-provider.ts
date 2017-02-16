@@ -24,7 +24,6 @@ export class ParseProvider {
     public errorHandlerService: ErrorHandlerService
   ) {
   	
-    console.log("ParseProvider init");
     events.subscribe("ImgCache.init.success", (val) => {
       this.imageCacheService  = val;
     });
@@ -97,7 +96,6 @@ export class ParseProvider {
     }).then((user) => {
       me.user = user;
       if(me.user.userParseObj!=null){
-        console.log("getUserEvent");
         me.events.publish("getUserEvent", me.user);
       }
       me.getUserFomParse();
@@ -121,7 +119,6 @@ export class ParseProvider {
         {
           if(userRetrieved[0]){
             me.user.userParseObj = me.getUserAsJSON(userRetrieved[0]);
-            console.log("getUserEvent");
             me.events.publish("getUserEvent", me.user);
             me.localDBStorage.saveUser(me.user);
           }

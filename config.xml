@@ -6,7 +6,6 @@
   <content src="index.html"/>
   <access origin="*"/>
   <access origin="cdvfile://" />
-  <access origin="filesystem://" />
   <allow-navigation href="*://*/*"/>
   <allow-navigation href="http://ionic.local/*"/>
   <allow-navigation href="http://192.168.2.198:8100"/>
