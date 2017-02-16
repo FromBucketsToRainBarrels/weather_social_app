@@ -20,6 +20,7 @@ before_install:
 - chmod 600 fbtrb_deploy
 - export LANG=en_US.UTF-8
 - nvm install $NODE_VERSION
+- npm install
 - npm install -g gulp bower cordova ionic
 install:
 - mkdir www
