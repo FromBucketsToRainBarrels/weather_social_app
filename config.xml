@@ -5,6 +5,8 @@
   <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
   <content src="index.html"/>
   <access origin="*"/>
+  <access origin="cdvfile://*" />
+  <allow-navigation href="*://*/*"/>
   <allow-navigation href="http://ionic.local/*"/>
   <allow-navigation href="http://192.168.2.198:8100"/>
   <allow-navigation href="http://172.27.224.1:8100"/>

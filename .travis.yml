@@ -49,6 +49,7 @@ script:
 - ionic plugin add cordova-plugin-geolocation
 - cordova plugin add cordova-plugin-file
 - cordova plugin add cordova-plugin-file-transfer
+- cordova plugin add cordova-plugin-whitelist
 - cordova plugins
 - ionic resources
 

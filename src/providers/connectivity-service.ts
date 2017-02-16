@@ -52,6 +52,7 @@ export class ConnectivityService {
 
   networkConnected(){
     let me = this;
+    console.log("ConnectivityService -> networkConnected()");
     setTimeout(() => {
       me.testInternetAccess();
     }, 3000);
