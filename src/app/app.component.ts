@@ -45,6 +45,7 @@ export class MyApp {
       
       // activated debug mode
       ImgCache.options.debug = true;
+      ImgCache.options.usePersistentCache = true;
       // page is set until img cache has started
       ImgCache.init(()=>{ 
         me.events.publish("ImgCache.init.success",true);
