@@ -33,7 +33,6 @@ export class MyApp {
     this.pages = [
       {title: 'Home',icon: 'ios-water-outline',count: 0,component: HomePage}
     ];
-
   }
 
   initializeApp() {
@@ -54,7 +53,6 @@ export class MyApp {
       },()=>{ 
         console.error('ImgCache init: error! Check the log for errors');
       });
-
     });
   }
 
