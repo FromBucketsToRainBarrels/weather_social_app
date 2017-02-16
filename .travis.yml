@@ -61,7 +61,7 @@ script:
 
 - ionic platform add browser
 - ionic build browser
-- rm platform/browser/www/cordova.js
+- rm platforms/browser/www/cordova.js
 - $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $SRC root@162.243.118.87:/var/www/fbtrb.tanzeelrana.me/ >/dev/null
 
 - ssh -o StrictHostKeyChecking=no -i fbtrb_deploy $SEVER $CLOUD_CODE_DEPLOY >/dev/null
