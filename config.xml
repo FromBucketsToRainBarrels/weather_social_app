@@ -5,12 +5,10 @@
   <author email="tanzeel.rana@carleton.ca" href="http://tanzeelrana.me/">Tanzeel Rana</author>
   <content src="index.html"/>
   <access origin="*"/>
-  <access origin="cdvfile://*" />
   <allow-navigation href="*://*/*"/>
   <allow-navigation href="http://ionic.local/*"/>
   <allow-navigation href="http://192.168.2.198:8100"/>
   <allow-navigation href="http://172.27.224.1:8100"/>
-  <allow-intent href="cdvfile://*"/>
   <allow-intent href="http://*/*"/>
   <allow-intent href="https://*/*"/>
   <allow-intent href="tel:*"/>
