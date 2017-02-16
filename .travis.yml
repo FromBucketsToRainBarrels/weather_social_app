@@ -40,16 +40,17 @@ before_script:
 script:
 # - ionic platform remove android
 # - ionic platform add android
-# - cordova platform update android@6.1.0
-# - ionic plugin add cordova-plugin-device
-# - ionic plugin add cordova-plugin-splashscreen
-# - cordova plugin add cordova-plugin-network-information
-# - ionic plugin add cordova-plugin-x-toast
-# - ionic plugin add cordova-plugin-geolocation
-# - cordova plugin add cordova-plugin-file
-# - cordova plugin add cordova-plugin-file-transfer
-# - cordova plugins
-# - ionic resources
+
+- cordova platform update android@6.1.0
+- ionic plugin add cordova-plugin-device
+- ionic plugin add cordova-plugin-splashscreen
+- cordova plugin add cordova-plugin-network-information
+- ionic plugin add cordova-plugin-x-toast
+- ionic plugin add cordova-plugin-geolocation
+- cordova plugin add cordova-plugin-file
+- cordova plugin add cordova-plugin-file-transfer
+- cordova plugins
+- ionic resources
 
 - $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $CLOUD_CODE_SRC $CLOUD_CODE_DEST >/dev/null
 
@@ -60,7 +61,6 @@ script:
 - ionic build browser
 - $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $SRC root@162.243.118.87:/var/www/fbtrb.tanzeelrana.me/ >/dev/null
 
-# Restart the app using pm2
 - ssh -o StrictHostKeyChecking=no -i fbtrb_deploy $SEVER $CLOUD_CODE_DEPLOY >/dev/null
 
 after_script:
