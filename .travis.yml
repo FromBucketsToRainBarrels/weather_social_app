@@ -40,8 +40,8 @@ before_script:
 script:
 # - ionic platform remove android
 # - ionic platform add android
+# - cordova platform update android@6.1.0
 
-- cordova platform update android@6.1.0
 - ionic plugin add cordova-plugin-device
 - ionic plugin add cordova-plugin-splashscreen
 - cordova plugin add cordova-plugin-network-information
