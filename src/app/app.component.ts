@@ -46,8 +46,18 @@ export class MyApp {
       // activated debug mode
       ImgCache.options.debug = true;
       ImgCache.options.usePersistentCache = true;
+      
+      
       // page is set until img cache has started
       ImgCache.init(()=>{ 
+        console.log("clearCache");
+        ImgCache.clearCache(function () {
+          // continue cleanup...
+          console.log("continue cleanup...");
+        }, function () {
+          // something went wrong
+          console.log("something went wrong");
+        });
         me.events.publish("ImgCache.init.success",true);
         me.imageCacheInit = true;
         this.nav.setRoot(LoginPage);
