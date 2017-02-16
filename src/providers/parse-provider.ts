@@ -24,6 +24,7 @@ export class ParseProvider {
     public errorHandlerService: ErrorHandlerService
   ) {
   	
+    console.log("ParseProvider init");
     events.subscribe("ImgCache.init.success", (val) => {
       this.imageCacheService  = val;
     });
@@ -96,6 +97,7 @@ export class ParseProvider {
     }).then((user) => {
       me.user = user;
       if(me.user.userParseObj!=null){
+        console.log("getUserEvent");
         me.events.publish("getUserEvent", me.user);
       }
       me.getUserFomParse();
@@ -110,7 +112,7 @@ export class ParseProvider {
     if(me.connectivityService.hasInernet()){
       var userQuery = new Parse.Query(Parse.User);
       userQuery.equalTo("objectId", Parse.User.current().id);
-      if(me.user.userParseObj){userQuery.notEqualTo("updatedAt"),me.user.userParseObj.updatedAt}
+      // if(me.user.userParseObj){userQuery.notEqualTo("updatedAt"),me.user.userParseObj.updatedAt}
       userQuery.include("stations");
       userQuery.include("defaultStation");
       userQuery.include("defaultStation.latestData");
@@ -119,6 +121,7 @@ export class ParseProvider {
         {
           if(userRetrieved[0]){
             me.user.userParseObj = me.getUserAsJSON(userRetrieved[0]);
+            console.log("getUserEvent");
             me.events.publish("getUserEvent", me.user);
             me.localDBStorage.saveUser(me.user);
           }

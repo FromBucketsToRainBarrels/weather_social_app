@@ -6,6 +6,10 @@
     <div text-center padding-top padding-bottom class="primary-bg menu-left">
       <a menuClose (click)="viewMyProfile()">
         <div *ngIf="parse?.imageCacheService&&user?.image?.url">
+          <div id="msg"></div>
+          <img id="img" src="" />
+
+          
           <lazy-img class="profile-picture" src="{{user?.image?.url}}"></lazy-img>
         </div>
         

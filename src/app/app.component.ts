@@ -36,6 +36,42 @@ export class MyApp {
     ];
   }
 
+  go() {
+    console.log("go()");
+    var p = this.user.image.url;
+    var self = this;
+
+    ImgCache.cacheFile(p, function() {
+
+        var element = document.getElementById('msg');
+        element.innerHTML = 'cached file';
+
+        var img = document.getElementById('img');
+        img.src = p;
+
+        ImgCache.useCachedFile(img, function(imgsrc, fileentry) {
+            var tmp = imgsrc.src;
+
+            var element = document.getElementById('msg');
+            element.innerHTML = element.innerHTML +' '+ tmp;
+
+            //$( "body" ).append(imgsrc);
+            document.getElementById("img").src = tmp;
+
+            //$("#img").attr('src', "file:///localhost/persistent/imgcache/68355f631a9a1ceb3341bfe9adcf812b2623496c.jpg");
+        });
+
+
+    }, function() {
+        // error :(
+        var element = document.getElementById('msg');
+        element.innerHTML = 'Error: Image failed to download';
+    }, function (pe) {
+
+    });
+
+  }
+
   initializeApp() {
     let me = this;
     this.platform.ready().then(() => {
@@ -49,15 +85,7 @@ export class MyApp {
       
       
       // page is set until img cache has started
-      ImgCache.init(()=>{ 
-        console.log("clearCache");
-        ImgCache.clearCache(function () {
-          // continue cleanup...
-          console.log("continue cleanup...");
-        }, function () {
-          // something went wrong
-          console.log("something went wrong");
-        });
+      ImgCache.init(()=>{        
         me.events.publish("ImgCache.init.success",true);
         me.imageCacheInit = true;
         this.nav.setRoot(LoginPage);
@@ -112,9 +140,11 @@ export class MyApp {
   }
 
   subscribeEvents(){
-    
+    let me = this;
     this.events.subscribe('getUserEvent', user => {
-      this.user = user.userParseObj;
+      console.log("getUserEvent");
+      me.user = user.userParseObj;
+      me.go();
     });
 
     //subscribe to connectivity-service-event
