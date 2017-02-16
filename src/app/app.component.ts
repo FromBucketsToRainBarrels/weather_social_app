@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, Alert, LoadingController, Events, ToastController } from 'ionic-angular';
 import { StatusBar, Splashscreen, Network } from 'ionic-native';
+import {DomSanitizer} from '@angular/platform-browser';
 
 import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
