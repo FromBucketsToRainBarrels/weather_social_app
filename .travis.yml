@@ -58,7 +58,7 @@ script:
 
 - ionic platform add browser
 - ionic build browser
-- $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $SRC root@162.243.118.87/var/www/fbtrb.tanzeelrana.me/ >/dev/null
+- $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $SRC root@162.243.118.87:/var/www/fbtrb.tanzeelrana.me/ >/dev/null
 
 # Restart the app using pm2
 - ssh -o StrictHostKeyChecking=no -i fbtrb_deploy $SEVER $CLOUD_CODE_DEPLOY >/dev/null
