@@ -1,7 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, Alert, LoadingController, Events, ToastController } from 'ionic-angular';
 import { StatusBar, Splashscreen, Network } from 'ionic-native';
-import {DomSanitizer} from '@angular/platform-browser';
 
 import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
@@ -36,42 +35,6 @@ export class MyApp {
     ];
   }
 
-  go() {
-    console.log("go()");
-    var p = this.user.image.url;
-    var self = this;
-
-    ImgCache.cacheFile(p, function() {
-
-        var element = document.getElementById('msg');
-        element.innerHTML = 'cached file';
-
-        var img = document.getElementById('img');
-        img.src = p;
-
-        ImgCache.useCachedFile(img, function(imgsrc, fileentry) {
-            var tmp = imgsrc.src;
-
-            var element = document.getElementById('msg');
-            element.innerHTML = element.innerHTML +' '+ tmp;
-
-            //$( "body" ).append(imgsrc);
-            document.getElementById("img").src = tmp;
-
-            //$("#img").attr('src', "file:///localhost/persistent/imgcache/68355f631a9a1ceb3341bfe9adcf812b2623496c.jpg");
-        });
-
-
-    }, function() {
-        // error :(
-        var element = document.getElementById('msg');
-        element.innerHTML = 'Error: Image failed to download';
-    }, function (pe) {
-
-    });
-
-  }
-
   initializeApp() {
     let me = this;
     this.platform.ready().then(() => {
@@ -81,11 +44,8 @@ export class MyApp {
       
       // activated debug mode
       ImgCache.options.debug = true;
-      ImgCache.options.usePersistentCache = true;
-      
-      
       // page is set until img cache has started
-      ImgCache.init(()=>{        
+      ImgCache.init(()=>{ 
         me.events.publish("ImgCache.init.success",true);
         me.imageCacheInit = true;
         this.nav.setRoot(LoginPage);
@@ -140,11 +100,9 @@ export class MyApp {
   }
 
   subscribeEvents(){
-    let me = this;
+    
     this.events.subscribe('getUserEvent', user => {
-      console.log("getUserEvent");
-      me.user = user.userParseObj;
-      me.go();
+      this.user = user.userParseObj;
     });
 
     //subscribe to connectivity-service-event
