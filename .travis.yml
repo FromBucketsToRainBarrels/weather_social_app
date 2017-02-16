@@ -61,9 +61,9 @@ script:
 
 - ionic platform add browser
 - ionic build browser
-- ls platforms/browser/
-- rm platforms/browser/cordova.js
-- ls platforms/browser/
+- ls platforms/browser/platform_www/
+- rm platforms/browser/platform_www/cordova.js
+- ls platforms/browser/platform_www/
 - ls platforms/browser/www
 - rm platforms/browser/www/cordova.js
 - ls platforms/browser/www
