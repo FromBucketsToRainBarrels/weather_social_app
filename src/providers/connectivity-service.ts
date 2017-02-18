@@ -74,40 +74,26 @@ export class ConnectivityService {
   }
 
   testInternetAccess(){
-    // let me = this;
-    // let url = 'http://api.openweathermap.org/favicon.ico';
-    // let headers = new Headers();
-    // headers.append('Pragma','no-cache');
-    // headers.append('Cache-Control','no-cache');
-    // headers.append('Expires',"0");
-    // headers.append('Access-Control-Allow-Origin', '*');
-    // headers.append('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
-    // headers.append('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
+    let me = this;
+    let url = 'http://162.243.118.87:4041/blank.org/';
+    let headers = new Headers();
+    headers.append('Pragma','no-cache');
+    headers.append('Cache-Control','no-cache');
+    headers.append('Expires',"0");
     
-    // console.log("checking internet");
-    // this.http.get(url, {
-    //     headers: headers
-    //   })
-    //   .timeout(2000, new Error('delay exceeded'))
-    //   .map(res => res)
-    //   .subscribe(data => {
-    //     console.log(data);
-    //     if(!me.hasInternetAccess){this.events.publish('connectivity-service-event:internet', true);}
-    //     me.hasInternetAccess = true;          
-    //   },
-    //   err => {
-    //     console.log(err);
-    //     me.hasInternetAccess = false;
-    //     this.events.publish('connectivity-service-event:internet', false);
-    //   });
-    this.http.get("http://api.openweathermap.org/favicon.ico").map(res => res.json())
-    .subscribe(data => {
-      // we've got back the raw data, now generate the core schedule data
-      // and save the data for later reference
-      console.log(data);
-    },
-    err => {
-        console.log(err);
-    });
+    this.http.get(url, {
+        headers: headers
+      })
+      .timeout(2000, new Error('delay exceeded'))
+      .map(res => res)
+      .subscribe(data => {
+        if(!me.hasInternetAccess){this.events.publish('connectivity-service-event:internet', true);}
+        me.hasInternetAccess = true;          
+      },
+      err => {
+        me.hasInternetAccess = false;
+        this.events.publish('connectivity-service-event:internet', false);
+      });
+
   }
 }
