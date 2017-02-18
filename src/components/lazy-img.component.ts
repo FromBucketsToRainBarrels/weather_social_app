@@ -37,13 +37,11 @@ export class LazyImgComponent implements OnInit {
       if (success) {
 
         ImgCache.useCachedFile(this.img, () => { 
-          console.log(this.img);
         });
 
       } else {
 
         ImgCache.cacheFile(this.src, () => {
-          console.log(this.src);
         });
 
       }
