@@ -93,6 +93,7 @@ Parse.Cloud.define("likePost", function(request, response) {
 	    query.find().then((res) => {
 	      return res;
 	    }).then((likes) => {
+	    	console.log("likes : " + likes + " length : " + likes.length);
 	      if(likes.length){
 	        relation.remove(Parse.User.current());
 	        post.set("likes_count",post.get("likes_count")-1);

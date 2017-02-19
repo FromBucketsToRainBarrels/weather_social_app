@@ -148,6 +148,7 @@ export class ParseProvider {
         console.log("post_like_count : "  + post_like_count);
       });
     }else{
+      console.log();
       me.errorHandlerService.handleError(true,{message:"No internet access"},"likePost","ParseProvider",me.getArguments(arguments));
     }
   }
