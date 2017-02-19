@@ -1,5 +1,5 @@
 //this is cloud code for the application
-var pagination_limit = 7;
+var pagination_limit = 1;
 
 Parse.Cloud.define("getUserStations", function(request, response) {
   
@@ -15,7 +15,7 @@ Parse.Cloud.define("updateFeed", function(request, response) {
   getFeed(0).then((response) => {
 	  return response;
 	}).then((feed) => {
-	  var feedObj = {posts: feed, start:0};
+	  var feedObj = {posts: getAsJSON(feed), start:0};
 	  response.success(feedObj);
 	}).catch((ex) => {
 	  response.error(ex);
@@ -56,6 +56,9 @@ function getFeed(n){
 	});
 }
 
-function getAsJSON(parseObj){
-    return JSON.parse(JSON.stringify(parseObj));
+function getAsJSON(obj){
+	console.log(obj)
+	var x = JSON.parse(JSON.stringify(obj));
+    console.log(x);
+    return x;
 }
