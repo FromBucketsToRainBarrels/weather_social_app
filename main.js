@@ -34,7 +34,7 @@ Parse.Cloud.define("getMoreFeed", function(request, response) {
   console.log(JSON.stringify(request));
 
   //updateFeed will always pass a 0 index as user is asking for new posts on his/her feed
-  getFeed(0).then((response) => {
+  getFeed(request.params.start).then((response) => {
 	  return response;
 	}).then((posts) => {
 	  response.success(getAsJSON(posts));
