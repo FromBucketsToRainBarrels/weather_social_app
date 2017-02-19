@@ -1,7 +1,7 @@
 //this is cloud code for the application
 var pagination_limit = 1;
-var stringify = require('node-stringify');
-var parser = require('json-parser');
+var stringify = require('node-stringify').default;
+var parser = require('json-parser').default;
 
 Parse.Cloud.define("getUserStations", function(request, response) {
   
