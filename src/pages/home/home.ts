@@ -46,7 +46,6 @@ export class HomePage {
       console.log(feed);
       me.feed = feed;
       if(feed.posts.length == 0){
-        //call the updateFeed to get the latest posts
         me.parse.updateFeed();
       }
     });

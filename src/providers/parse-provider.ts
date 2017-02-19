@@ -71,7 +71,7 @@ export class ParseProvider {
   		if(me.connectivityService.hasInernet()){
         Parse.User.logIn(user, pass, {
 		        success: function(user) {
-		          me.user.userParseObj = user;
+		          me.user.userParseObj = me.getAsJSON(user);
               me.events.publish("loginSuccess",context);
               me.getUser();
             },
@@ -87,13 +87,11 @@ export class ParseProvider {
   }
 
   getFeed(){
-    console.log("getFeed")
     let me = this;
     this.localDBStorage.getFeed().then((response) => {
       if(!response){
         response = {posts:[], start:0};
       }
-      console.log(response);
       return response;
     }).then((feed) => {
       me.events.publish("getFeedEvent", feed);
@@ -104,6 +102,7 @@ export class ParseProvider {
 
   updateFeed(){
     let me = this;
+    console.log(me.user.userParseObj);
     Parse.Cloud.run('updateFeed', { 
       user: me.user.userParseObj 
     }).then(function(feed) {

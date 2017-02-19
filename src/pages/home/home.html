@@ -47,19 +47,19 @@
   <ion-card *ngFor="let post of feed?.posts">
     <ion-item>
       <ion-avatar item-left>
-        <img src="{{post.get('user').get('image')?.url()}}">
+        <img src="{{post.user.image?.url}}">
       </ion-avatar>
-      <h2>{{post.get("user").get("username")}}</h2>
+      <h2>{{post.user.username}}</h2>
     </ion-item>
 
-    <ion-item *ngIf="post.get('type')== 'photo'">
+    <ion-item *ngIf="post.type=='photo'">
       <ion-thumbnail item-left>
-        <img  src="{{post.get('images')[0]}}" imageViewer/>
+        <img  src="{{post?.images[0]}}" imageViewer/>
       </ion-thumbnail>
     </ion-item>
 
     <ion-card-content>
-      <p>{{post.get("text")}}</p>
+      <p>{{post.text}}</p>
     </ion-card-content>
 
     <ion-row>
@@ -67,14 +67,14 @@
       <ion-col center text-center (click)="feedService.likeUnlikePost(post)">
         <button ion-button icon-left clear small>
           <ion-icon name="thumbs-up"></ion-icon>
-          <div>{{post.get("likes_count")}} Likes</div>
+          <div>{{post.likes_count}} Likes</div>
         </button>
       </ion-col>
       
       <ion-col center text-center (click)="openCommentsModal(post)">
         <button ion-button icon-left clear small>
           <ion-icon name="text"></ion-icon>
-          <div>{{post.get('comments_count')}} Comments</div>
+          <div>{{post.comments_count}} Comments</div>
         </button>
       </ion-col>
     </ion-row>

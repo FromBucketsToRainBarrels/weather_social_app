@@ -15,7 +15,7 @@ Parse.Cloud.define("updateFeed", function(request, response) {
   getFeed(0).then((response) => {
 	  return response;
 	}).then((feed) => {
-	  var feedObj = {posts: getAsJSON(feed), start:0};
+	  var feedObj = {posts: feed, start:0};
 	  response.success(feedObj);
 	}).catch((ex) => {
 	  response.error(ex);
