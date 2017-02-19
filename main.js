@@ -78,46 +78,46 @@ function getFeed(n){
 }
 
 Parse.Cloud.define("likePost", function(request, response) {
-  	
-  	var postId = request.params.post;
-    console.log("postId : " + postId);
-    var Post = Parse.Object.extend("Post");
-    var post = new Parse.Query(Post);
+  	console.log(user);
+  	// var postId = request.params.post;
+   //  console.log("postId : " + postId);
+   //  var Post = Parse.Object.extend("Post");
+   //  var post = new Parse.Query(Post);
     
-    post.get(postId, {
-      success: function(p) {
-        console.log(p);
-        console.log(user);
-        console.log(user.id);
-        var relation = p.relation("likes");
-        var query = relation.query();
-        query.equalTo("objectId", user.id);
-        console.log(query);
-        query.find().then((res) => {
-          console.log("res");
-          console.log(res);
-          return res;
-        }).then((likes) => {
-          console.log("likes : " + likes + " length : " + likes.length);
-          if(likes.length){
-            console.log("need to remove user from the relation");
-            relation.remove(Parse.User.current());
-            p.set("likes_count",p.get("likes_count")-1);
-          }else{
-            console.log("need to add user to the relation");
-            relation.add(Parse.User.current());
-            p.set("likes_count",p.get("likes_count")+1);
-          }
-          p.save();
-          console.log("p.save() : likes_count : " + p.get("likes_count"));
-          // response.success(post.get("likes_count"));
-        });
-      },
-      error: function(post, error) {
-        console.log(error);
-        response.error(error);
-      }
-    });
+   //  post.get(postId, {
+   //    success: function(p) {
+   //      console.log(p);
+   //      console.log(user);
+   //      console.log(user.id);
+   //      var relation = p.relation("likes");
+   //      var query = relation.query();
+   //      query.equalTo("objectId", user.id);
+   //      console.log(query);
+   //      query.find().then((res) => {
+   //        console.log("res");
+   //        console.log(res);
+   //        return res;
+   //      }).then((likes) => {
+   //        console.log("likes : " + likes + " length : " + likes.length);
+   //        if(likes.length){
+   //          console.log("need to remove user from the relation");
+   //          relation.remove(Parse.User.current());
+   //          p.set("likes_count",p.get("likes_count")-1);
+   //        }else{
+   //          console.log("need to add user to the relation");
+   //          relation.add(Parse.User.current());
+   //          p.set("likes_count",p.get("likes_count")+1);
+   //        }
+   //        p.save();
+   //        console.log("p.save() : likes_count : " + p.get("likes_count"));
+   //        // response.success(post.get("likes_count"));
+   //      });
+   //    },
+   //    error: function(post, error) {
+   //      console.log(error);
+   //      response.error(error);
+   //    }
+   //  });
 });
 
 
