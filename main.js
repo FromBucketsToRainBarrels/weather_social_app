@@ -78,7 +78,9 @@ function getFeed(n){
 }
 
 Parse.Cloud.define("likePost", function(request, response) {
+  	
   	var postId = request.params.post;
+  	console.log("postId : " + postId);
   	var Post = Parse.Object.extend("Post");
 	var post = new Parse.Query(Post);
 	post.get(postId, {
