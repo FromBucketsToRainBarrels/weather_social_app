@@ -78,7 +78,7 @@ function getFeed(n){
 }
 
 Parse.Cloud.define("likePost", function(request, response) {
-  	
+  	console.log(request.user);
   	var postId = request.params.post;
     console.log("postId : " + postId);
     var Post = Parse.Object.extend("Post");
@@ -99,11 +99,11 @@ Parse.Cloud.define("likePost", function(request, response) {
           console.log("likes : " + likes + " length : " + likes.length);
           if(likes.length){
             console.log("need to remove user from the relation");
-            relation.remove(Parse.User.current());
+            relation.remove(request.user);
             p.set("likes_count",p.get("likes_count")-1);
           }else{
             console.log("need to add user to the relation");
-            relation.add(Parse.User.current());
+            relation.add(request.user);
             p.set("likes_count",p.get("likes_count")+1);
           }
           p.save();
