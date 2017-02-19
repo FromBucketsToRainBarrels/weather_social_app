@@ -43,7 +43,7 @@ export class MyApp {
       StatusBar.styleDefault();
       
       // activated debug mode
-      ImgCache.options.debug = true;
+      ImgCache.options.debug = false;
       // page is set until img cache has started
       ImgCache.init(()=>{ 
         me.events.publish("ImgCache.init.success",true);
@@ -102,9 +102,7 @@ export class MyApp {
   subscribeEvents(){
     
     this.events.subscribe('getUserEvent', user => {
-      console.log(this.user);
       this.user = user.userParseObj;
-      console.log(this.user);
     });
 
     //subscribe to connectivity-service-event

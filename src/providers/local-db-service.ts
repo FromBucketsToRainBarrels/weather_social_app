@@ -29,6 +29,20 @@ export class LocalDBService {
   	});
   }
 
+  getFeed(){
+    let me = this;
+    return new Promise((resolve, reject) => {
+      me.storage.get('feed').then((feed) => {
+        resolve(feed);
+      });
+    });
+  }
+
+  saveFeed(feed){
+    let me = this;
+    me.storage.set('feed', feed);
+  }
+
   saveUser(user){
   	let me = this;
   	me.storage.set('user', me.seriallize(user));

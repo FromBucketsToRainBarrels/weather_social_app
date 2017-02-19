@@ -18,15 +18,22 @@ export class HomePage {
   public comment_box_models: any;
   public comments_models: any;
   public status_model: any;
-  private start:number=0;
+  private currPost: any;
   
   constructor(
   	public navCtrl: NavController, 
   	public navParams: NavParams,
   	public alertCtrl: AlertController,
-    public parse: ParseProvider
+    public parse: ParseProvider,
+    public events: Events,
   ) {
+    this.subscribeFeedEvent();
+  }
 
+  subscribeFeedEvent(){
+    this.events.subscribe("getFeedEvent", (feed) =>{
+      this.feed = feed;
+    });
   }
 
   alert(message) {

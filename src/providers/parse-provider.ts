@@ -38,6 +38,7 @@ export class ParseProvider {
     this.current = Parse.User.current();
     if(this.current){
       this.getUser();
+      this.getFeed();
   	}
   }
 
@@ -84,6 +85,33 @@ export class ParseProvider {
         me.events.publish("loginFail",context);
 			  me.errorHandlerService.handleError(false, {message:"No internet access"}, "login", "ParseProvider", me.getArguments(arguments));
   		}
+  }
+
+  getFeed(){
+    let me = this;
+    this.localDBStorage.getFeed().then((response) => {
+      if(!response){
+        response = {posts:[], start:0};
+      }
+      return response;
+    }).then((feed) => {
+      me.events.publish("getFeedEvent", feed);
+    }).catch((ex) => {
+      console.error('Error getting feed from localDBStorage: ', ex);
+    });
+  }
+
+  updateFeed(){
+    let me = this;
+    Parse.Cloud.run('updateFeed', { 
+      user: me.user.userParseObj 
+    }).then(function(feed) {
+      console.log(feed);
+    });
+  }
+
+  getMoreFeed(){
+
   }
 
   getUser(){
