@@ -141,18 +141,18 @@ export class ParseProvider {
 
   likePost(post,index){
     let me = this;
-    // if(me.connectivityService.hasInernet()){
-    //   Parse.Cloud.run('likePost', { 
-    //     post: post.objectId
-    //   }).then(function(post_like_count) {
-    //     console.log("post_like_count : "  + post_like_count);
-    //   });
-    // }else{
-    //   console.log("error happened");
-    //   me.errorHandlerService.handleError(false,{message:"No internet access"},"likePost","ParseProvider",me.getArguments(arguments));
-    // }
+    if(me.connectivityService.hasInernet()){
+      Parse.Cloud.run('likePost', { 
+        post: post.objectId
+      }).then(function(post_like_count) {
+        console.log("post_like_count : "  + post_like_count);
+      });
+    }else{
+      console.log("error happened");
+      me.errorHandlerService.handleError(false,{message:"No internet access"},"likePost","ParseProvider",me.getArguments(arguments));
+    }
 
-    me.likePostTest(post.objectId);
+    // me.likePostTest(post.objectId);
 
   }
 
