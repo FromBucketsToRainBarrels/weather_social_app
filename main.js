@@ -90,15 +90,18 @@ Parse.Cloud.define("likePost", function(request, response) {
         query.find().then((res) => {
           return res;
         }).then((likes) => {
+        	var liked;
           if(likes.length){
             relation.remove(request.user);
             p.set("likes_count",p.get("likes_count")-1);
+            liked = false;
           }else{
             relation.add(request.user);
             p.set("likes_count",p.get("likes_count")+1);
+            liked = true;
           }
           p.save();
-          response.success(p.get("likes_count"));
+          response.success({count:p.get("likes_count"), liked: liked});
         });
       },
       error: function(post, error) {
