@@ -102,13 +102,12 @@ export class ParseProvider {
 
   updateFeed(){
     let me = this;
-    console.log(me.user.userParseObj);
     Parse.Cloud.run('updateFeed', { 
       user: me.user.userParseObj 
     }).then(function(feed) {
+      feed = JSON.parse(feed);
       me.localDBStorage.saveFeed(feed);
       me.events.publish("updateFeedEvent", feed);
-      console.log(feed);
     });
   }
 
