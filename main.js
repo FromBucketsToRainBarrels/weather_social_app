@@ -98,7 +98,7 @@ Parse.Cloud.define("likePost", function(request, response) {
             p.set("likes_count",p.get("likes_count")+1);
           }
           p.save();
-          response.success(post.get("likes_count"));
+          response.success(p.get("likes_count"));
         });
       },
       error: function(post, error) {

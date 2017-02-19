@@ -18,12 +18,12 @@ export class SyncService {
     public localDBStorage: LocalDBService,
   	public events: Events,
   ) {
-  	// console.log("SyncService init");
+  	console.log("SyncService init");
     this.subscribeToConnectivityService();
   }
 
   subscribeToConnectivityService(){
-  	// console.log("subscribeToConnectivityService");
+  	console.log("subscribeToConnectivityService");
   	let me = this;
   	me.events.subscribe("connectivity-service-event:internet", (val) => {
       console.log("connectivity-service-event:internet : " + val);
