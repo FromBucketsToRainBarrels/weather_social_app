@@ -102,7 +102,9 @@ export class MyApp {
   subscribeEvents(){
     
     this.events.subscribe('getUserEvent', user => {
+      console.log(this.user);
       this.user = user.userParseObj;
+      console.log(this.user);
     });
 
     //subscribe to connectivity-service-event

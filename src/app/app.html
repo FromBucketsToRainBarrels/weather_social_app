@@ -5,7 +5,7 @@
     <!-- User profile -->
     <div text-center padding-top padding-bottom class="primary-bg menu-left">
       <a menuClose (click)="viewMyProfile()">
-        <div *ngIf="parse?.imageCacheService&&user?.image?.url">          
+        <div *ngIf="imageCacheInit&&user?.image?.url">          
           <lazy-img class="profile-picture" src="{{user?.image?.url}}"></lazy-img>
         </div>
         <h4 color="light">{{user?.username}}</h4>

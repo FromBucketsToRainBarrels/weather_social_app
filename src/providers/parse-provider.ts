@@ -90,7 +90,8 @@ export class ParseProvider {
     let me = this;
     this.localDBStorage.getUser().then((response) => {
       if(!response){
-        response = {userParseObj: Parse.User.current(), stations:[]};
+        let user = me.getUserAsJSON(Parse.User.current())
+        response = {userParseObj: user, stations:[]};
       }
       return response;
     }).then((user) => {
