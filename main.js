@@ -102,6 +102,7 @@ Parse.Cloud.define("likePost", function(request, response) {
 	        post.set("likes_count",post.get("likes_count")+1);
 	      }
 	      post.save();
+	      console.log("post.save() : likes_count : " + post.get("likes_count"));
 	      response.success(post.get("likes_count"));
 	    });
 	  },
