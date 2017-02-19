@@ -113,39 +113,3 @@ function getAsJSON(obj){
 	var x = x.replace(/localhost/g,'162.243.118.87');
     return x;
 }
-
-function likeUnlikePost(post){
-    var me = this;
-    var query = new Parse.Query("Post");
-    var relation = post.relation("likes");
-    query.equalTo("likes", Parse.User.current());
-    query.equalTo("objectId", post.id);
-    query.find().then((response) => {
-      return response;
-    }).then((likes) => {
-      console.log(likes);
-      if(likes.length){
-        relation.remove(Parse.User.current());
-        post.set("likes_count",post.get("likes_count")-1);
-      }else{
-        relation.add(Parse.User.current());
-        post.set("likes_count",post.get("likes_count")+1);
-      }
-      post.save();
-    })
-}
-
-function getComments(post){
-	return new Promise((resolve, reject) => {
-	  var relation = post.relation("comments");
-	  var query = relation.query();
-	  query.ascending("createdAt");
-	  query.find({
-	    success: function(comments){
-	      resolve(comments);
-	    },
-	    error: function(comments,error){
-	      reject(error);
-	    }
-  	});
-});
