@@ -111,8 +111,20 @@ export class ParseProvider {
     });
   }
 
-  getMoreFeed(){
+  getMoreFeed(n){
+    let me = this;
+    Parse.Cloud.run('getMoreFeed', { 
+      user: me.user.userParseObj,
+      start: n
+    }).then(function(posts) {
+      posts = JSON.parse(posts);
+      me.events.publish("getMoreFeedEvent", posts);
+    });
+  }
 
+  saveFeed(feed){
+    let me = this;
+    me.localDBStorage.saveFeed(feed);
   }
 
   getUser(){

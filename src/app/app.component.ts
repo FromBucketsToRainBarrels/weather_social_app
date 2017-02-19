@@ -43,7 +43,7 @@ export class MyApp {
       StatusBar.styleDefault();
       
       // activated debug mode
-      ImgCache.options.debug = false;
+      ImgCache.options.debug = true;
       // page is set until img cache has started
       ImgCache.init(()=>{ 
         me.events.publish("ImgCache.init.success",true);

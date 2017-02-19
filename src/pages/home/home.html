@@ -47,14 +47,14 @@
   <ion-card *ngFor="let post of feed?.posts">
     <ion-item>
       <ion-avatar item-left>
-        <img src="{{post.user.image.url}}">
+        <lazy-img src="{{post.user.image.url}}"></lazy-img>
       </ion-avatar>
       <h2>{{post.user.username}}</h2>
     </ion-item>
 
     <ion-item *ngIf="post.type=='photo'">
       <ion-thumbnail item-left>
-        <img  src="{{post?.images[0]}}" imageViewer/>
+        <lazy-img  src="{{post?.images[0]}}"></lazy-img>
       </ion-thumbnail>
     </ion-item>
 

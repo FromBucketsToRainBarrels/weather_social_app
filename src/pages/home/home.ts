@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { NavController, NavParams, AlertController, Events } from 'ionic-angular';
 import { ParseProvider } from '../../providers/parse-provider';
 /*
@@ -19,6 +19,7 @@ export class HomePage {
   public comments_models: any;
   public status_model: any;
   private currPost: any;
+  private infiniteScroll: any;
   
   constructor(
   	public navCtrl: NavController, 
@@ -26,6 +27,7 @@ export class HomePage {
   	public alertCtrl: AlertController,
     public parse: ParseProvider,
     public events: Events,
+    public cdr: ChangeDetectorRef,
   ) {
     let me = this;
 
@@ -36,15 +38,31 @@ export class HomePage {
     this.subscribeFeedEvents();
   }
 
+  doInfinite(infiniteScroll) {
+    var me = this;
+    me.infiniteScroll = infiniteScroll;
+    me.parse.getMoreFeed(me.feed.start);
+  }
+
   subscribeFeedEvents(){
     let me = this;
+
+    me.events.subscribe("getMoreFeedEvent", (posts) =>{
+      me.feed.posts = me.feed.posts.concat(posts);
+      me.feed.start+= posts.length;
+      me.parse.saveFeed(me.feed);
+      me.infiniteScroll.complete();
+      me.cdr.detectChanges();
+    });
     me.events.subscribe("updateFeedEvent", (feed) =>{
       console.log(feed);
       me.feed = feed;
+      me.cdr.detectChanges();
     });
     me.events.subscribe("getFeedEvent", (feed) =>{
       console.log(feed);
       me.feed = feed;
+      me.cdr.detectChanges();
       if(feed.posts.length == 0){
         me.parse.updateFeed();
       }
