@@ -85,6 +85,7 @@ Parse.Cloud.define("likePost", function(request, response) {
 	var post = new Parse.Query(Post);
 	post.get(postId, {
 	  success: function(post) {
+	  	console.log(post);
 	    var query = new Parse.Query("Post");
 	    var relation = post.relation("likes");
 	    query.equalTo("likes", Parse.User.current());
@@ -104,6 +105,7 @@ Parse.Cloud.define("likePost", function(request, response) {
 	    });
 	  },
 	  error: function(post, error) {
+	  	console.log(error);
 	    response.error(error);
 	  }
 	});
