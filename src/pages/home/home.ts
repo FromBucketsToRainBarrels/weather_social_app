@@ -48,11 +48,13 @@ export class HomePage {
     let me = this;
 
     me.events.subscribe("getMoreFeedEvent", (posts) =>{
-      me.feed.posts = me.feed.posts.concat(posts);
-      me.feed.start+= posts.length;
-      me.parse.saveFeed(me.feed);
+      if(posts.length!=0){
+        me.feed.posts = me.feed.posts.concat(posts);
+        me.feed.start++;
+        me.parse.saveFeed(me.feed);
+        me.cdr.detectChanges();
+      }
       me.infiniteScroll.complete();
-      me.cdr.detectChanges();
     });
     me.events.subscribe("updateFeedEvent", (feed) =>{
       console.log(feed);
