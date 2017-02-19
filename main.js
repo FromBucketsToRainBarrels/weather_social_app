@@ -89,8 +89,8 @@ Parse.Cloud.define("likePost", function(request, response) {
 	    var relation = post.relation("likes");
 	    query.equalTo("likes", Parse.User.current());
 	    query.equalTo("objectId", post.id);
-	    query.find().then((response) => {
-	      return response;
+	    query.find().then((res) => {
+	      return res;
 	    }).then((likes) => {
 	      if(likes.length){
 	        relation.remove(Parse.User.current());
