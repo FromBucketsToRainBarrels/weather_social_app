@@ -1,9 +1,10 @@
 //this is cloud code for the application
+
 var pagination_limit = 7;
 module.paths.push('/usr/local/lib/node_modules');
 
-var stringify = require('node-stringify');
-var parser = require('json-parser');
+// var stringify = require('node-stringify');
+// var parser = require('json-parser');
 
 Parse.Cloud.define("getUserStations", function(request, response) {
   
@@ -63,5 +64,5 @@ function getFeed(n){
 
 function getAsJSON(obj){
 	var x = JSON.stringify(obj)    
-    return x;
+    return obj;
 }
