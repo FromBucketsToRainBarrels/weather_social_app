@@ -143,7 +143,8 @@ export class ParseProvider {
     let me = this;
     if(me.connectivityService.hasInernet()){
       Parse.Cloud.run('likePost', { 
-        post: post.objectId
+        post: post.objectId,
+        user: Parse.User.current().id
       }).then(function(post_like_count) {
         console.log("post_like_count : "  + post_like_count);
       });
