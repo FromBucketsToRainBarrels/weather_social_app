@@ -80,18 +80,20 @@ function getFeed(n){
 Parse.Cloud.define("likePost", function(request, response) {
   	
   	var postId = request.params.post;
-  	console.log("postId : " + postId);
-  	var Post = Parse.Object.extend("Post");
-	var post = new Parse.Query(Post);
-	post.get(postId, {
-	  success: function(p) {
-	  	console.log(p);
+    console.log("postId : " + postId);
+    var Post = Parse.Object.extend("Post");
+    var post = new Parse.Query(Post);
+    
+    post.get(postId, {
+      success: function(p) {
+        console.log(p);
         var relation = p.relation("likes");
         var query = relation.query();
-
-        // query.equalTo("likes", Parse.User.current());
         query.equalTo("objectId", Parse.User.current().id);
+        console.log(query);
         query.find().then((res) => {
+          console.log("res");
+          console.log(res);
           return res;
         }).then((likes) => {
           console.log("likes : " + likes + " length : " + likes.length);
@@ -106,14 +108,14 @@ Parse.Cloud.define("likePost", function(request, response) {
           }
           p.save();
           console.log("p.save() : likes_count : " + p.get("likes_count"));
-          response.success(p.get("likes_count"));
+          // response.success(post.get("likes_count"));
         });
-	  },
-	  error: function(post, error) {
-	  	console.log(error);
-	    response.error(error);
-	  }
-	});
+      },
+      error: function(post, error) {
+        console.log(error);
+        response.error(error);
+      }
+    });
 });
 
 

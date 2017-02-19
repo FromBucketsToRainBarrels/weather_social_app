@@ -141,58 +141,57 @@ export class ParseProvider {
 
   likePost(post,index){
     let me = this;
-    if(me.connectivityService.hasInernet()){
-      Parse.Cloud.run('likePost', { 
-        post: post.objectId
-      }).then(function(post_like_count) {
-        console.log("post_like_count : "  + post_like_count);
-      });
-    }else{
-      console.log("error happened");
-      me.errorHandlerService.handleError(false,{message:"No internet access"},"likePost","ParseProvider",me.getArguments(arguments));
-    }
+    // if(me.connectivityService.hasInernet()){
+    //   Parse.Cloud.run('likePost', { 
+    //     post: post.objectId
+    //   }).then(function(post_like_count) {
+    //     console.log("post_like_count : "  + post_like_count);
+    //   });
+    // }else{
+    //   console.log("error happened");
+    //   me.errorHandlerService.handleError(false,{message:"No internet access"},"likePost","ParseProvider",me.getArguments(arguments));
+    // }
 
-    // me.likePostTest(post.objectId);
+    me.likePostTest(post.objectId);
 
   }
 
-  // likePostTest(postId){
-  //   // var postId = request.params.post;
-  //   console.log("postId : " + postId);
-  //   var Post = Parse.Object.extend("Post");
-  //   var post = new Parse.Query(Post);
-  //   post.get(postId, {
-  //     success: function(p) {
-  //       console.log(p);
-  //       var relation = p.relation("likes");
-  //       var query = relation.query();
+  likePostTest(postId){
+    // var postId = request.params.post;
+    console.log("postId : " + postId);
+    var Post = Parse.Object.extend("Post");
+    var post = new Parse.Query(Post);
+    post.get(postId, {
+      success: function(p) {
+        console.log(p);
+        var relation = p.relation("likes");
+        var query = relation.query();
 
-  //       // query.equalTo("likes", Parse.User.current());
-  //       query.equalTo("objectId", Parse.User.current().id);
-  //       query.find().then((res) => {
-  //         return res;
-  //       }).then((likes) => {
-  //         console.log("likes : " + likes + " length : " + likes.length);
-  //         if(likes.length){
-  //           console.log("need to remove user from the relation");
-  //           relation.remove(Parse.User.current());
-  //           p.set("likes_count",p.get("likes_count")-1);
-  //         }else{
-  //           console.log("need to add user to the relation");
-  //           relation.add(Parse.User.current());
-  //           p.set("likes_count",p.get("likes_count")+1);
-  //         }
-  //         p.save();
-  //         console.log("post.save() : likes_count : " + post.get("likes_count"));
-  //         // response.success(post.get("likes_count"));
-  //       });
-  //     },
-  //     error: function(post, error) {
-  //       console.log(error);
-  //       // response.error(error);
-  //     }
-  //   });
-  // }
+        query.equalTo("objectId", Parse.User.current().id);
+        query.find().then((res) => {
+          return res;
+        }).then((likes) => {
+          console.log("likes : " + likes + " length : " + likes.length);
+          if(likes.length){
+            console.log("need to remove user from the relation");
+            relation.remove(Parse.User.current());
+            p.set("likes_count",p.get("likes_count")-1);
+          }else{
+            console.log("need to add user to the relation");
+            relation.add(Parse.User.current());
+            p.set("likes_count",p.get("likes_count")+1);
+          }
+          p.save();
+          console.log("p.save() : likes_count : " + p.get("likes_count"));
+          // response.success(post.get("likes_count"));
+        });
+      },
+      error: function(post, error) {
+        console.log(error);
+        // response.error(error);
+      }
+    });
+  }
 
   getUser(){
     let me = this;
