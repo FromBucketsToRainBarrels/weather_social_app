@@ -77,35 +77,35 @@ function getFeed(n){
 	});
 }
 
-// Parse.Cloud.define("likePost", function(request, response) {
-//   	var postId = request.params.post;
-//   	var Post = Parse.Object.extend("Post");
-// 	var post = new Parse.Query(Post);
-// 	query.get(postId, {
-// 	  success: function(post) {
-// 	    var query = new Parse.Query("Post");
-// 	    var relation = post.relation("likes");
-// 	    query.equalTo("likes", Parse.User.current());
-// 	    query.equalTo("objectId", post.id);
-// 	    query.find().then((response) => {
-// 	      return response;
-// 	    }).then((likes) => {
-// 	      if(likes.length){
-// 	        relation.remove(Parse.User.current());
-// 	        post.set("likes_count",post.get("likes_count")-1);
-// 	      }else{
-// 	        relation.add(Parse.User.current());
-// 	        post.set("likes_count",post.get("likes_count")+1);
-// 	      }
-// 	      post.save();
-// 	      response.success(post.get("likes_count"));
-// 	    });
-// 	  },
-// 	  error: function(post, error) {
-// 	    response.error(error);
-// 	  }
-// 	});
-// });
+Parse.Cloud.define("likePost", function(request, response) {
+  	var postId = request.params.post;
+  	var Post = Parse.Object.extend("Post");
+	var post = new Parse.Query(Post);
+	query.get(postId, {
+	  success: function(post) {
+	    var query = new Parse.Query("Post");
+	    var relation = post.relation("likes");
+	    query.equalTo("likes", Parse.User.current());
+	    query.equalTo("objectId", post.id);
+	    query.find().then((response) => {
+	      return response;
+	    }).then((likes) => {
+	      if(likes.length){
+	        relation.remove(Parse.User.current());
+	        post.set("likes_count",post.get("likes_count")-1);
+	      }else{
+	        relation.add(Parse.User.current());
+	        post.set("likes_count",post.get("likes_count")+1);
+	      }
+	      post.save();
+	      response.success(post.get("likes_count"));
+	    });
+	  },
+	  error: function(post, error) {
+	    response.error(error);
+	  }
+	});
+});
 
 
 function getAsJSON(obj){
