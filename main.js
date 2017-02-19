@@ -81,7 +81,7 @@ Parse.Cloud.define("likePost", function(request, response) {
   	var postId = request.params.post;
   	var Post = Parse.Object.extend("Post");
 	var post = new Parse.Query(Post);
-	query.get(postId, {
+	post.get(postId, {
 	  success: function(post) {
 	    var query = new Parse.Query("Post");
 	    var relation = post.relation("likes");
