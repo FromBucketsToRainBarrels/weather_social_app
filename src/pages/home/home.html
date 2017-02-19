@@ -23,4 +23,65 @@
 
 <ion-content padding>
 
+  <!-- new status card goes here -->
+  <ion-card style="background-color: #8db9ea;">
+    <div *ngIf="status_model.attachment_photo">
+      <ion-item>
+        <ion-thumbnail item-left>
+          <img  src="{{status_model.attachment_photo_src}}"/>
+        </ion-thumbnail>
+        <ion-icon name="ios-trash" item-right (click)="removeImage()" ></ion-icon>
+      </ion-item>
+    </div>
+    <ion-item >
+      <ion-label floating>Whats on your mind ....</ion-label>
+      <ion-textarea elastic [(ngModel)]="status_model.text" ></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="ios-camera" item-left (click)="selectPic()"></ion-icon>
+      <input hidden="true" id="profile_upload" (change)="getPic($event)" type="file">
+      <ion-badge ion-button item-right  (click)="addPost()"><ion-icon name="ios-send"></ion-icon>Post</ion-badge>
+    </ion-item>
+  </ion-card>
+
+  <ion-card *ngFor="let post of feed?.posts">
+    <ion-item>
+      <ion-avatar item-left>
+        <img src="{{post.get('user').get('image')?.url()}}">
+      </ion-avatar>
+      <h2>{{post.get("user").get("username")}}</h2>
+    </ion-item>
+
+    <ion-item *ngIf="post.get('type')== 'photo'">
+      <ion-thumbnail item-left>
+        <img  src="{{post.get('images')[0]}}" imageViewer/>
+      </ion-thumbnail>
+    </ion-item>
+
+    <ion-card-content>
+      <p>{{post.get("text")}}</p>
+    </ion-card-content>
+
+    <ion-row>
+      
+      <ion-col center text-center (click)="feedService.likeUnlikePost(post)">
+        <button ion-button icon-left clear small>
+          <ion-icon name="thumbs-up"></ion-icon>
+          <div>{{post.get("likes_count")}} Likes</div>
+        </button>
+      </ion-col>
+      
+      <ion-col center text-center (click)="openCommentsModal(post)">
+        <button ion-button icon-left clear small>
+          <ion-icon name="text"></ion-icon>
+          <div>{{post.get('comments_count')}} Comments</div>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+  
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
 </ion-content>

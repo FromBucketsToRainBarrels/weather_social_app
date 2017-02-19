@@ -38,7 +38,6 @@ export class ParseProvider {
     this.current = Parse.User.current();
     if(this.current){
       this.getUser();
-      this.getFeed();
   	}
   }
 
@@ -88,11 +87,13 @@ export class ParseProvider {
   }
 
   getFeed(){
+    console.log("getFeed")
     let me = this;
     this.localDBStorage.getFeed().then((response) => {
       if(!response){
         response = {posts:[], start:0};
       }
+      console.log(response);
       return response;
     }).then((feed) => {
       me.events.publish("getFeedEvent", feed);
@@ -106,6 +107,8 @@ export class ParseProvider {
     Parse.Cloud.run('updateFeed', { 
       user: me.user.userParseObj 
     }).then(function(feed) {
+      me.localDBStorage.saveFeed(feed);
+      me.events.publish("updateFeedEvent", feed);
       console.log(feed);
     });
   }
@@ -118,7 +121,7 @@ export class ParseProvider {
     let me = this;
     this.localDBStorage.getUser().then((response) => {
       if(!response){
-        let user = me.getUserAsJSON(Parse.User.current())
+        let user = me.getAsJSON(Parse.User.current())
         response = {userParseObj: user, stations:[]};
       }
       return response;
@@ -147,7 +150,7 @@ export class ParseProvider {
         success: function(userRetrieved)
         {
           if(userRetrieved[0]){
-            me.user.userParseObj = me.getUserAsJSON(userRetrieved[0]);
+            me.user.userParseObj = me.getAsJSON(userRetrieved[0]);
             me.events.publish("getUserEvent", me.user);
             me.localDBStorage.saveUser(me.user);
           }
@@ -224,11 +227,7 @@ export class ParseProvider {
     return parseFile;
   }
 
-  getParseUserFromJSON(){
-
-  }
-
-  getUserAsJSON(user){
+  getAsJSON(user){
     return JSON.parse(JSON.stringify(user));
   }
   

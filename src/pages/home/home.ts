@@ -27,13 +27,30 @@ export class HomePage {
     public parse: ParseProvider,
     public events: Events,
   ) {
-    this.subscribeFeedEvent();
+    let me = this;
+
+    // set data for feed
+    this.status_model = {};
+    this.comment_box_models = {};
+    this.comments_models = {};
+    this.subscribeFeedEvents();
   }
 
-  subscribeFeedEvent(){
-    this.events.subscribe("getFeedEvent", (feed) =>{
-      this.feed = feed;
+  subscribeFeedEvents(){
+    let me = this;
+    me.events.subscribe("updateFeedEvent", (feed) =>{
+      console.log(feed);
+      me.feed = feed;
     });
+    me.events.subscribe("getFeedEvent", (feed) =>{
+      console.log(feed);
+      me.feed = feed;
+      if(feed.posts.length == 0){
+        //call the updateFeed to get the latest posts
+        me.parse.updateFeed();
+      }
+    });
+    me.parse.getFeed();
   }
 
   alert(message) {

@@ -17,7 +17,6 @@ export class LocalDBService {
   	public http: Http,
   	public storage: Storage,
   ) {
-    console.log('Init LocalDBService Provider');
   }
 
   getUser(){
