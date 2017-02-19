@@ -85,11 +85,12 @@ Parse.Cloud.define("likePost", function(request, response) {
 	var post = new Parse.Query(Post);
 	post.get(postId, {
 	  success: function(p) {
-	  	console.log(post);
-	    var query = new Parse.Query("Post");
+	  	console.log(p);
 	    var relation = p.relation("likes");
-	    query.equalTo("likes", Parse.User.current());
-	    query.equalTo("objectId", p.id);
+	    var query = relation.query();
+
+	    // query.equalTo("likes", Parse.User.current());
+	    query.equalTo("objectId", Parse.User.current().id);
 	    query.find().then((res) => {
 	      return res;
 	    }).then((likes) => {
