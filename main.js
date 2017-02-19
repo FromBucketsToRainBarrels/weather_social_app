@@ -84,20 +84,22 @@ Parse.Cloud.define("likePost", function(request, response) {
   	var Post = Parse.Object.extend("Post");
 	var post = new Parse.Query(Post);
 	post.get(postId, {
-	  success: function(post) {
+	  success: function(p) {
 	  	console.log(post);
 	    var query = new Parse.Query("Post");
-	    var relation = post.relation("likes");
+	    var relation = p.relation("likes");
 	    query.equalTo("likes", Parse.User.current());
-	    query.equalTo("objectId", post.id);
+	    query.equalTo("objectId", p.id);
 	    query.find().then((res) => {
 	      return res;
 	    }).then((likes) => {
 	    	console.log("likes : " + likes + " length : " + likes.length);
 	      if(likes.length){
+	        console.log("need to remove user from the relation");
 	        relation.remove(Parse.User.current());
 	        post.set("likes_count",post.get("likes_count")-1);
 	      }else{
+	      	console.log("need to add user to the relation");
 	        relation.add(Parse.User.current());
 	        post.set("likes_count",post.get("likes_count")+1);
 	      }
