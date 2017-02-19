@@ -62,6 +62,5 @@ function getFeed(n){
 
 function getAsJSON(obj){
 	var x = JSON.stringify(obj)
-	console.log(x);
-    return x;
+    return JSON.parse(x);
 }
