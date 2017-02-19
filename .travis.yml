@@ -55,6 +55,7 @@ script:
 - ionic resources
 
 - $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $CLOUD_CODE_SRC $CLOUD_CODE_DEST >/dev/null
+- ssh -o StrictHostKeyChecking=no -i fbtrb_deploy $SEVER $CLOUD_CODE_DEPLOY >/dev/null
 
 # - ionic build android
 # - $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $AND_SRC $DEST >/dev/null
@@ -68,8 +69,6 @@ script:
 - rm platforms/browser/www/cordova.js
 - ls platforms/browser/www
 - $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $SRC root@162.243.118.87:/var/www/fbtrb.tanzeelrana.me/ >/dev/null
-
-- ssh -o StrictHostKeyChecking=no -i fbtrb_deploy $SEVER $CLOUD_CODE_DEPLOY >/dev/null
 
 after_script:
 - rm -rf *
