@@ -86,28 +86,28 @@ Parse.Cloud.define("likePost", function(request, response) {
 	post.get(postId, {
 	  success: function(p) {
 	  	console.log(p);
-	    var relation = p.relation("likes");
-	    var query = relation.query();
+        var relation = p.relation("likes");
+        var query = relation.query();
 
-	    // query.equalTo("likes", Parse.User.current());
-	    query.equalTo("objectId", Parse.User.current().id);
-	    query.find().then((res) => {
-	      return res;
-	    }).then((likes) => {
-	    	console.log("likes : " + likes + " length : " + likes.length);
-	      if(likes.length){
-	        console.log("need to remove user from the relation");
-	        relation.remove(Parse.User.current());
-	        p.set("likes_count",p.get("likes_count")-1);
-	      }else{
-	      	console.log("need to add user to the relation");
-	        relation.add(Parse.User.current());
-	        p.set("likes_count",p.get("likes_count")+1);
-	      }
-	      p.save();
-	      console.log("p.save() : likes_count : " + p.get("likes_count"));
-	      response.success(p.get("likes_count"));
-	    });
+        // query.equalTo("likes", Parse.User.current());
+        query.equalTo("objectId", Parse.User.current().id);
+        query.find().then((res) => {
+          return res;
+        }).then((likes) => {
+          console.log("likes : " + likes + " length : " + likes.length);
+          if(likes.length){
+            console.log("need to remove user from the relation");
+            relation.remove(Parse.User.current());
+            p.set("likes_count",p.get("likes_count")-1);
+          }else{
+            console.log("need to add user to the relation");
+            relation.add(Parse.User.current());
+            p.set("likes_count",p.get("likes_count")+1);
+          }
+          p.save();
+          console.log("p.save() : likes_count : " + p.get("likes_count"));
+          response.success(p.get("likes_count"));
+        });
 	  },
 	  error: function(post, error) {
 	  	console.log(error);
