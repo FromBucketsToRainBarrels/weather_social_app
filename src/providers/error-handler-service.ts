@@ -55,7 +55,7 @@ export class ErrorHandlerService {
 
     if(obj.error){
       console.error(error);
-      // this.events.publish('error-handler-service-event', obj.error.message);
+      this.events.publish('error-handler-service-event', obj.error.message);
     }
     this.connectivityService.testInternetAccess();    
     if(obj.retry){

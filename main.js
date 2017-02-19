@@ -60,13 +60,13 @@ function getFeed(n){
 	  mainQuery.include("user");
 	  mainQuery.include("user.information");
 	  mainQuery.include("comments");
-	  mainQuery.include("likes");
-	  
+	  mainQuery.include("likes");	  
 	  mainQuery.descending("createdAt");
 	  mainQuery.equalTo("isDeleted", false);
 
 	  mainQuery.find({
 	    success: function(posts) {
+
 	      resolve(posts);
 	    },
 	    error: function(error) {
@@ -77,8 +77,75 @@ function getFeed(n){
 	});
 }
 
+Parse.Cloud.define("likePost", function(request, response) {
+  	
+  	var Post = Parse.Object.extend("Post");
+	var post = new Parse.Query(Post);
+	query.get(request.params.post, {
+	  success: function(post) {
+	    var query = new Parse.Query("Post");
+	    var relation = post.relation("likes");
+	    query.equalTo("likes", Parse.User.current());
+	    query.equalTo("objectId", post.id);
+	    query.find().then((response) => {
+	      return response;
+	    }).then((likes) => {
+	      if(likes.length){
+	        relation.remove(Parse.User.current());
+	        post.set("likes_count",post.get("likes_count")-1);
+	      }else{
+	        relation.add(Parse.User.current());
+	        post.set("likes_count",post.get("likes_count")+1);
+	      }
+	      post.save();
+	      response.success(post.get("likes_count"));
+	    });
+	  },
+	  error: function(post, error) {
+	    response.error(error);
+	  }
+	});
+});
+
+
 function getAsJSON(obj){
 	var x = JSON.stringify(obj);
 	var x = x.replace(/localhost/g,'162.243.118.87');
     return x;
 }
+
+function likeUnlikePost(post){
+    var me = this;
+    var query = new Parse.Query("Post");
+    var relation = post.relation("likes");
+    query.equalTo("likes", Parse.User.current());
+    query.equalTo("objectId", post.id);
+    query.find().then((response) => {
+      return response;
+    }).then((likes) => {
+      console.log(likes);
+      if(likes.length){
+        relation.remove(Parse.User.current());
+        post.set("likes_count",post.get("likes_count")-1);
+      }else{
+        relation.add(Parse.User.current());
+        post.set("likes_count",post.get("likes_count")+1);
+      }
+      post.save();
+    })
+}
+
+function getComments(post){
+	return new Promise((resolve, reject) => {
+	  var relation = post.relation("comments");
+	  var query = relation.query();
+	  query.ascending("createdAt");
+	  query.find({
+	    success: function(comments){
+	      resolve(comments);
+	    },
+	    error: function(comments,error){
+	      reject(error);
+	    }
+  	});
+});

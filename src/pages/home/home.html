@@ -44,7 +44,7 @@
     </ion-item>
   </ion-card>
 
-  <ion-card *ngFor="let post of feed?.posts">
+  <ion-card *ngFor="let post of feed?.posts let i = index">
     <ion-item>
       <ion-avatar item-left>
         <lazy-img src="{{post.user.image.url}}"></lazy-img>
@@ -64,7 +64,7 @@
 
     <ion-row>
       
-      <ion-col center text-center (click)="feedService.likeUnlikePost(post)">
+      <ion-col center text-center (click)="likePost(post,i)">
         <button ion-button icon-left clear small>
           <ion-icon name="thumbs-up"></ion-icon>
           <div>{{post.likes_count}} Likes</div>

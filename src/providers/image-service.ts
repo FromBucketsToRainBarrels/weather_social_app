@@ -17,7 +17,7 @@ export class ImageService {
   	public http: Http,
   	public parse: ParseProvider
   ) {
-    console.log('Hello ImageUploadService Provider');
+    // console.log('Hello ImageUploadService Provider');
   }
 
   getImage(fileInput){

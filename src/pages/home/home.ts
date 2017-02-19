@@ -52,7 +52,7 @@ export class HomePage {
         me.feed.posts = me.feed.posts.concat(posts);
         me.feed.start++;
         me.parse.saveFeed(me.feed);
-        me.cdr.detectChanges();
+        // me.cdr.detectChanges();
       }
       me.infiniteScroll.complete();
     });
@@ -64,12 +64,19 @@ export class HomePage {
     me.events.subscribe("getFeedEvent", (feed) =>{
       console.log(feed);
       me.feed = feed;
-      me.cdr.detectChanges();
-      if(feed.posts.length == 0){
-        me.parse.updateFeed();
-      }
     });
     me.parse.getFeed();
+  }
+
+  likePost(post,index){
+    let me = this;
+    if(post.liked){
+      post.likes_count--;
+    }else{
+      post.likes_count++;
+    }
+    post.liked = !post.liked;
+    me.parse.likePost(post,index);
   }
 
   alert(message) {

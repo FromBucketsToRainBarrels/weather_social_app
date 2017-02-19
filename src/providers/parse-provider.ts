@@ -95,6 +95,9 @@ export class ParseProvider {
       return response;
     }).then((feed) => {
       me.events.publish("getFeedEvent", feed);
+      if(!me.user.userParseObj.saveData){
+        me.updateFeed();
+      }
     }).catch((ex) => {
       console.error('Error getting feed from localDBStorage: ', ex);
     });
@@ -102,29 +105,52 @@ export class ParseProvider {
 
   updateFeed(){
     let me = this;
-    Parse.Cloud.run('updateFeed', { 
-      user: me.user.userParseObj 
-    }).then(function(feed) {
-      feed = JSON.parse(feed);
-      me.localDBStorage.saveFeed(feed);
-      me.events.publish("updateFeedEvent", feed);
-    });
+    if(me.connectivityService.hasInernet()){
+      Parse.Cloud.run('updateFeed', { 
+        user: me.user.userParseObj 
+      }).then(function(feed) {
+        feed = JSON.parse(feed);
+        me.localDBStorage.saveFeed(feed);
+        me.events.publish("updateFeedEvent", feed);
+      });
+    }else{
+      me.errorHandlerService.handleError(false,{message:"No internet access"},"updateFeed","ParseProvider",[]);
+    }
   }
 
   getMoreFeed(n){
     let me = this;
-    Parse.Cloud.run('getMoreFeed', { 
-      user: me.user.userParseObj,
-      start: n
-    }).then(function(posts) {
-      posts = JSON.parse(posts);
-      me.events.publish("getMoreFeedEvent", posts);
-    });
+    if(me.connectivityService.hasInernet()){
+      Parse.Cloud.run('getMoreFeed', { 
+        user: me.user.userParseObj,
+        start: n
+      }).then(function(posts) {
+        posts = JSON.parse(posts);
+        me.events.publish("getMoreFeedEvent", posts);
+      });
+    }else{
+      me.events.publish("getMoreFeedEvent", []);
+      me.errorHandlerService.handleError(false,{message:"No internet access"},"getMoreFeed","ParseProvider",[]);
+    }
   }
 
   saveFeed(feed){
     let me = this;
     me.localDBStorage.saveFeed(feed);
+  }
+
+  likePost(post,index){
+    let me = this;
+    if(me.connectivityService.hasInernet()){
+      Parse.Cloud.run('likePost', { 
+        user: me.user.userParseObj,
+        post: post.id
+      }).then(function(post_like_count) {
+        console.log("post_like_count : "  + post_like_count);
+      });
+    }else{
+      me.errorHandlerService.handleError(true,{message:"No internet access"},"likePost","ParseProvider",me.getArguments(arguments));
+    }
   }
 
   getUser(){
@@ -210,6 +236,7 @@ export class ParseProvider {
       user.set("name",me.user.userParseObj.name);
       user.set("phone",me.user.userParseObj.phone);
       user.set("email",me.user.userParseObj.email);
+      user.set("saveData",me.user.userParseObj.saveData);
       
       if(me.user.userParseObj.image.upload){
         user.set("image",me.user.userParseObj.image.parseImageFile);
