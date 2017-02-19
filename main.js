@@ -77,7 +77,7 @@ function getFeed(n){
 	});
 }
 
-Parse.Cloud.define("likePost", function(request, response) {
+Parse.Cloud.define("likePost", function(request, response, user) {
   	console.log(user);
   	// var postId = request.params.post;
    //  console.log("postId : " + postId);
