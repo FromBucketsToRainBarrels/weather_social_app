@@ -1,5 +1,5 @@
 //this is cloud code for the application
-var pagination_limit = 1;
+var pagination_limit = 2;
 module.paths.push('/usr/local/lib/node_modules');
 
 var stringify = require('node-stringify');
@@ -19,7 +19,7 @@ Parse.Cloud.define("updateFeed", function(request, response) {
   getFeed(0).then((response) => {
 	  return response;
 	}).then((feed) => {
-	  var feedObj = {posts: getAsJSON(feed), start:0};
+	  var feedObj = {posts: getAsJSONString(feed), start:0};
 	  response.success(feedObj);
 	}).catch((ex) => {
 	  response.error(ex);
@@ -60,7 +60,6 @@ function getFeed(n){
 	});
 }
 
-function getAsJSON(obj){
-	var x = JSON.stringify(obj)
-    return JSON.parse(x);
+function (obj){
+    return JSON.stringify(obj);
 }
