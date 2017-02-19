@@ -1,5 +1,7 @@
 //this is cloud code for the application
 var pagination_limit = 1;
+var stringify = require('node-stringify');
+var parser = require('json-parser');
 
 Parse.Cloud.define("getUserStations", function(request, response) {
   
@@ -57,8 +59,16 @@ function getFeed(n){
 }
 
 function getAsJSON(obj){
-	console.log(obj)
-	var x = JSON.parse(JSON.stringify(obj));
-    console.log(x);
-    return x;
+	
+	var x = stringify(obj);
+	console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+	console.log(x)
+	console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+	
+	var object = parser.parse(x);
+	console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+	console.log(object)
+	console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+    
+    return object;
 }
