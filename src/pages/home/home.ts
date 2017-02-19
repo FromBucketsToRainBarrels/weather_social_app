@@ -20,6 +20,11 @@ export class HomePage {
   public status_model: any;
   private currPost: any;
   private infiniteScroll: any;
+
+  //event handlers
+  private getMoreFeedEvent: (posts) => void;
+  private updateFeedEvent: (feed) => void;
+  private getFeedEvent: (feed) => void;
   
   constructor(
   	public navCtrl: NavController, 
@@ -35,37 +40,22 @@ export class HomePage {
     this.status_model = {};
     this.comment_box_models = {};
     this.comments_models = {};
-    this.subscribeFeedEvents();
+  }
+
+  ionViewWillEnter(){
+    this.initializeEventHandlers();
+    this.subscribeEventHandlers();
+    this.parse.getFeed();
+  }
+
+  ionViewWillLeave() {
+    this.unsubscribeEventHandlers();
   }
 
   doInfinite(infiniteScroll) {
     var me = this;
     me.infiniteScroll = infiniteScroll;
     me.parse.getMoreFeed(me.feed.start);
-  }
-
-  subscribeFeedEvents(){
-    let me = this;
-
-    me.events.subscribe("getMoreFeedEvent", (posts) =>{
-      if(posts.length!=0){
-        me.feed.posts = me.feed.posts.concat(posts);
-        me.feed.start++;
-        me.parse.saveFeed(me.feed);
-        // me.cdr.detectChanges();
-      }
-      me.infiniteScroll.complete();
-    });
-    me.events.subscribe("updateFeedEvent", (feed) =>{
-      console.log(feed);
-      me.feed = feed;
-      me.cdr.detectChanges();
-    });
-    me.events.subscribe("getFeedEvent", (feed) =>{
-      console.log(feed);
-      me.feed = feed;
-    });
-    me.parse.getFeed();
   }
 
   likePost(post,index){
@@ -88,6 +78,47 @@ export class HomePage {
     alert.present();
   }
 
-  
+  initializeEventHandlers(){
+    let me = this;
+    this.getMoreFeedEvent = (posts) => {
+      if(posts.length!=0){
+        me.feed.posts = me.feed.posts.concat(posts);
+        me.feed.start++;
+        me.parse.saveFeed(me.feed);
+        // me.cdr.detectChanges();
+      }
+      me.infiniteScroll.complete();
+    };
+    this.updateFeedEvent = (feed) => {
+      console.log(feed);
+      me.feed = feed;
+      me.cdr.detectChanges();
+    };
+    this.getFeedEvent = (feed) => {
+      console.log(feed);
+      me.feed = feed;
+    };
+  }
+
+  subscribeEventHandlers(){
+    this.events.subscribe('updateFeedEvent', this.updateFeedEvent);
+    this.events.subscribe('getMoreFeedEvent', this.getMoreFeedEvent);
+    this.events.subscribe('getFeedEvent', this.getFeedEvent);
+  }
+
+  unsubscribeEventHandlers(){
+    if (this.updateFeedEvent) {
+      this.events.unsubscribe('updateFeedEvent', this.updateFeedEvent);
+      this.updateFeedEvent = undefined;
+    }
+    if (this.getMoreFeedEvent) {
+      this.events.unsubscribe('getMoreFeedEvent', this.getMoreFeedEvent);
+      this.getMoreFeedEvent = undefined;
+    }
+    if (this.getFeedEvent) {
+      this.events.unsubscribe('getFeedEvent', this.getFeedEvent);
+      this.getFeedEvent = undefined;
+    }
+  }
 
 }
