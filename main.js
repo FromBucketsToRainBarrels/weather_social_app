@@ -63,6 +63,7 @@ function getFeed(n){
 }
 
 function getAsJSON(obj){
-	var x = JSON.stringify(obj)    
-    return obj;
+	var x = JSON.stringify(obj);
+	var replaced = x.replace(/localhost/g,'162.243.118.87');
+    return x;
 }
