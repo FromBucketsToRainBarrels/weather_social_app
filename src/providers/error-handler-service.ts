@@ -52,7 +52,7 @@ export class ErrorHandlerService {
       context: context,
       args: args
     };
-
+    console.log(obj);
     if(obj.error){
       console.error(error);
       this.events.publish('error-handler-service-event', obj.error.message);

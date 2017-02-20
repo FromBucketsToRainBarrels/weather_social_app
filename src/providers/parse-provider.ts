@@ -45,7 +45,7 @@ export class ParseProvider {
     console.log("syncServiceExecuteJob");
     console.log(val);
     if(this.constructor.name == val.context){
-      this[val.function](val.args);
+      this[val.function].apply(this,val.args);
     }
   }
 
@@ -84,6 +84,24 @@ export class ParseProvider {
         me.events.publish("loginFail",context);
 			  me.errorHandlerService.handleError(false, {message:"No internet access"}, "login", "ParseProvider", me.getArguments(arguments));
   		}
+  }
+
+  getComments(){
+    let me = this;
+    this.localDBStorage.getComments().then((response) => {
+      if(!response){
+        response = {};
+      }
+      return response;
+    }).then((comments) => {
+      me.events.publish("getCommentsEvent", comments);
+      if(!me.user.userParseObj.saveData){
+        // me.updateFeed();
+        console.log("need to fetch updated comments as user has set his settings to not save data");
+      }
+    }).catch((ex) => {
+      console.error('Error getting comments from localDBStorage: ', ex);
+    });
   }
 
   getFeed(){
@@ -146,13 +164,52 @@ export class ParseProvider {
         post: post.objectId,
         user: Parse.User.current().id
       }).then(function(data) {
-        post.likes_count = data.count;
-        post.liked = data.liked;
-        console.log("post_like_count : "  + data.count + " liked : " + data.liked);
+        data.post = post;
+        data.index = index;
+        me.events.publish('postLikeEvent',data);
       });
     }else{
-      console.log("error happened");
-      me.errorHandlerService.handleError(true,{message:"No internet access"},"likePost","ParseProvider",me.getArguments(arguments));
+      me.errorHandlerService.handleError(true,{message:"No internet access"},"likePost","ParseProvider",[post,index]);
+    }
+  }
+
+  getPostComments(post,page){
+    let me = this;
+    if(me.connectivityService.hasInernet()){
+      Parse.Cloud.run('getPostComments', { 
+        post:post.objectId,
+        page:page
+      }).then(function(comments) {
+        comments = JSON.parse(comments);
+        me.localDBStorage.savePostComments(post,comments).then((response) => {
+          return response;
+        }).then((c) => {
+          me.events.publish('getCommentsEvent',c);
+        }).catch((ex) => {
+          console.error('Error saving post  comments to localDBStorage: ', ex);
+        });
+      });
+    }else{
+      me.errorHandlerService.handleError(true,{message:"No internet access"},"likePost","ParseProvider",[post]);
+    }
+  }
+
+  saveComments(comments){
+    let me = this;
+    me.localDBStorage.saveComments(comments);
+  }
+
+  commentPost(post,c){
+    let me = this;
+    if(me.connectivityService.hasInernet()){
+      Parse.Cloud.run('commentPost', { 
+        post:post.objectId,
+        c:c
+      }).then(function(comment) {
+        me.events.publish('postCommentEvent',comment);
+      });
+    }else{
+      me.errorHandlerService.handleError(true,{message:"No internet access"},"likePost","ParseProvider",[post,c]);
     }
   }
 

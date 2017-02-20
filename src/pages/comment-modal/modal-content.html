@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      {{post.likes_count}} Like(s)
+    </ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">
+        <ion-icon name="md-close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="comments[post.objectId] && comments[post.objectId].show">
+    <ion-item *ngFor="let comment of comments[post.objectId].comments" text-wrap>
+      <ion-avatar item-left>
+        <img src="{{comment.user.image?.url}}">
+      </ion-avatar>
+      <strong><small>{{comment.user.username}}</small></strong><br>
+      <small>{{comment.text}}</small>
+    </ion-item>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+        <ion-item >
+          <ion-input id="post_comment_{{post.objectId}}" placeholder="Write a comment" [(ngModel)]="comment_box_models[post.objectId]"></ion-input>
+          <button ion-button round item-right icon-left (click)="commentPost(post)">
+            <ion-icon name="ios-send"></ion-icon>
+          </button>
+        </ion-item>
+  </ion-toolbar>
+</ion-footer>

@@ -16,7 +16,7 @@ import { ParseProvider } from '../providers/parse-provider';
 import { ImageService } from '../providers/image-service';
 import { LazyImgComponent } from '../components/lazy-img.component';
 
-
+import {CommentsModal} from '../pages/comment-modal/modal-content';
 
 @NgModule({
   declarations: [
@@ -25,7 +25,8 @@ import { LazyImgComponent } from '../components/lazy-img.component';
     RegisterPage,
     HomePage,
     LazyImgComponent,
-    UserPage
+    UserPage,
+    CommentsModal
 
   ],
   imports: [
@@ -62,7 +63,8 @@ import { LazyImgComponent } from '../components/lazy-img.component';
     RegisterPage,
     HomePage,
     LazyImgComponent,
-    UserPage
+    UserPage,
+    CommentsModal
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},
     ParseProvider,

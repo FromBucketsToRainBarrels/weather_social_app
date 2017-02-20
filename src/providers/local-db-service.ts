@@ -28,6 +28,36 @@ export class LocalDBService {
   	});
   }
 
+  savePostComments(p,c){
+    let me = this;
+    return new Promise((resolve, reject) => {
+      me.storage.get('comments').then((comments) => {
+        
+        if(!comments[p.objectId]){
+          comments[p.objectId] = {start:0, comments:[]};
+        }
+        comments[p.objectId].start++;
+        comments[p.objectId].comments.concat(c);
+        me.saveComments(comments);
+        resolve(comments);
+      });
+    });
+  }
+
+  getComments(){
+    let me = this;
+    return new Promise((resolve, reject) => {
+      me.storage.get('comments').then((comments) => {
+        resolve(comments);
+      });
+    });
+  }
+
+  saveComments(commens){
+    let me = this;
+    me.storage.set('commens', commens);
+  }
+
   getFeed(){
     let me = this;
     return new Promise((resolve, reject) => {

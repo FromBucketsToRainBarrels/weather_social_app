@@ -1,6 +1,7 @@
 //this is cloud code for the application
 
 var pagination_limit = 7;
+var comments_pagination_limit = 10;
 module.paths.push('/usr/local/lib/node_modules');
 
 // var stringify = require('node-stringify');
@@ -111,6 +112,88 @@ Parse.Cloud.define("likePost", function(request, response) {
     });
 });
 
+Parse.Cloud.define("getPostComments", function(request, response) {
+	getPostById(request.params.post).then((_p_res) => {
+		return _p_res;
+	}).then((post) => {
+		getPostComments(post).then((_c_res) => {
+			return _c_res;
+		}).then((comments) => {
+			response.success(getAsJSON(comments));
+		}).catch((error) => {
+			response.error(error);
+		});
+	}).catch((error) => {
+		response.error(error);
+	});
+});
+
+Parse.Cloud.define("commentPost", function(request, response) {
+	
+	getPostById(request.params.post).then((res) => {
+		return res;
+	}).then((post) => {
+		var Comment = Parse.Object.extend("Comment");
+		var comment = new Comment();
+		comment.set("user", request.user);
+		comment.set("post", post);
+		comment.set("isDeleted", false);
+		comment.set("type","text");
+		comment.set("text",request.params.c);
+		comment.save(null, {
+			success: function(comment) {
+			  var relation = post.relation("comments");
+			  relation.add(comment);
+			  post.set("comments_count",post.get("comments_count") + 1);
+			  post.save(null, {
+			    success: function(p){
+			      response.success(getAsJSON(comment));
+			    },
+			    error: function(post, error){
+			      response.error(error);
+			    }
+			  });
+			},
+			error: function(comment, error) {
+			  console.log("Error : " + error.message);
+			  response.error(error);
+			}
+		});
+	}).catch((error) => {
+		response.error(error);
+	});
+});
+
+function getPostById(postId){
+	return new Promise((resolve, reject) => {
+		var Post = Parse.Object.extend("Post");
+	    var post = new Parse.Query(Post);
+	    post.get(postId, {
+	      success: function(p) {
+	        resolve(p);
+	      },
+	      error: function(post, error) {
+	        reject(error);
+	      }
+	    });
+	});
+}
+
+function getPostComments(post){
+    return new Promise((resolve, reject) => {
+      var relation = post.relation("comments");
+      var query = relation.query();
+      query.ascending("createdAt");
+      query.find({
+        success: function(comments){
+          resolve(comments);
+        },
+        error: function(comments,error){
+          reject(error);
+        }
+      });
+    });
+}
 
 function getAsJSON(obj){
 	var x = JSON.stringify(obj);

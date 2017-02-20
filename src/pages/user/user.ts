@@ -36,9 +36,7 @@ export class UserPage {
 
 	doUploadProfilePic(fileInput: any){
 		var me = this;
-		console.log(fileInput);
 		me.imageSerive.getImage(fileInput).then((img) => {
-			console.log(img);
 			if(!this.parse.user.userParseObj.image)me.user.image = {};
 			this.parse.user.userParseObj.image = img
         }).catch((ex) => {

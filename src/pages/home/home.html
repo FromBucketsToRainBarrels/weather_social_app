@@ -38,8 +38,8 @@
       <ion-textarea elastic [(ngModel)]="status_model.text" ></ion-textarea>
     </ion-item>
     <ion-item>
-      <ion-icon name="ios-camera" item-left (click)="selectPic()"></ion-icon>
-      <input hidden="true" id="profile_upload" (change)="getPic($event)" type="file">
+      <ion-icon name="ios-camera" item-left (click)="selectStatusPic()"></ion-icon>
+      <input hidden="true" id="status_pic" (change)="getPic($event)" type="file">
       <ion-badge ion-button item-right  (click)="addPost()"><ion-icon name="ios-send"></ion-icon>Post</ion-badge>
     </ion-item>
   </ion-card>
