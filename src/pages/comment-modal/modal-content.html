@@ -12,7 +12,7 @@
 </ion-header>
 
 <ion-content>
-  <div *ngIf="comments[post.objectId] && comments[post.objectId].show">
+  <div *ngIf="comments[post.objectId]">
     <ion-item *ngFor="let comment of comments[post.objectId].comments" text-wrap>
       <ion-avatar item-left>
         <img src="{{comment.user.image?.url}}">

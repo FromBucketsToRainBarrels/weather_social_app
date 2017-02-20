@@ -15,7 +15,7 @@ export class CommentsModal {
   public loader: any;
 
   //event listeners
-  private getPostCommentsEvent: (data) => void;
+  private getCommentsEvent: (comments) => void;
 
   constructor(
     public platform: Platform,
@@ -46,30 +46,31 @@ export class CommentsModal {
   }
 
   initializeEventHandlers(){
-    this.initializeGetPostCommentsEventHandler();
+    this.initializeGetCommentsEventHandler();
   }
 
   subscribeEventHandlers(){
-    this.events.subscribe('getPostCommentsEvent', this.getPostCommentsEvent);
+    this.events.subscribe('getCommentsEvent', this.getCommentsEvent);
   }
 
   unsubscribeEventHandlers(){
-    this.unsubscribeGetPostCommentsEventHandler();
+    this.unsubscribeGetCommentsEventHandler();
   }
 
-  initializeGetPostCommentsEventHandler(){
+  initializeGetCommentsEventHandler(){
     let me = this;
-    this.getPostCommentsEvent = (data) => {
+    this.getCommentsEvent = (comments) => {
       // this.comments[data.post.objectId].comments = this.comments[data.post.objectId].comments.concat(data.comments);
       // this.comments[data.post.objectId].start++;
-      console.log(data);
+      me.comments = comments;
+      console.log(comments);
     };
   }
 
-  unsubscribeGetPostCommentsEventHandler(){
-    if(this.getPostCommentsEvent){
-      this.events.unsubscribe('getPostCommentsEvent', this.getPostCommentsEvent);
-      this.getPostCommentsEvent = undefined;
+  unsubscribeGetCommentsEventHandler(){
+    if(this.getCommentsEvent){
+      this.events.unsubscribe('getCommentsEvent', this.getCommentsEvent);
+      this.getCommentsEvent = undefined;
     }
   }
 

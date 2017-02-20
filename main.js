@@ -16,7 +16,6 @@ Parse.Cloud.define("getUserStations", function(request, response) {
 Parse.Cloud.define("updateFeed", function(request, response) {
   
   console.log(JSON.stringify(request));
-
   //updateFeed will always pass a 0 index as user is asking for new posts on his/her feed
   getFeed(0).then((response) => {
 	  return response;
@@ -27,7 +26,6 @@ Parse.Cloud.define("updateFeed", function(request, response) {
 	}).catch((ex) => {
 	  response.error(ex);
 	});
-
 });
 
 Parse.Cloud.define("getMoreFeed", function(request, response) {
@@ -45,44 +43,10 @@ Parse.Cloud.define("getMoreFeed", function(request, response) {
 
 });
 
-function getFeed(n){
-	return new Promise((resolve, reject) => {
-	  
-	  var textPost = new Parse.Query("Post");
-	  textPost.equalTo("type", "text");
-	  var imagePost = new Parse.Query("Post");
-	  imagePost.equalTo("type", "photo");
-
-	  var mainQuery = Parse.Query.or(textPost, imagePost);
-	  
-	  mainQuery.descending('createdAt');
-	  mainQuery.limit(pagination_limit);
-	  mainQuery.skip(n*pagination_limit);
-	  mainQuery.include("user");
-	  mainQuery.include("user.information");
-	  mainQuery.include("comments");
-	  mainQuery.include("likes");	  
-	  mainQuery.descending("createdAt");
-	  mainQuery.equalTo("isDeleted", false);
-
-	  mainQuery.find({
-	    success: function(posts) {
-
-	      resolve(posts);
-	    },
-	    error: function(error) {
-	      console.log("Error: " + error.code + " " + error.message);
-	      reject(error);
-	    }
-	  });
-	});
-}
-
 Parse.Cloud.define("likePost", function(request, response) {
   	var postId = request.params.post;
     var Post = Parse.Object.extend("Post");
     var post = new Parse.Query(Post);
-    
     post.get(postId, {
       success: function(p) {
         var relation = p.relation("likes");
@@ -164,6 +128,34 @@ Parse.Cloud.define("commentPost", function(request, response) {
 	});
 });
 
+function getFeed(n){
+	return new Promise((resolve, reject) => {
+	  var textPost = new Parse.Query("Post");
+	  textPost.equalTo("type", "text");
+	  var imagePost = new Parse.Query("Post");
+	  imagePost.equalTo("type", "photo");
+	  var mainQuery = Parse.Query.or(textPost, imagePost);
+	  mainQuery.descending('createdAt');
+	  mainQuery.limit(pagination_limit);
+	  mainQuery.skip(n*pagination_limit);
+	  mainQuery.include("user");
+	  mainQuery.include("user.information");
+	  mainQuery.include("comments");
+	  mainQuery.include("likes");	  
+	  mainQuery.descending("createdAt");
+	  mainQuery.equalTo("isDeleted", false);
+	  mainQuery.find({
+	    success: function(posts) {
+	      resolve(posts);
+	    },
+	    error: function(error) {
+	      console.log("Error: " + error.code + " " + error.message);
+	      reject(error);
+	    }
+	  });
+	});
+}
+
 function getPostById(postId){
 	return new Promise((resolve, reject) => {
 		var Post = Parse.Object.extend("Post");
@@ -183,6 +175,7 @@ function getPostComments(post){
     return new Promise((resolve, reject) => {
       var relation = post.relation("comments");
       var query = relation.query();
+      query.include("user");
       query.ascending("createdAt");
       query.find({
         success: function(comments){

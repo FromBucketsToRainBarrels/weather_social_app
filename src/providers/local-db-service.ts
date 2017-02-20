@@ -32,12 +32,12 @@ export class LocalDBService {
     let me = this;
     return new Promise((resolve, reject) => {
       me.storage.get('comments').then((comments) => {
-        
+        if(comments == null){comments={}};
         if(!comments[p.objectId]){
           comments[p.objectId] = {start:0, comments:[]};
         }
         comments[p.objectId].start++;
-        comments[p.objectId].comments.concat(c);
+        comments[p.objectId].comments = comments[p.objectId].comments.concat(c);
         me.saveComments(comments);
         resolve(comments);
       });
@@ -48,14 +48,16 @@ export class LocalDBService {
     let me = this;
     return new Promise((resolve, reject) => {
       me.storage.get('comments').then((comments) => {
+        console.log(comments);
         resolve(comments);
       });
     });
   }
 
-  saveComments(commens){
+  saveComments(comments){
     let me = this;
-    me.storage.set('commens', commens);
+    console.log(comments);
+    me.storage.set('comments', comments);
   }
 
   getFeed(){

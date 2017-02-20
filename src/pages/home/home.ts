@@ -107,7 +107,7 @@ export class HomePage {
         me.feed.posts = me.feed.posts.concat(posts);
         me.feed.start++;
         me.parse.saveFeed(me.feed);
-        // me.cdr.detectChanges();
+        me.cdr.detectChanges();
       }
       me.infiniteScroll.complete();
     };
@@ -119,6 +119,7 @@ export class HomePage {
     this.getFeedEvent = (feed) => {
       console.log(feed);
       me.feed = feed;
+      me.cdr.detectChanges();
     };
 
     this.postLikeEvent = (data) => {
