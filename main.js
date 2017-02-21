@@ -144,29 +144,22 @@ Parse.Cloud.define("savePost", function(request, response) {
 		post.set("type","photo");
 		var Image = Parse.Object.extend("Image");
 		var img = new Image();
-		getImage(fileInput).then((img) => {
-	      if(img){
-	        img.set("image",img.parseImageFile);
-			img.save(null, {
-			  success: function(img){
-			    post.set("images",[img.get('image').url()]);
-			    savePost(post).then((p) => {
-			    	response.success(getAsJSON(p));
-			    }).catch((ex) => {
-			      console.error(ex);
-			      response.error(ex)
-			    });
-			  },
-			  error: function(img,error){
-			    console.error(error);
-			    response.error(ex)
-			  }
-			});
-	      }
-	    }).catch((ex) => {
-	      console.error(ex);
-	      response.error(ex)
-	    });
+		img.set("image",getParseFile(post_data.img.name, { base64: post_data.img.base64 }));
+		img.save(null, {
+		  success: function(img){
+		    post.set("images",[img.get('image').url()]);
+		    savePost(post).then((p) => {
+		    	response.success(getAsJSON(p));
+		    }).catch((ex) => {
+		      console.error(ex);
+		      response.error(ex)
+		    });
+		  },
+		  error: function(img,error){
+		    console.error(error);
+		    response.error(ex)
+		  }
+
 	}else{
 		post.set("type","text");
 		savePost(post).then((p) => {
@@ -190,30 +183,6 @@ function savePost(post){
       });
     });
 }
-
-// //getImage
-// function getImage(fileInput){
-// 	var reader = new FileReader();
-// 	var img = {upload:false};
-// 	return new Promise((resolve, reject) => { 
-// 	  	if (fileInput.target.files.length == 1) {
-// 		  	reader.onload = function (e : any) {
-// 			      if(e.target.result){
-// 			      	img['url'] = e.target.result;
-// 			      	img['upload'] = true;
-// 			      	img['parseImageFile'] = getParseFile(fileInput.target.files[0].name, { base64: e.target.result });
-// 			      	resolve(img);
-// 			      }else{
-// 			      	reject(img);
-// 			      }
-// 			  }
-// 			  console.log(fileInput.target.files[0]);
-// 			  reader.readAsDataURL(fileInput.target.files[0]);
-// 		}else{
-// 			reject(img);
-// 		}
-// 	});
-// }
 
 function getFeed(n){
 	return new Promise((resolve, reject) => {
@@ -282,8 +251,8 @@ function getAsJSON(obj){
 }
 
 // // name : String,  encoding : base64-encoded 
-// function getParseFile(name, encoding){
-//     name = name.replace(/[^a-zA-Z0-9_.]/g, '');
-//     var parseFile = new Parse.File( name, encoding);
-//     return parseFile;
-// }
+function getParseFile(name, encoding){
+    name = name.replace(/[^a-zA-Z0-9_.]/g, '');
+    var parseFile = new Parse.File( name, encoding);
+    return parseFile;
+}

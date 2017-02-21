@@ -26,12 +26,12 @@ export class ImageService {
 	let img = {upload:false};
 	return new Promise((resolve, reject) => { 
 	  	if (fileInput.target.files.length == 1) {
-		  
-		  
 		  	reader.onload = function (e : any) {
 			      if(e.target.result){
 			      	img['url'] = e.target.result;
 			      	img['upload'] = true;
+			      	img['base64'] = base64: e.target.result;
+			      	img['name'] = fileInput.target.files[0].name;
 			      	img['parseImageFile'] = me.parse.getParseFile(fileInput.target.files[0].name, { base64: e.target.result });
 			      	resolve(img);
 			      }else{
