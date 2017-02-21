@@ -121,7 +121,6 @@ export class HomePage {
     let img = {};
     me.imageSerive.getImage(fileInput).then((img) => {
       if(img){
-        img["fileInput"] = fileInput;
         me.status_model.img = img;
         console.log(me.status_model);
       }

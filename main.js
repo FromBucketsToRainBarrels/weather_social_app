@@ -140,7 +140,7 @@ Parse.Cloud.define("savePost", function(request, response) {
 	post.set("text",post_data.text);
 	post.set("likes_count",0);
 	post.set("comments_count",0);
-	if(post_data.img.upload){
+	if(post_data.img && post_data.img.upload){
 		post.set("type","photo");
 		var Image = Parse.Object.extend("Image");
 		var img = new Image();

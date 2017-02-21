@@ -244,7 +244,6 @@ export class ParseProvider {
   }
 
   addPost(post_data){
-    post_data = JSON.parse(JSON.stringify(post_data));
     let me = this;
     let now = new Date();
     let post = {};
@@ -259,6 +258,7 @@ export class ParseProvider {
     if(post_data.img && post_data.img.upload){
       post["type"] = "photo";
       post["images"] = [post_data.img.url];
+      post_data.img.parseImageFile = null;
     }else{
       post["type"] = "text";
     }
