@@ -246,8 +246,9 @@ export class ParseProvider {
   addPost(post_data){
     let me = this;
     let now = new Date();
+    post_data["objectId"] = now.toString()+"_post";
     let post = {};
-    post["objectId"] = now.toString()+"_post";
+    post["objectId"] = post_data.objectId;
     post["isLocal"] = true;
     post["user"]= me.user.userParseObj;
     post["isDeleted"] = false;
