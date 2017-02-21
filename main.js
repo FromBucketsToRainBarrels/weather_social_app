@@ -144,7 +144,7 @@ Parse.Cloud.define("savePost", function(request, response) {
 		post.set("type","photo");
 		var Image = Parse.Object.extend("Image");
 		var img = new Image();
-		img.set("image",getParseFile(post_data.img.name, { base64: post_data.img.base64 }));
+		img.set("image",getParseFile( post_data.img.name, { base64: post_data.img.base64 }));
 		img.save(null, {
 		  success: function(img){
 		    post.set("images",[img.get('image').url()]);
@@ -251,8 +251,8 @@ function getAsJSON(obj){
 }
 
 // // name : String,  encoding : base64-encoded 
-function getParseFile(name, encoding){
-    name = name.replace(/[^a-zA-Z0-9_.]/g, '');
-    var parseFile = new Parse.File( name, encoding);
-    return parseFile;
-}
+// function getParseFile(name, encoding){
+//     name = name.replace(/[^a-zA-Z0-9_.]/g, '');
+//     var parseFile = new Parse.File( name, encoding);
+//     return parseFile;
+// }
