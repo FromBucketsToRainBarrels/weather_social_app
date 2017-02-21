@@ -128,6 +128,95 @@ Parse.Cloud.define("commentPost", function(request, response) {
 	});
 });
 
+//savePost
+
+Parse.Cloud.define("savePost", function(request, response) {
+	
+	var post_data = request.params.post_data;
+	var Post = Parse.Object.extend("Post");
+	var post = new Post();
+	post.set("user", request.user);
+	post.set("isDeleted",false);
+	post.set("text",post_data.text);
+	post.set("likes_count",0);
+	post.set("comments_count",0);
+	if(post_data.img.upload){
+		post.set("type","photo");
+		var Image = Parse.Object.extend("Image");
+		var img = new Image();
+		getImage(fileInput).then((img) => {
+	      if(img){
+	        img.set("image",img.parseImageFile);
+			img.save(null, {
+			  success: function(img){
+			    post.set("images",[img.get('image').url()]);
+			    savePost(post).then((p) => {
+			    	response.success(getAsJSON(p));
+			    }).catch((ex) => {
+			      console.error(ex);
+			      response.error(ex)
+			    });
+			  },
+			  error: function(img,error){
+			    console.error(error);
+			    response.error(ex)
+			  }
+			});
+	      }
+	    }).catch((ex) => {
+	      console.error(ex);
+	      response.error(ex)
+	    });
+	}else{
+		post.set("type","text");
+		savePost(post).then((p) => {
+			response.success(getAsJSON(p));
+		}).catch((ex) => {
+		  console.error(ex);
+		  response.error(ex)
+		});
+	}
+});
+
+function savePost(post){
+    var me = this;
+    return new Promise((resolve, reject) => {
+      post.save(null, {
+        success: function(post){
+          resolve(post);
+        },
+        error: function(post,error){
+          reject(error);
+        }
+      });
+    });
+}
+
+//getImage
+function getImage(fileInput){
+	let me = this;
+	let reader = new FileReader();
+	let img = {upload:false};
+	return new Promise((resolve, reject) => { 
+	  	if (fileInput.target.files.length == 1) {
+		  	reader.onload = function (e : any) {
+			      if(e.target.result){
+			      	img['url'] = e.target.result;
+			      	img['upload'] = true;
+			      	img['parseImageFile'] = me.parse.getParseFile(fileInput.target.files[0].name, { base64: e.target.result });
+			      	resolve(img);
+			      }else{
+			      	reject(img);
+			      }
+			  }
+			  console.log(fileInput.target.files[0]);
+			  reader.readAsDataURL(fileInput.target.files[0]);
+		}else{
+			reject(img);
+		}
+	});
+}
+
 function getFeed(n){
 	return new Promise((resolve, reject) => {
 	  var textPost = new Parse.Query("Post");
@@ -192,4 +281,11 @@ function getAsJSON(obj){
 	var x = JSON.stringify(obj);
 	var x = x.replace(/localhost/g,'162.243.118.87');
     return x;
+}
+
+// name : String,  encoding : base64-encoded 
+function getParseFile(name, encoding){
+    name = name.replace(/[^a-zA-Z0-9_.]/g, '');
+    let parseFile = new Parse.File( name, encoding);
+    return parseFile;
 }

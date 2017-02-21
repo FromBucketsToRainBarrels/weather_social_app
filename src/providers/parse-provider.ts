@@ -227,7 +227,7 @@ export class ParseProvider {
         me.updatePostComments(post,c,JSON.parse(comment));
       });
     }else{
-      me.errorHandlerService.handleError(true,{message:"No internet access"},"likePost","ParseProvider",[post,c]);
+      me.errorHandlerService.handleError(true,{message:"No internet access"},"commentPost","ParseProvider",[post,c]);
     }
   }
 
@@ -241,6 +241,38 @@ export class ParseProvider {
         me.localDBStorage.saveComments(comments);
       }
     })
+  }
+
+  addPost(post_data){
+    let me = this;
+    let now = new Date();
+    let post = {};
+    post["objectId"] = now.toString()+"_post";
+    post["isLocal"] = true;
+    post["user"]= me.user.userParseObj;
+    post["isDeleted"] = false;
+    post["text"] = post_data.text;
+    post["likes_count"] = 0;
+    post["comments_count"] = 0;
+    post["img"] = post_data.img;
+    if(post_data.img && post_data.img.upload){
+      post["type"] = "photo";
+      post["images"] = [post_data.img.url];
+    }else{
+      post["type"] = "text";
+    }
+    me.savePost(post_data);
+    return post;
+  }
+
+  savePost(post_data){
+    let me = this;
+    
+    Parse.Cloud.run('savePost', { 
+      post_data: post_data 
+    }).then(function(post) {
+      console.log(JSON.parse(post));
+    });
   }
 
   getUser(){

@@ -24,11 +24,11 @@
 <ion-content padding>
 
   <!-- new status card goes here -->
-  <ion-card style="background-color: #8db9ea;">
-    <div *ngIf="status_model.attachment_photo">
+  <ion-card >
+    <div *ngIf="status_model?.img?.upload">
       <ion-item>
         <ion-thumbnail item-left>
-          <img  src="{{status_model.attachment_photo_src}}"/>
+          <img  src="{{status_model?.img?.url}}"/>
         </ion-thumbnail>
         <ion-icon name="ios-trash" item-right (click)="removeImage()" ></ion-icon>
       </ion-item>
@@ -39,7 +39,7 @@
     </ion-item>
     <ion-item>
       <ion-icon name="ios-camera" item-left (click)="selectStatusPic()"></ion-icon>
-      <input hidden="true" id="status_pic" (change)="getPic($event)" type="file">
+      <input hidden="true" id="status_pic" (change)="doUploadStatusPic($event)" type="file">
       <ion-badge ion-button item-right  (click)="addPost()"><ion-icon name="ios-send"></ion-icon>Post</ion-badge>
     </ion-item>
   </ion-card>
@@ -65,15 +65,15 @@
 
     <ion-row>
       
-      <ion-col center text-center (click)="likePost(post,i)">
-        <button ion-button icon-left clear small>
+      <ion-col center text-center>
+        <button [disabled]="post.isLocal" ion-button icon-left clear small (click)="likePost(post,i)">
           <ion-icon name="thumbs-up"></ion-icon>
           <div>{{post.likes_count}} Likes</div>
         </button>
       </ion-col>
       
-      <ion-col center text-center (click)="openCommentsModal(post)">
-        <button ion-button icon-left clear small>
+      <ion-col center text-center>
+        <button [disabled]="post.isLocal" ion-button icon-left clear small (click)="openCommentsModal(post)">
           <ion-icon name="text"></ion-icon>
           <div>{{post.comments_count}} Comments</div>
         </button>

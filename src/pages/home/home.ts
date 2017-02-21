@@ -4,6 +4,7 @@ import { ParseProvider } from '../../providers/parse-provider';
 
 import {CommentsModal} from '../comment-modal/modal-content';
 import {PopoverPage} from '../../components/home-card-popover/home-card-popover';
+import { ImageService } from '../../providers/image-service';
 /*
   Generated class for the Home page.
 
@@ -48,8 +49,8 @@ export class HomePage {
     public events: Events,
     public cdr: ChangeDetectorRef,
     public modalCtrl:ModalController,
-    public popoverCtrl: PopoverController
-
+    public popoverCtrl: PopoverController,
+    public imageSerive: ImageService
   ) {
 
     let me = this;
@@ -99,6 +100,41 @@ export class HomePage {
     popover.present({
       ev: myEvent
     });
+  }
+
+  selectStatusPic(){
+    document.getElementById("status_pic").click();
+  }
+
+  addPost(){
+    let me = this;
+    if(this.status_model.text || me.status_model.attachment_photo){
+      let post = this.parse.addPost(this.status_model);
+      me.status_model = {};
+      me.feed.posts.unshift(post);
+      me.parse.saveFeed(me.feed);
+    }
+  }
+
+  doUploadStatusPic(fileInput: any){
+    let me = this;
+    let img = {};
+    me.imageSerive.getImage(fileInput).then((img) => {
+      if(img){
+        img["fileInput"] = fileInput;
+        me.status_model.img = img;
+        console.log(me.status_model);
+      }
+    }).catch((ex) => {
+      console.error(ex);
+    });
+  }
+
+  removeImage(){
+    var me = this;
+    me.status_model.attachment_photo_src = null;
+    me.status_model.attachment_photo = false;
+    me.status_model.attachment_photo_parseFile = null;
   }
 
   alert(message) {
