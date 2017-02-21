@@ -194,7 +194,6 @@ function savePost(post){
 
 //getImage
 function getImage(fileInput){
-	var me = this;
 	var reader = new FileReader();
 	var img = {upload:false};
 	return new Promise((resolve, reject) => { 
@@ -203,7 +202,7 @@ function getImage(fileInput){
 			      if(e.target.result){
 			      	img['url'] = e.target.result;
 			      	img['upload'] = true;
-			      	img['parseImageFile'] = me.parse.getParseFile(fileInput.target.files[0].name, { base64: e.target.result });
+			      	img['parseImageFile'] = getParseFile(fileInput.target.files[0].name, { base64: e.target.result });
 			      	resolve(img);
 			      }else{
 			      	reject(img);
