@@ -179,7 +179,6 @@ Parse.Cloud.define("savePost", function(request, response) {
 });
 
 function savePost(post){
-    var me = this;
     return new Promise((resolve, reject) => {
       post.save(null, {
         success: function(post){
@@ -192,29 +191,29 @@ function savePost(post){
     });
 }
 
-//getImage
-function getImage(fileInput){
-	var reader = new FileReader();
-	var img = {upload:false};
-	return new Promise((resolve, reject) => { 
-	  	if (fileInput.target.files.length == 1) {
-		  	reader.onload = function (e : any) {
-			      if(e.target.result){
-			      	img['url'] = e.target.result;
-			      	img['upload'] = true;
-			      	img['parseImageFile'] = getParseFile(fileInput.target.files[0].name, { base64: e.target.result });
-			      	resolve(img);
-			      }else{
-			      	reject(img);
-			      }
-			  }
-			  console.log(fileInput.target.files[0]);
-			  reader.readAsDataURL(fileInput.target.files[0]);
-		}else{
-			reject(img);
-		}
-	});
-}
+// //getImage
+// function getImage(fileInput){
+// 	var reader = new FileReader();
+// 	var img = {upload:false};
+// 	return new Promise((resolve, reject) => { 
+// 	  	if (fileInput.target.files.length == 1) {
+// 		  	reader.onload = function (e : any) {
+// 			      if(e.target.result){
+// 			      	img['url'] = e.target.result;
+// 			      	img['upload'] = true;
+// 			      	img['parseImageFile'] = getParseFile(fileInput.target.files[0].name, { base64: e.target.result });
+// 			      	resolve(img);
+// 			      }else{
+// 			      	reject(img);
+// 			      }
+// 			  }
+// 			  console.log(fileInput.target.files[0]);
+// 			  reader.readAsDataURL(fileInput.target.files[0]);
+// 		}else{
+// 			reject(img);
+// 		}
+// 	});
+// }
 
 function getFeed(n){
 	return new Promise((resolve, reject) => {
@@ -282,9 +281,9 @@ function getAsJSON(obj){
     return x;
 }
 
-// name : String,  encoding : base64-encoded 
-function getParseFile(name, encoding){
-    name = name.replace(/[^a-zA-Z0-9_.]/g, '');
-    var parseFile = new Parse.File( name, encoding);
-    return parseFile;
-}
+// // name : String,  encoding : base64-encoded 
+// function getParseFile(name, encoding){
+//     name = name.replace(/[^a-zA-Z0-9_.]/g, '');
+//     var parseFile = new Parse.File( name, encoding);
+//     return parseFile;
+// }
