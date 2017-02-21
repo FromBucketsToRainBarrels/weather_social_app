@@ -159,7 +159,7 @@ Parse.Cloud.define("savePost", function(request, response) {
 		    console.error(error);
 		    response.error(ex)
 		  }
-
+		})
 	}else{
 		post.set("type","text");
 		savePost(post).then((p) => {
