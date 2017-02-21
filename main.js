@@ -194,9 +194,9 @@ function savePost(post){
 
 //getImage
 function getImage(fileInput){
-	let me = this;
-	let reader = new FileReader();
-	let img = {upload:false};
+	var me = this;
+	var reader = new FileReader();
+	var img = {upload:false};
 	return new Promise((resolve, reject) => { 
 	  	if (fileInput.target.files.length == 1) {
 		  	reader.onload = function (e : any) {
@@ -286,6 +286,6 @@ function getAsJSON(obj){
 // name : String,  encoding : base64-encoded 
 function getParseFile(name, encoding){
     name = name.replace(/[^a-zA-Z0-9_.]/g, '');
-    let parseFile = new Parse.File( name, encoding);
+    var parseFile = new Parse.File( name, encoding);
     return parseFile;
 }
