@@ -135,6 +135,7 @@ Parse.Cloud.define("savePost", function(request, response) {
 	var post_data = request.params.post_data;
 	var Post = Parse.Object.extend("Post");
 	var post = new Post();
+	post.set("local_objectId", post_data.objectId);
 	post.set("user", request.user);
 	post.set("isDeleted",false);
 	post.set("text",post_data.text);

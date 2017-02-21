@@ -131,9 +131,7 @@ export class HomePage {
 
   removeImage(){
     var me = this;
-    me.status_model.attachment_photo_src = null;
-    me.status_model.attachment_photo = false;
-    me.status_model.attachment_photo_parseFile = null;
+    me.status_model.img = {};
   }
 
   alert(message) {
