@@ -50,6 +50,7 @@
         <lazy-img src="{{post.user.image.url}}"></lazy-img>
       </ion-avatar>
       <h2>{{post.user.username}}</h2>
+      <span item-right (click)="presentPopover($event,post)"><ion-icon name="more"></ion-icon></span>
     </ion-item>
 
     <ion-item *ngIf="post.type=='photo'">

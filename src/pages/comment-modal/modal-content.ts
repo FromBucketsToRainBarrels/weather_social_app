@@ -1,21 +1,28 @@
-import {Component} from '@angular/core';
-import { Platform, NavParams, ViewController, AlertController, LoadingController, Events } from 'ionic-angular';
+import {Component, ViewChild} from '@angular/core';
+import { Content, Platform, NavParams, ViewController, AlertController, LoadingController, Events } from 'ionic-angular';
 
 import { ParseProvider } from '../../providers/parse-provider';
 
 @Component({
-  templateUrl: 'modal-content.html'
+  templateUrl: 'modal-content.html',
+  queries: {
+      content: new ViewChild(Content)
+  }
 })
 
 export class CommentsModal {
 
+  public showSysncSpinner: boolean = true;
+  public showCommentSpinner: boolean = false;
   public post: any;
   public comment_box_models: any;
   public comments: any;
   public loader: any;
 
+  @ViewChild(Content) content: Content;
+
   //event listeners
-  private getCommentsEvent: (comments) => void;
+  private getPostCommentsEvent: (comments) => void;
 
   constructor(
     public platform: Platform,
@@ -30,10 +37,17 @@ export class CommentsModal {
     this.post = this.params.get('currPost');
     this.comment_box_models = this.params.get('comment_box_models');
     this.comments = this.params.get('comments');
-    
-    if(!this.comments[this.post.objectId]){
-      parse.getPostComments(this.post,0);
-    }
+    if(!this.comments[this.post.objectId]){this.comments[this.post.objectId]={}};
+    if(!parse.user.userParseObj.saveData){parse.getPostComments(this.post,0)};
+    this.showSysncSpinner = false;
+  }
+
+  scrollToBottom(x){
+      this.content.scrollToBottom(x);
+  }
+
+  ionViewDidEnter(){
+    this.scrollToBottom(300);
   }
 
   ionViewWillEnter(){
@@ -46,49 +60,52 @@ export class CommentsModal {
   }
 
   initializeEventHandlers(){
-    this.initializeGetCommentsEventHandler();
+    this.initializeGetPostCommentsEventHandler();
   }
 
   subscribeEventHandlers(){
-    this.events.subscribe('getCommentsEvent', this.getCommentsEvent);
+    this.events.subscribe('getPostCommentsEvent', this.getPostCommentsEvent);
   }
 
   unsubscribeEventHandlers(){
-    this.unsubscribeGetCommentsEventHandler();
+    this.unsubscribeGetPostCommentsEventHandler();
   }
 
-  initializeGetCommentsEventHandler(){
+  initializeGetPostCommentsEventHandler(){
     let me = this;
-    this.getCommentsEvent = (comments) => {
-      // this.comments[data.post.objectId].comments = this.comments[data.post.objectId].comments.concat(data.comments);
-      // this.comments[data.post.objectId].start++;
-      me.comments = comments;
-      console.log(comments);
+    this.getPostCommentsEvent = (data) => {
+      me.comments[data.post.objectId].comments = data.c.comments;
+      me.comments[data.post.objectId].start = data.c.start;
+      me.showSysncSpinner = false;
+      me.scrollToBottom(300);
     };
   }
 
-  unsubscribeGetCommentsEventHandler(){
-    if(this.getCommentsEvent){
-      this.events.unsubscribe('getCommentsEvent', this.getCommentsEvent);
-      this.getCommentsEvent = undefined;
+  unsubscribeGetPostCommentsEventHandler(){
+    if(this.getPostCommentsEvent){
+      this.events.unsubscribe('getPostCommentsEvent', this.getPostCommentsEvent);
+      this.getPostCommentsEvent = undefined;
     }
   }
 
   commentPost(post){
-    console.log("commentPost");
     var me = this;
-    if(me.comment_box_models[post.id] && me.comment_box_models[post.id].length != 0){
-      me.presentLoading();
-      // me.feedService.commentPost(post,me.comment_box_models[post.id]).then((response) => {
-      //   return response;
-      // }).then((p) => {
-      //   me.comment_box_models[post.id] = "";
-      //   me.dismissLoading();
-      // }).catch((ex) => {
-      //   console.error('Error : ', ex);
-      //   me.dismissLoading();
-      // });
+    me.showCommentSpinner = true;
+    if(me.comment_box_models[post.objectId] && me.comment_box_models[post.objectId].length != 0){
+      let comment = me.comment(me.comment_box_models[post.objectId]);
+      me.comments[post.objectId].comments.push(comment);
+      me.comment_box_models[post.objectId] = "";
+      me.events.publish('commentPostEvent',{comment:comment, post:post, comments:me.comments[post.objectId]});
     }
+    me.showCommentSpinner = false;
+    me.scrollToBottom(300);
+  }
+
+  fetchLatestComment(){
+    let me = this;
+    me.showSysncSpinner = true;
+    me.parse.getPostComments(me.post,0);
+    me.scrollToBottom(300);
   }
 
   showAlert(msg) {
@@ -115,5 +132,20 @@ export class CommentsModal {
 
   dismiss() {
     this.viewCtrl.dismiss();
+  }
+
+  comment(c){
+    let now = new Date();
+    let comment = {
+      createdAt: now,
+      isDeleted: false,
+      post: this.post,
+      text: c,
+      type: "text",
+      updatedAt: now,
+      user: this.parse.user.userParseObj,
+      objectId: "comment_"+now.toString()
+    }
+    return comment;
   }
 }

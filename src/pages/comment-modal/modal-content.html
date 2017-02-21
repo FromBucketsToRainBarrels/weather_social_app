@@ -4,8 +4,16 @@
       {{post.likes_count}} Like(s)
     </ion-title>
     <ion-buttons start>
+      
+      <button *ngIf="showSysncSpinner" ion-button icon-only>
+        <ion-spinner name="bubbles"></ion-spinner>
+      </button>
+      
+      <button *ngIf="!showSysncSpinner" ion-button icon-only (click)="fetchLatestComment()">
+        <ion-icon name="md-sync"></ion-icon>
+      </button>
       <button ion-button (click)="dismiss()">
-        <ion-icon name="md-close"></ion-icon>
+        <ion-icon name="md-close-circle"></ion-icon>
       </button>
     </ion-buttons>
   </ion-toolbar>
@@ -15,7 +23,7 @@
   <div *ngIf="comments[post.objectId]">
     <ion-item *ngFor="let comment of comments[post.objectId].comments" text-wrap>
       <ion-avatar item-left>
-        <img src="{{comment.user.image?.url}}">
+        <lazy-img src="{{comment.user.image?.url}}"></lazy-img>
       </ion-avatar>
       <strong><small>{{comment.user.username}}</small></strong><br>
       <small>{{comment.text}}</small>
@@ -26,10 +34,17 @@
 <ion-footer>
   <ion-toolbar>
         <ion-item >
+
           <ion-input id="post_comment_{{post.objectId}}" placeholder="Write a comment" [(ngModel)]="comment_box_models[post.objectId]"></ion-input>
-          <button ion-button round item-right icon-left (click)="commentPost(post)">
+          
+          <button *ngIf="showCommentSpinner" ion-button round item-right icon-left>
+            <ion-spinner name="bubbles"></ion-spinner>
+          </button>
+
+          <button *ngIf="!showCommentSpinner" ion-button round item-right icon-left (click)="commentPost(post)">
             <ion-icon name="ios-send"></ion-icon>
           </button>
+
         </ion-item>
   </ion-toolbar>
 </ion-footer>

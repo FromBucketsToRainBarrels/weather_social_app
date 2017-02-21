@@ -1,8 +1,9 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
-import { NavController, NavParams, AlertController, Events, ModalController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, Events, ModalController, PopoverController } from 'ionic-angular';
 import { ParseProvider } from '../../providers/parse-provider';
 
 import {CommentsModal} from '../comment-modal/modal-content';
+import {PopoverPage} from '../../components/home-card-popover/home-card-popover';
 /*
   Generated class for the Home page.
 
@@ -37,7 +38,8 @@ export class HomePage {
   private getFeedEvent: (feed) => void;
   private postLikeEvent: (data) => void;
   private getCommentsEvent: (comments) => void;
-  
+  private getPostCommentsEvent: (comments) => void;
+
   constructor(
   	public navCtrl: NavController, 
   	public navParams: NavParams,
@@ -46,6 +48,7 @@ export class HomePage {
     public events: Events,
     public cdr: ChangeDetectorRef,
     public modalCtrl:ModalController,
+    public popoverCtrl: PopoverController
 
   ) {
 
@@ -89,6 +92,13 @@ export class HomePage {
     // this.getComments(post);
     let modal = this.modalCtrl.create(CommentsModal,this);
     modal.present();
+  }
+
+  presentPopover(myEvent,post) {
+    let popover = this.popoverCtrl.create(PopoverPage, post);
+    popover.present({
+      ev: myEvent
+    });
   }
 
   alert(message) {
@@ -140,6 +150,7 @@ export class HomePage {
       }
     }
     this.initializeGetCommentsEventHandler();
+    this.initializeGetPostCommentsEventHandler();
   }
 
   initializeGetCommentsEventHandler(){
@@ -150,12 +161,27 @@ export class HomePage {
     };
   }
 
+  initializeGetPostCommentsEventHandler(){
+    let me = this;
+    this.getPostCommentsEvent = (data) => {
+      me.find = data.post;
+      var index = me.feed.posts.findIndex(function(x) { return x.objectId == me.find.objectId; });
+      if(index!=-1){
+        me.feed.posts[index].comments_count = data.c.comments.length;
+        me.parse.saveFeed(me.feed);
+      }      
+      me.comments[data.post.objectId].comments = data.c.comments;
+      me.comments[data.post.objectId].start = data.c.start;
+    };
+  }
+
   subscribeEventHandlers(){
     this.events.subscribe('updateFeedEvent', this.updateFeedEvent);
     this.events.subscribe('getMoreFeedEvent', this.getMoreFeedEvent);
     this.events.subscribe('getFeedEvent', this.getFeedEvent);
     this.events.subscribe('postLikeEvent', this.postLikeEvent);
     this.events.subscribe('getCommentsEvent', this.getCommentsEvent);
+    this.events.subscribe('getPostCommentsEvent', this.getPostCommentsEvent);
   }
 
   unsubscribeEventHandlers(){
@@ -178,6 +204,14 @@ export class HomePage {
     if(this.getCommentsEvent){
       this.events.unsubscribe('getCommentsEvent', this.getCommentsEvent);
       this.getCommentsEvent = undefined;
+    }
+    this.unsubscribeGetPostCommentsEventHandler();
+  }
+
+  unsubscribeGetPostCommentsEventHandler(){
+    if(this.getPostCommentsEvent){
+      this.events.unsubscribe('getPostCommentsEvent', this.getPostCommentsEvent);
+      this.getPostCommentsEvent = undefined;
     }
   }
 

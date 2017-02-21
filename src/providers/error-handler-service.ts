@@ -44,8 +44,9 @@ export class ErrorHandlerService {
   
   */
   handleError(retry,error,f,context,args){
-    
+    let now = Date();
     let obj = {
+      id: now.toString()+"_"+f,
       retry: retry,
       error:error,
       function: f,

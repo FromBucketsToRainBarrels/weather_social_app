@@ -28,18 +28,18 @@ export class LocalDBService {
   	});
   }
 
-  savePostComments(p,c){
+  savePostComments(p,c,page){
+    console.log(c);
     let me = this;
     return new Promise((resolve, reject) => {
       me.storage.get('comments').then((comments) => {
         if(comments == null){comments={}};
-        if(!comments[p.objectId]){
+        if(!comments[p.objectId]|| page==0){
           comments[p.objectId] = {start:0, comments:[]};
         }
-        comments[p.objectId].start++;
         comments[p.objectId].comments = comments[p.objectId].comments.concat(c);
         me.saveComments(comments);
-        resolve(comments);
+        resolve(comments[p.objectId]);
       });
     });
   }
@@ -48,7 +48,7 @@ export class LocalDBService {
     let me = this;
     return new Promise((resolve, reject) => {
       me.storage.get('comments').then((comments) => {
-        console.log(comments);
+        if(!comments){comments = {}};
         resolve(comments);
       });
     });
@@ -56,7 +56,6 @@ export class LocalDBService {
 
   saveComments(comments){
     let me = this;
-    console.log(comments);
     me.storage.set('comments', comments);
   }
 

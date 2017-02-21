@@ -16,6 +16,7 @@ export class ParseProvider {
 	public current: any;
 	public user: any = {userParseObj: null, stations: []};
   public imageCacheService : boolean = false;
+  public find: any;
 
   constructor(
     public localDBStorage: LocalDBService,
@@ -26,6 +27,11 @@ export class ParseProvider {
   	
     events.subscribe("ImgCache.init.success", (val) => {
       this.imageCacheService  = val;
+    });
+
+    events.subscribe("commentPostEvent", (val) => {
+      this.savePostComments(val.post,val.comments);
+      this.commentPost(val.post,val.comment);
     });
 
     events.subscribe("syncServiceExecuteJob", (val) =>{
@@ -173,6 +179,17 @@ export class ParseProvider {
     }
   }
 
+  savePostComments(post, comments){
+    let me = this;
+    me.localDBStorage.savePostComments(post,comments.comments,comments.start).then((response) => {
+      return response;
+    }).then((c) => {
+      me.events.publish('getPostCommentsEvent',{post:post, c:c});
+    }).catch((ex) => {
+      console.error('Error saving post  comments to localDBStorage: ', ex);
+    });
+  }
+
   getPostComments(post,page){
     let me = this;
     if(me.connectivityService.hasInernet()){
@@ -181,10 +198,10 @@ export class ParseProvider {
         page:page
       }).then(function(comments) {
         comments = JSON.parse(comments);
-        me.localDBStorage.savePostComments(post,comments).then((response) => {
+        me.localDBStorage.savePostComments(post,comments,page).then((response) => {
           return response;
         }).then((c) => {
-          me.events.publish('getCommentsEvent',c);
+          me.events.publish('getPostCommentsEvent',{post:post, c:c});
         }).catch((ex) => {
           console.error('Error saving post  comments to localDBStorage: ', ex);
         });
@@ -204,13 +221,26 @@ export class ParseProvider {
     if(me.connectivityService.hasInernet()){
       Parse.Cloud.run('commentPost', { 
         post:post.objectId,
-        c:c
+        c:c.text
       }).then(function(comment) {
-        me.events.publish('postCommentEvent',comment);
+        console.log(JSON.parse(comment));
+        me.updatePostComments(post,c,JSON.parse(comment));
       });
     }else{
       me.errorHandlerService.handleError(true,{message:"No internet access"},"likePost","ParseProvider",[post,c]);
     }
+  }
+
+  updatePostComments(post,oldCommentReccord,newcommentRecord){
+    let me = this;
+    me.localDBStorage.getComments().then((comments) => {
+      me.find = oldCommentReccord;
+      var index = comments[post.objectId].comments.findIndex(function(x) { return x.objectId == me.find.objectId; });
+      if(index != -1){
+        comments[post.objectId].comments[index] = newcommentRecord;
+        me.localDBStorage.saveComments(comments);
+      }
+    })
   }
 
   getUser(){

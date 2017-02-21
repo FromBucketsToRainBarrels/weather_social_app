@@ -17,6 +17,7 @@ import { ImageService } from '../providers/image-service';
 import { LazyImgComponent } from '../components/lazy-img.component';
 
 import {CommentsModal} from '../pages/comment-modal/modal-content';
+import {PopoverPage} from '../components/home-card-popover/home-card-popover';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import {CommentsModal} from '../pages/comment-modal/modal-content';
     HomePage,
     LazyImgComponent,
     UserPage,
-    CommentsModal
+    CommentsModal,
+    PopoverPage
 
   ],
   imports: [
@@ -64,7 +66,8 @@ import {CommentsModal} from '../pages/comment-modal/modal-content';
     HomePage,
     LazyImgComponent,
     UserPage,
-    CommentsModal
+    CommentsModal,
+    PopoverPage
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},
     ParseProvider,

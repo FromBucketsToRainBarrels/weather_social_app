@@ -43,12 +43,12 @@ export class SyncService {
       }
       return response;
     }).then((jobsQueue) => {
-      jobsQueue[job.function] = job;
+      jobsQueue[job.id] = job;
       me.localDBStorage.saveJobsQueue(jobsQueue);
     }).catch((ex) => {
       console.error('Error getting jobsQueue from localDBStorage: ', ex);
       let jobsQueue = {};
-      jobsQueue[job.function] = job;
+      jobsQueue[job.id] = job;
       me.localDBStorage.saveJobsQueue(jobsQueue);
     });	
   }
