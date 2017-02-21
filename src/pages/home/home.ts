@@ -109,10 +109,11 @@ export class HomePage {
   addPost(){
     let me = this;
     if(this.status_model.text || me.status_model.attachment_photo){
-      let post = this.parse.addPost(this.status_model);
+      let data = this.parse.addPost(this.status_model);
       me.status_model = {};
-      me.feed.posts.unshift(post);
+      me.feed.posts.unshift(data.post);
       me.parse.saveFeed(me.feed);
+      me.parse.savePost(data.post_data);
     }
   }
 
@@ -122,7 +123,7 @@ export class HomePage {
     me.imageSerive.getImage(fileInput).then((img) => {
       if(img){
         me.status_model.img = img;
-        console.log(me.status_model);
+        //console.log(me.status_model);
       }
     }).catch((ex) => {
       console.error(ex);
@@ -155,12 +156,12 @@ export class HomePage {
       me.infiniteScroll.complete();
     };
     this.updateFeedEvent = (feed) => {
-      console.log(feed);
+      //console.log(feed);
       me.feed = feed;
       me.cdr.detectChanges();
     };
     this.getFeedEvent = (feed) => {
-      console.log(feed);
+      //console.log(feed);
       me.feed = feed;
       me.cdr.detectChanges();
     };
@@ -189,7 +190,7 @@ export class HomePage {
   initializeGetCommentsEventHandler(){
     let me = this;
     this.getCommentsEvent = (comments) => {
-      console.log(comments);
+      //console.log(comments);
       me.comments = comments;
     };
   }

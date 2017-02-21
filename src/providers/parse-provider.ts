@@ -103,7 +103,7 @@ export class ParseProvider {
       me.events.publish("getCommentsEvent", comments);
       if(!me.user.userParseObj.saveData){
         // me.updateFeed();
-        console.log("need to fetch updated comments as user has set his settings to not save data");
+        // console.log("need to fetch updated comments as user has set his settings to not save data");
       }
     }).catch((ex) => {
       console.error('Error getting comments from localDBStorage: ', ex);
@@ -223,7 +223,7 @@ export class ParseProvider {
         post:post.objectId,
         c:c.text
       }).then(function(comment) {
-        console.log(JSON.parse(comment));
+        //console.log(JSON.parse(comment));
         me.updatePostComments(post,c,JSON.parse(comment));
       });
     }else{
@@ -263,17 +263,29 @@ export class ParseProvider {
     }else{
       post["type"] = "text";
     }
-    me.savePost(post_data);
-    return post;
+    return {post:post, post_data:post_data};
   }
 
   savePost(post_data){
     let me = this;
-    Parse.Cloud.run('savePost', { 
-      post_data: post_data 
-    }).then(function(post) {
-      console.log(JSON.parse(post));
-    });
+    if(me.connectivityService.hasInernet()){
+      Parse.Cloud.run('savePost', { 
+        post_data: post_data 
+      }).then(function(post) {
+        post = JSON.parse(post);
+        me.localDBStorage.getFeed().then((feed) => {
+          me.find = post;
+          var index = feed["posts"].findIndex(function(x) { return x.objectId == me.find.local_objectId; });
+          if(index != -1){
+            feed["posts"][index] = post;
+            me.localDBStorage.saveFeed(feed);
+            me.events.publish("getFeedEvent", feed);
+          }
+        });
+      });
+    }else{
+      me.errorHandlerService.handleError(true,null,"savePost","ParseProvider",[post_data]);
+    }
   }
 
   getUser(){
@@ -354,7 +366,6 @@ export class ParseProvider {
     let me = this;
     me.localDBStorage.saveUser(me.user);
     if(me.connectivityService.hasInernet()){
-      
       let user = Parse.User.current();
       user.set("name",me.user.userParseObj.name);
       user.set("phone",me.user.userParseObj.phone);
