@@ -244,6 +244,7 @@ export class ParseProvider {
   }
 
   addPost(post_data){
+    post_data = JSON.parse(JSON.stringify(post_data));
     let me = this;
     let now = new Date();
     let post = {};
@@ -267,7 +268,6 @@ export class ParseProvider {
 
   savePost(post_data){
     let me = this;
-    
     Parse.Cloud.run('savePost', { 
       post_data: post_data 
     }).then(function(post) {

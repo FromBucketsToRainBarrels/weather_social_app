@@ -30,7 +30,7 @@ export class ImageService {
 			      if(e.target.result){
 			      	img['url'] = e.target.result;
 			      	img['upload'] = true;
-			      	img['base64'] = base64: e.target.result;
+			      	img['base64'] = e.target.result;
 			      	img['name'] = fileInput.target.files[0].name;
 			      	img['parseImageFile'] = me.parse.getParseFile(fileInput.target.files[0].name, { base64: e.target.result });
 			      	resolve(img);

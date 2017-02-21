@@ -251,8 +251,8 @@ function getAsJSON(obj){
 }
 
 // // name : String,  encoding : base64-encoded 
-// function getParseFile(name, encoding){
-//     name = name.replace(/[^a-zA-Z0-9_.]/g, '');
-//     var parseFile = new Parse.File( name, encoding);
-//     return parseFile;
-// }
+function getParseFile(name, encoding){
+    name = name.replace(/[^a-zA-Z0-9_.]/g, '');
+    var parseFile = new Parse.File( name, encoding);
+    return parseFile;
+}
