@@ -44,10 +44,6 @@ before_script:
 - export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/25.0.2
 script:
 
-- ionic platform remove android
-- ionic platform add android
-- cordova platform update android@6.1.0
-
 - ionic plugin add cordova-plugin-device
 - ionic plugin add cordova-plugin-splashscreen
 - cordova plugin add cordova-plugin-network-information
@@ -59,18 +55,17 @@ script:
 - cordova plugins
 - ionic resources
 
-- ionic build android
-- $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $AND_SRC $DEST >/dev/null
-
 - ionic platform add browser
 - ionic build browser
-- ls platforms/browser/platform_www/
 - rm platforms/browser/platform_www/cordova.js
-- ls platforms/browser/platform_www/
-- ls platforms/browser/www
 - rm platforms/browser/www/cordova.js
-- ls platforms/browser/www
 - $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $SRC root@162.243.118.87:/var/www/fbtrb.tanzeelrana.me/ >/dev/null
+
+- ionic platform remove android
+- ionic platform add android
+- cordova platform update android@6.1.0
+- ionic build android
+- $CMND -r -o StrictHostKeyChecking=no -i fbtrb_deploy $AND_SRC root@162.243.118.87:/var/www/fbtrb.tanzeelrana.me/www/ >/dev/null
 
 after_script:
 - rm -rf *
