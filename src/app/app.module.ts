@@ -18,6 +18,7 @@ import { LazyImgComponent } from '../components/lazy-img.component';
 
 import {CommentsModal} from '../pages/comment-modal/modal-content';
 import {PopoverPage} from '../components/home-card-popover/home-card-popover';
+import {WeatherPage} from '../pages/weather/weather';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import {PopoverPage} from '../components/home-card-popover/home-card-popover';
     LazyImgComponent,
     UserPage,
     CommentsModal,
-    PopoverPage
+    PopoverPage,
+    WeatherPage
 
   ],
   imports: [
@@ -67,7 +69,8 @@ import {PopoverPage} from '../components/home-card-popover/home-card-popover';
     LazyImgComponent,
     UserPage,
     CommentsModal,
-    PopoverPage
+    PopoverPage,
+    WeatherPage
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},
     ParseProvider,

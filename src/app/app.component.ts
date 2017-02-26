@@ -5,6 +5,7 @@ import { StatusBar, Splashscreen, Network } from 'ionic-native';
 import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
 import { UserPage } from '../pages/user/user';
+import { WeatherPage } from '../pages/weather/weather';
 
 import { ParseProvider } from '../providers/parse-provider';
 import ImgCache from 'imgcache.js';
@@ -31,7 +32,8 @@ export class MyApp {
     this.initializeApp();
     // used for an example of ngFor and navigation
     this.pages = [
-      {title: 'Home',icon: 'ios-water-outline',count: 0,component: HomePage}
+      {title: 'Home',icon: 'ios-water-outline',count: 0,component: HomePage},
+      {title: 'WeatherPage',icon: 'md-rainy',count: 0,component: WeatherPage}
     ];
   }
 
