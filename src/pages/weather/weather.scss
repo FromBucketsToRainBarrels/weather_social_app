@@ -1,3 +1,43 @@
 page-weather {
+	.item-md ion-icon[item-left], .item-md ion-icon[item-right] {
+		margin-top: 0px;
+		margin-bottom: 0px;
+		margin-left: 0;
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		overflow: hidden;
+		margin: 0px;
+	}
 
+	.item-md ion-avatar[item-left], .item-md ion-thumbnail[item-left] {
+      margin: 0px 0px 0px 0;
+    }
+
+    .item-md {
+      padding-left: 0px;
+    }
+
+    .item-md.item-block .item-inner {
+      padding-right: 0px;
+    }
+
+    .item-md ion-icon[item-left] + .item-inner, .item-md ion-icon[item-left] + .item-input {
+      margin-left: 0px;
+    }
+
+    .card-background-page {
+    ion-card {
+      text-align: center;
+    }
+    .card-title {
+      font-size: 1.5em;
+      width: 100%;
+      font-weight: bold;
+    }
+    .card-subtitle{
+      font-size: 1.0em;
+      width: 100%;
+    }
+  }
 }

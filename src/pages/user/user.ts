@@ -28,6 +28,7 @@ export class UserPage {
     public imageSerive: ImageService
   ) {
   	this.user = this.parse.user.userParseObj;
+  	console.log(this.user);
   }
 
   	uploadPic(){

@@ -45,6 +45,7 @@ export class WeatherPage {
     	filter: "byCity"
     };
     this.stations = this.parseProvider.user.stations;
+    console.log(this.parseProvider.user);
   }
 
   ionViewWillEnter(){
@@ -156,8 +157,8 @@ export class WeatherPage {
   showRadio(data) {
   	var me = this;
     let alert = this.alertCtrl.create();
-	alert.setTitle("Confirm");
-	alert.addInput({
+	  alert.setTitle("Confirm");
+  	alert.addInput({
       type: 'radio',
       label: data.name + "," + data.sys.country,
       value: data,

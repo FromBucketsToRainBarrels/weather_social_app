@@ -1,10 +1,10 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
-import { NavController, NavParams, AlertController, Events, ModalController, PopoverController } from 'ionic-angular';
-import { ParseProvider } from '../../providers/parse-provider';
+import {Component, ChangeDetectorRef} from '@angular/core';
+import {NavController, NavParams, AlertController, Events, ModalController, PopoverController} from 'ionic-angular';
+import {ParseProvider} from '../../providers/parse-provider';
 
 import {CommentsModal} from '../comment-modal/modal-content';
 import {PopoverPage} from '../../components/home-card-popover/home-card-popover';
-import { ImageService } from '../../providers/image-service';
+import {ImageService} from '../../providers/image-service';
 /*
   Generated class for the Home page.
 

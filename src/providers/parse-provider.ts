@@ -47,6 +47,7 @@ export class ParseProvider {
     this.current = Parse.User.current();
     if(this.current){
       this.getUser();
+      this.getUserStations();
   	}
   }
 
@@ -400,7 +401,7 @@ export class ParseProvider {
       me.weatherService.addStation(data).then((response) => {
         return response;
       }).then((station) => {
-        var user = me.user.userParseObj;
+        var user = Parse.User.current();
         me.find = station;
         var indx = me.user.stations.findIndex(function(x) { return x.id == me.find.id; });
         if(indx!=-1)me.user.stations.splice(indx, 1);
