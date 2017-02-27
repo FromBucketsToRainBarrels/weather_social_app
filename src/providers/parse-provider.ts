@@ -4,6 +4,8 @@ import Parse from 'parse';
 import { ConnectivityService } from '../providers/connectivity-service';
 import { ErrorHandlerService } from '../providers/error-handler-service';
 import { LocalDBService } from '../providers/local-db-service';
+import { WeatherService } from '../providers/weather-service';
+
 /*
   Generated class for the ParseProvider provider.
 
@@ -22,7 +24,8 @@ export class ParseProvider {
     public localDBStorage: LocalDBService,
   	public events: Events,
     public connectivityService: ConnectivityService,
-    public errorHandlerService: ErrorHandlerService
+    public errorHandlerService: ErrorHandlerService,
+    public weatherService: WeatherService
   ) {
   	
     events.subscribe("ImgCache.init.success", (val) => {
@@ -389,6 +392,33 @@ export class ParseProvider {
     }else{
       me.errorHandlerService.handleError(true,null,"saveUser","ParseProvider",[]);
     }
+  }
+
+  addStation(data){
+    var me = this;
+    return new Promise((resolve, reject) => {
+      me.weatherService.addStation(data).then((response) => {
+        return response;
+      }).then((station) => {
+        var user = me.user.userParseObj;
+        me.find = station;
+        var indx = me.user.stations.findIndex(function(x) { return x.id == me.find.id; });
+        if(indx!=-1)me.user.stations.splice(indx, 1);
+        me.user.stations.unshift(station);
+        var stations = user.relation("stations");
+        stations.add(station);
+        user.set("defaultStation", station);
+        user.save(null, {
+          success: function(user){
+            resolve(station);
+          },error: function(user,error){
+            reject(error);
+          }
+        })
+      }).catch((ex) => {
+        reject(ex);
+      });
+    });
   }
 
   // name : String,  encoding : base64-encoded 

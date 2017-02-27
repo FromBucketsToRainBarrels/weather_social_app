@@ -14,11 +14,13 @@ import { SyncService } from '../providers/sync-service';
 import { LocalDBService } from '../providers/local-db-service';
 import { ParseProvider } from '../providers/parse-provider';
 import { ImageService } from '../providers/image-service';
+import { WeatherService } from '../providers/weather-service';
 import { LazyImgComponent } from '../components/lazy-img.component';
 
-import {CommentsModal} from '../pages/comment-modal/modal-content';
-import {PopoverPage} from '../components/home-card-popover/home-card-popover';
-import {WeatherPage} from '../pages/weather/weather';
+import { CommentsModal } from '../pages/comment-modal/modal-content';
+import { PopoverPage } from '../components/home-card-popover/home-card-popover';
+import { WeatherPage } from '../pages/weather/weather';
+import { ForecastPage } from '../pages/forecast/forecast';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,8 @@ import {WeatherPage} from '../pages/weather/weather';
     UserPage,
     CommentsModal,
     PopoverPage,
-    WeatherPage
+    WeatherPage,
+    ForecastPage
 
   ],
   imports: [
@@ -70,7 +73,8 @@ import {WeatherPage} from '../pages/weather/weather';
     UserPage,
     CommentsModal,
     PopoverPage,
-    WeatherPage
+    WeatherPage,
+    ForecastPage
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},
     ParseProvider,
@@ -79,6 +83,7 @@ import {WeatherPage} from '../pages/weather/weather';
     ErrorHandlerService,
     LocalDBService,
     ImageService,
-    SyncService]
+    SyncService,
+    WeatherService]
 })
 export class AppModule {}
