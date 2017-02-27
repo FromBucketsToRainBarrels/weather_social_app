@@ -6,8 +6,14 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>forecast</ion-title>
+  <ion-navbar color="primary">
+
+    <ion-title>{{station.get("name")}} Forecast</ion-title>
+    <ion-buttons end>
+      <button ion-button>
+        <!-- <ion-icon name="md-more"></ion-icon> -->
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
@@ -15,4 +21,143 @@
 
 <ion-content padding>
 
+  <ion-card [hidden]="hideChart">
+    <ion-card-header>
+      Line Chart
+    </ion-card-header>
+    <ion-card-content>
+      <canvas #lineCanvas></canvas>
+      <button ion-button icon-left (click)="showCheckbox()">
+        <ion-icon name="more"></ion-icon>
+        Filter
+      </button>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-list>
+    <ion-item *ngFor="let data of forecastData?.list">
+      <div *ngIf="forecastType=='forecast5'">
+        <ion-row center>
+          <ion-col text-left>
+            <div>
+              <p>{{data.dt*1000 | date:'ha'}}</p>
+              <small>{{data.dt*1000 | date:'dMMM'}}</small>
+            </div>
+          </ion-col>
+          <ion-col>
+              <ion-item no-lines>
+                <ion-avatar item-left>
+                  <img src='http://openweathermap.org/img/w/{{data.weather[0].icon}}.png'>
+                </ion-avatar>
+                <p>{{data.main.temp}}&#8451;</p>
+              </ion-item>
+          </ion-col>
+          <ion-col text-right>
+            <div>
+              <ion-icon name="ios-cloud-outline"></ion-icon>
+              <p>{{data.clouds.all}}%</p>
+            </div>
+          </ion-col>
+        </ion-row>
+      </div>
+
+      <div *ngIf="forecastType=='forecast16'">
+        <ion-item-group>
+          <ion-item-divider color="dark">{{data.dt*1000 | date:'EEEE'}}</ion-item-divider>
+          <ion-item>
+            <ion-row center>
+              <ion-col text-left>
+                <div>
+                  Morning
+                </div>
+              </ion-col>
+              <ion-col>
+                  <ion-item no-lines>
+                    <ion-avatar item-left>
+                      <img src='http://openweathermap.org/img/w/{{data.weather[0].icon}}.png'>
+                    </ion-avatar>
+                    <p>{{data.temp.morn}}&#8451;</p>
+                  </ion-item>
+              </ion-col>
+              <ion-col text-right>
+                <div>
+                  <ion-icon name="ios-cloud-outline"></ion-icon>
+                  <p>{{data.clouds}}%</p>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-item>
+          <ion-item>
+            <ion-row center>
+              <ion-col text-left>
+                <div>
+                  Afternoon
+                </div>
+              </ion-col>
+              <ion-col>
+                  <ion-item no-lines>
+                    <ion-avatar item-left>
+                      <img src='http://openweathermap.org/img/w/{{data.weather[0].icon}}.png'>
+                    </ion-avatar>
+                    <p>{{data.temp.day}}&#8451;</p>
+                  </ion-item>
+              </ion-col>
+              <ion-col text-right>
+                <div>
+                  <ion-icon name="ios-cloud-outline"></ion-icon>
+                  <p>{{data.clouds}}%</p>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-item>
+          <ion-item>
+            <ion-row center>
+              <ion-col text-left>
+                <div>
+                  Evening
+                </div>
+              </ion-col>
+              <ion-col>
+                  <ion-item no-lines>
+                    <ion-avatar item-left>
+                      <img src='http://openweathermap.org/img/w/{{data.weather[0].icon}}.png'>
+                    </ion-avatar>
+                    <p>{{data.temp.eve}}&#8451;</p>
+                  </ion-item>
+              </ion-col>
+              <ion-col text-right>
+                <div>
+                  <ion-icon name="ios-cloud-outline"></ion-icon>
+                  <p>{{data.clouds}}%</p>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-item>
+          <ion-item>
+            <ion-row center>
+              <ion-col text-left>
+                <div>
+                  Overnight
+                </div>
+              </ion-col>
+              <ion-col>
+                  <ion-item no-lines>
+                    <ion-avatar item-left>
+                      <img src='http://openweathermap.org/img/w/{{data.weather[0].icon}}.png'>
+                    </ion-avatar>
+                    <p>{{data.temp.night}}&#8451;</p>
+                  </ion-item>
+              </ion-col>
+              <ion-col text-right>
+                <div>
+                  <ion-icon name="ios-cloud-outline"></ion-icon>
+                  <p>{{data.clouds}}%</p>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-item>
+        </ion-item-group>
+      </div>
+    </ion-item>
+  </ion-list>
 </ion-content>

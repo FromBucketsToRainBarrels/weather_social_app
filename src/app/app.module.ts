@@ -7,6 +7,7 @@ import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
 import { RegisterPage } from '../pages/register/register';
 import { UserPage } from '../pages/user/user';
+import { ChartsPage } from '../pages/charts/charts';
 
 import { ErrorHandlerService } from '../providers/error-handler-service';
 import { ConnectivityService } from '../providers/connectivity-service';
@@ -22,6 +23,9 @@ import { PopoverPage } from '../components/home-card-popover/home-card-popover';
 import { WeatherPage } from '../pages/weather/weather';
 import { ForecastPage } from '../pages/forecast/forecast';
 
+import { ChartsModule } from 'ng2-charts';
+import 'chart.js/src/chart.js';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -33,7 +37,8 @@ import { ForecastPage } from '../pages/forecast/forecast';
     CommentsModal,
     PopoverPage,
     WeatherPage,
-    ForecastPage
+    ForecastPage,
+    ChartsPage
 
   ],
   imports: [
@@ -61,7 +66,8 @@ import { ForecastPage } from '../pages/forecast/forecast';
       /*
        * END MODIFY
        */
-       )
+       ),
+    ChartsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -74,7 +80,8 @@ import { ForecastPage } from '../pages/forecast/forecast';
     CommentsModal,
     PopoverPage,
     WeatherPage,
-    ForecastPage
+    ForecastPage,
+    ChartsPage
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},
     ParseProvider,

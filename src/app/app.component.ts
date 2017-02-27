@@ -6,6 +6,7 @@ import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
 import { UserPage } from '../pages/user/user';
 import { WeatherPage } from '../pages/weather/weather';
+import { ChartsPage } from '../pages/charts/charts';
 
 import { ParseProvider } from '../providers/parse-provider';
 import ImgCache from 'imgcache.js';
@@ -33,7 +34,8 @@ export class MyApp {
     // used for an example of ngFor and navigation
     this.pages = [
       {title: 'Home',icon: 'ios-water-outline',count: 0,component: HomePage},
-      {title: 'WeatherPage',icon: 'md-rainy',count: 0,component: WeatherPage}
+      {title: 'WeatherPage',icon: 'md-rainy',count: 0,component: WeatherPage},
+      {title: 'ChartsPage',icon: 'md-rainy',count: 0,component: ChartsPage}
     ];
   }
 
