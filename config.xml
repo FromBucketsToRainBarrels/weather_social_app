@@ -3,12 +3,13 @@
   <name>FBTRB</name>
   <description>Tanzania App</description>
   <author email="tanzeel.rana@carleton.ca" href="http://tanzeelrana.me/">Tanzeel Rana</author>
-  <content src="index.html"/>
-  <access origin="*" />
+  <content src="http://172.17.34.135:8101" original-src="index.html"/>
+  <access origin="*"/>
   <allow-navigation href="*://*/*"/>
   <allow-navigation href="http://ionic.local/*"/>
   <allow-navigation href="http://192.168.2.198:8100"/>
   <allow-navigation href="http://172.27.224.1:8100"/>
+  <allow-navigation href="http://172.17.34.135:8101"/>
   <allow-intent href="http://*/*"/>
   <allow-intent href="https://*/*"/>
   <allow-intent href="tel:*"/>
