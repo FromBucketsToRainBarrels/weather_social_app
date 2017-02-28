@@ -189,7 +189,7 @@ export class LineChart {
   }
 
   getRandomNumberForColor(){
-    return Math.floor((Math.random() * 245) + 10);
+    return Math.floor((Math.random() * 250) + 10);
   }
 
 }

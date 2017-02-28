@@ -49,10 +49,16 @@ export class ForecastPage {
       let rawChartData = new LineChart(forecastData,me.forecastType);
       console.log(rawChartData);
       me.setChart(rawChartData);
+      me.fixIframe();
     }).catch((ex) => {
       console.error('Error : ', ex);
       me.dismissLoading();
     });
+  }
+
+  fixIframe(){
+    var x = <HTMLElement>document.getElementsByClassName("chartjs-hidden-iframe")[0];
+    x.style.display = "none";
   }
 
   setChart(rawChartData){
