@@ -34,8 +34,8 @@ export class MyApp {
     // used for an example of ngFor and navigation
     this.pages = [
       {title: 'Home',icon: 'ios-water-outline',count: 0,component: HomePage},
-      {title: 'WeatherPage',icon: 'md-rainy',count: 0,component: WeatherPage}
-      // {title: 'ChartsPage',icon: 'md-rainy',count: 0,component: ChartsPage}
+      {title: 'WeatherPage',icon: 'md-rainy',count: 0,component: WeatherPage},
+      {title: 'ChartsPage',icon: 'md-rainy',count: 0,component: ChartsPage}
     ];
   }
 
